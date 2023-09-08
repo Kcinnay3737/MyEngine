@@ -1,4 +1,5 @@
-#include "SDLInput.h"
+#include "Input/SDLInput.h"
+
 #include <SDL.h>
 
 void NPEngine::SDLInput::Update()

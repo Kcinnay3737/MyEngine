@@ -1,35 +1,46 @@
 #pragma once
 
 #include <string>
-#include "IInput.h"
 
-struct SDL_Renderer;
-struct SDL_Window;
+//struct SDL_Renderer;
+//struct SDL_Window;
 
 namespace NPEngine
 {
+	class IWindow;
+	class IGraphics;
+	class IInput;
+	class ITime;
+
+	struct EngineState
+	{
+	public:
+		bool IsInit = false;
+		bool IsRunning = false;
+	};
+
 	class Engine final 
 	{
-	private:
-		bool _IsRunning = false;
-		bool _IsInit = false;
+	public:
 
 	private:
-		SDL_Renderer* _Renderer = NULL;
-		SDL_Window* _Window = NULL;
+		EngineState _EngineState = EngineState();
 
+		//SDL_Renderer* _Renderer = NULL;
+		//SDL_Window* _Window = NULL;
+
+		IWindow* _Window = nullptr;
+		IGraphics* _Graphics = nullptr;
 		IInput* _Input = nullptr;
+		ITime* _Time = nullptr;
 
-	private:
 		const int _FramesPerSecond = 60;
 		const uint8_t* _KeyState = NULL;
 		float _X = 0.0f;
 
 	public:
-		bool Init(const char* Name, int Widht, int Height);
+		bool InitEngine(const char* Name, int Widht, int Height);
 		void Start(void);
-
-		IInput& Input() { return *_Input; };
 
 	private:
 		void ProcessInput(void);
@@ -37,5 +48,14 @@ namespace NPEngine
 		void Render(void);
 		void ControlFrameRate(long StartTime, long CurrentTime);
 		void Shutdown(void);
+
+	public:
+		//Getter, setter
+		EngineState& GetEngineState();
+
+		IWindow* GetWindow();
+		IGraphics* GetGraphics();
+		IInput* GetInput();
+		ITime* GetTime();
 	};
 }

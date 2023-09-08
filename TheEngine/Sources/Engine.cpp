@@ -1,10 +1,19 @@
 #include "Engine.h"
+
+#include "Window/IWindow.h"
+#include "Graphics/IGraphics.h"
+#include "Input/IInput.h"
+
+#include "Window/SDLWindow.h"
+#include "Graphics/SDLGraphics.h"
+#include "Input/SDLInput.h"
+
 #include <time.h>
 #include <SDL.h>
 
-#include "SDLInput.h"
+using namespace NPEngine;
 
-bool NPEngine::Engine::Init(const char* Name, int Widht, int Height)
+bool Engine::InitEngine(const char* Name, int Width, int Height)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
@@ -12,48 +21,40 @@ bool NPEngine::Engine::Init(const char* Name, int Widht, int Height)
 		return false;
 	}
 
-	int X = SDL_WINDOWPOS_CENTERED;
-	int Y = SDL_WINDOWPOS_CENTERED;
-	Uint32 Flag = SDL_WINDOW_TOOLTIP;
-
-	_Window = SDL_CreateWindow(Name,X, Y, Widht, Height, Flag);
-	if (!_Window)
+	_Window = new SDLWindow();
+	if (!_Window->InitWindow(Name, Width, Height))
 	{
-		SDL_Log(SDL_GetError());
 		return false;
 	}
 
-	Uint32 RenderFlags = SDL_RENDERER_ACCELERATED;
-	_Renderer = SDL_CreateRenderer(_Window, -1, RenderFlags);
-
-	if (!_Renderer)
+	_Graphics = new SDLGraphics();
+	if (!_Graphics->InitGraphics(_Window))
 	{
-		SDL_Log(SDL_GetError());
 		return false;
 	}
-
-	_IsInit = true;
 
 	_Input = new SDLInput();
+
+	GetEngineState().IsInit = true;
 
 	return true;
 }
 
-void NPEngine::Engine::Start(void)
+void Engine::Start(void)
 {
-	if (!_IsInit)
+	if (!GetEngineState().IsInit)
 	{
-		if (!Init("Unknow title", 800, 600))
+		if (!InitEngine("Unknow title", 800, 600))
 		{
 			return;
 		}
 	}
 
-	_IsRunning = true;
+	GetEngineState().IsRunning = true;
 
 	clock_t LastFrameStartTime = clock();
 
-	while (_IsRunning)
+	while (GetEngineState().IsRunning)
 	{
 		const clock_t CurrentFrameStartTime = clock();
 		float DeltaTime = (CurrentFrameStartTime - LastFrameStartTime) * 0.001f;
@@ -70,35 +71,39 @@ void NPEngine::Engine::Start(void)
 	Shutdown();
 }
 
-void NPEngine::Engine::ProcessInput(void)
+void Engine::ProcessInput(void)
 {
-	Input().Update();
-
-	/*SDL_Event _Event;
-	while (SDL_PollEvent(&_Event))
+	IInput* Input = GetInput();
+	if (Input)
 	{
-		switch (_Event.type)
-		{
-		case SDL_QUIT:
-			_IsRunning = false;
-			break;
-		}
+		Input->Update();
 	}
 
-	_KeyState = SDL_GetKeyboardState(nullptr);*/
+	//SDL_Event _Event;
+	//while (SDL_PollEvent(&_Event))
+	//{
+	//	switch (_Event.type)
+	//	{
+	//	case SDL_QUIT:
+	//		_IsRunning = false;
+	//		break;
+	//	}
+	//}
+
+	//_KeyState = SDL_GetKeyboardState(nullptr);
 }
 
-void NPEngine::Engine::Update(float DeltaTime)
+void Engine::Update(float DeltaTime)
 {
-	if (_KeyState[SDL_SCANCODE_D])
+	/*if (_KeyState[SDL_SCANCODE_D])
 	{
 		_X += 100 * DeltaTime;
-	}
+	}*/
 }
 
-void NPEngine::Engine::Render(void)
+void Engine::Render(void)
 {
-	SDL_SetRenderDrawColor(_Renderer, 0, 0, 0, 255);
+	/*SDL_SetRenderDrawColor(_Renderer, 0, 0, 0, 255);
 	SDL_RenderClear(_Renderer);
 
 	SDL_SetRenderDrawColor(_Renderer, 255, 0, 0, 255);
@@ -110,11 +115,11 @@ void NPEngine::Engine::Render(void)
 
 	SDL_RenderDrawRect(_Renderer, &Rect);
 
-	SDL_RenderPresent(_Renderer);
+	SDL_RenderPresent(_Renderer);*/
 
 }
 
-void NPEngine::Engine::ControlFrameRate(long StartTime, long CurrentTime)
+void Engine::ControlFrameRate(long StartTime, long CurrentTime)
 {
 	const int DesiredFrameDuration = 1000 / _FramesPerSecond;
 	long CurrentFrameTime = (CurrentTime - StartTime) * 1000 / CLOCKS_PER_SEC;
@@ -125,13 +130,40 @@ void NPEngine::Engine::ControlFrameRate(long StartTime, long CurrentTime)
 	}
 }
 
-void NPEngine::Engine::Shutdown(void)
+void Engine::Shutdown(void)
 {
 	if (_Input != nullptr)
 	{
 		delete _Input;
 	}
-	SDL_DestroyRenderer(_Renderer);
-	SDL_DestroyWindow(_Window);
-	SDL_Quit();
+	//SDL_DestroyRenderer(_Renderer);
+	//SDL_DestroyWindow(_Window);
+	//SDL_Quit();
+}
+
+//Getter, Setter
+
+EngineState& NPEngine::Engine::GetEngineState()
+{
+	return _EngineState;
+}
+
+IWindow* Engine::GetWindow()
+{
+	return _Window;
+}
+
+IGraphics* Engine::GetGraphics()
+{
+	return _Graphics;
+}
+
+IInput* Engine::GetInput()
+{
+	return _Input;
+}
+
+ITime* NPEngine::Engine::GetTime()
+{
+	return _Time;
 }

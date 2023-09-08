@@ -1,4 +1,6 @@
-#include "IInput.h"
+#pragma once
+
+#include "Input/IInput.h"
 
 namespace NPEngine
 {
