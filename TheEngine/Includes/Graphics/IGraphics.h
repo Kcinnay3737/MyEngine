@@ -9,6 +9,13 @@ namespace NPEngine
 
 	protected:
 		friend class Engine;
-		virtual bool InitGraphics(void* Window) = 0;
+		virtual bool Init() = 0;
+		friend class Enigne;
+		virtual bool InitWindow(const char* WindowName, int WindowWidht, int WindowHeight) = 0;
+		friend class Engine;
+		virtual bool InitRenderer() = 0;
+
+		friend class Engine;
+		virtual void Render() = 0;
 	};
 }

@@ -1,15 +1,49 @@
 #include "Graphics/SDLGraphics.h"
 
 #include <SDL.h>
+#include "Engine.h"
+#include "Debug/Logger/ILogger.h"
 
 using namespace NPEngine;
 
-bool SDLGraphics::InitGraphics(void* Window)
+NPEngine::SDLGraphics::~SDLGraphics()
 {
-	_Window = static_cast<SDL_Window*>(Window);
+	SDL_DestroyRenderer(_Renderer);
+	SDL_DestroyWindow(_Window);
+	SDL_Quit();
+}
+
+bool NPEngine::SDLGraphics::Init()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
+		Engine::GetEngineInstance()->GetLogger()->DebugMessage(SDL_GetError());
+		return false;
+	}
+	return true;
+}
+
+bool SDLGraphics::InitWindow(const char* WindowName, int WindowWidth, int WindowHeight)
+{
+	int X = SDL_WINDOWPOS_CENTERED;
+	int Y = SDL_WINDOWPOS_CENTERED;
+	Uint32 Flag = SDL_WINDOW_TOOLTIP;
+
+	_Window = SDL_CreateWindow(WindowName, X, Y, WindowWidth, WindowHeight, Flag);
 	if (!_Window)
 	{
-		SDL_Log("La window chie mon cave");
+		Engine::GetEngineInstance()->GetLogger()->DebugMessage(SDL_GetError());
+		return false;
+	}
+
+	return true;
+}
+
+bool SDLGraphics::InitRenderer()
+{
+	if (!_Window)
+	{
+		Engine::GetEngineInstance()->GetLogger()->DebugMessage("La window chie");
 		return false;
 	}
 
@@ -18,9 +52,26 @@ bool SDLGraphics::InitGraphics(void* Window)
 
 	if (!_Renderer)
 	{
-		SDL_Log(SDL_GetError());
+		Engine::GetEngineInstance()->GetLogger()->DebugMessage(SDL_GetError());
 		return false;
 	}
 
 	return true;
+}
+
+void NPEngine::SDLGraphics::Render()
+{
+	SDL_SetRenderDrawColor(_Renderer, 0, 0, 0, 255);
+	SDL_RenderClear(_Renderer);
+
+	/*SDL_SetRenderDrawColor(_Renderer, 255, 0, 0, 255);
+	SDL_Rect Rect = {0};
+	Rect.x = X;
+	Rect.y = Y;
+	Rect.w = 100;
+	Rect.h = 100;
+
+	SDL_RenderDrawRect(_Renderer, &Rect);*/
+
+	SDL_RenderPresent(_Renderer);
 }

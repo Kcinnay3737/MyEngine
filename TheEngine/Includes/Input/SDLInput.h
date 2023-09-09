@@ -1,23 +1,29 @@
 #pragma once
 
 #include "Input/IInput.h"
+#include "SDL_scancode.h"
 
 namespace NPEngine
 {
 	class SDLInput final : public IInput
 	{
 	public:
-		virtual ~SDLInput() = default;
-
-		virtual void Update() override;
-		virtual bool IsKeyDown(int keycode) override;
-		virtual bool IsButtonDown(int button) override;
-		virtual void GetMousePosition(int* x, int* y) override;
 
 	private:
-		const unsigned char* m_KeyStates = nullptr;
-		int m_MouseX = 0;
-		int m_MouseY = 0;
-		bool m_MouseStates[3]{ false, false, false };
+		const unsigned char* _KeyStates = nullptr;
+
+	public:
+		virtual ~SDLInput() = default;
+
+		virtual bool IsKeyDown(EKeyboardKeys Key) override;
+		virtual bool IsButtonDown(EButtonKeys Key) override;
+
+		virtual void GetMousePosition(int* x, int* y) override;
+
+		SDL_Scancode MapToSDLScancode(EKeyboardKeys Key);
+		Uint8 SDLInput::MapToSDLButtonCode(EButtonKeys button);
+
+	private:
+		virtual void ProcessInput() override;
 	};
 }

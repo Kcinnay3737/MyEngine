@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Input/EnumInput.h"
+
 namespace NPEngine
 {
 	class IInput
@@ -7,12 +9,12 @@ namespace NPEngine
 	public:
 		virtual ~IInput() = default;
 
-		virtual bool IsKeyDown(int key) = 0;
-		virtual bool IsButtonDown(int button) = 0;
-		virtual void GetMousePosition(int* x, int* y) = 0;
+		virtual bool IsKeyDown(EKeyboardKeys Key) = 0;
+		virtual bool IsButtonDown(EButtonKeys Key) = 0;
+
+		virtual void GetMousePosition(int* X, int* Y) = 0;
 	protected:
 		friend class Engine;
-		virtual void Update() = 0;
+		virtual void ProcessInput() = 0;
 	};
-
 }

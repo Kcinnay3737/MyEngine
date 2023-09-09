@@ -1,39 +1,66 @@
 #include "Engine.h"
 
-#include "Window/IWindow.h"
 #include "Graphics/IGraphics.h"
 #include "Input/IInput.h"
+#include "Time/ITime.h"
+#include "Debug/Logger/ILogger.h"
 
-#include "Window/SDLWindow.h"
 #include "Graphics/SDLGraphics.h"
 #include "Input/SDLInput.h"
+#include "Time/SDLTime.h"
+#if _DEBUG
+#include "Debug/Logger/ConsoleLogger.h"
+#else
+#include "Debug/Logger/FileLogger.h"
+#endif
 
 #include <time.h>
 #include <SDL.h>
 
 using namespace NPEngine;
 
+Engine* Engine::_InstanceEngine = nullptr;
+
 bool Engine::InitEngine(const char* Name, int Width, int Height)
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		SDL_Log(SDL_GetError());
-		return false;
-	}
-
-	_Window = new SDLWindow();
-	if (!_Window->InitWindow(Name, Width, Height))
-	{
-		return false;
-	}
-
 	_Graphics = new SDLGraphics();
-	if (!_Graphics->InitGraphics(_Window))
+	if (!_Graphics)
+	{
+		return false;
+	}
+	if (!_Graphics->Init())
+	{
+		return false;
+	}
+	if (!_Graphics->InitWindow(Name, Width, Height))
+	{
+		return false;
+	}
+	if (!_Graphics->InitRenderer())
 	{
 		return false;
 	}
 
 	_Input = new SDLInput();
+	if (!_Input)
+	{
+		return false;
+	}
+
+	_Time = new SDLTime();
+	if (!_Time)
+	{
+		return false;
+	}
+	_Time->SetFramePerSecond(60);
+
+#if _DEBUG
+	_Logger = new ConsoleLogger();
+#else
+	_Logger = new FileLogger();
+#endif
+
+	_InstanceEngine = this;
 
 	GetEngineState().IsInit = true;
 
@@ -52,49 +79,38 @@ void Engine::Start(void)
 
 	GetEngineState().IsRunning = true;
 
-	clock_t LastFrameStartTime = clock();
+	_Time->UpdateCurrentFrameStartTime();
+	_Time->UpdateLastFrameStartTime();
 
 	while (GetEngineState().IsRunning)
 	{
-		const clock_t CurrentFrameStartTime = clock();
-		float DeltaTime = (CurrentFrameStartTime - LastFrameStartTime) * 0.001f;
+		_Time->UpdateCurrentFrameStartTime();
+		_Time->UpdateDeltaTime();
 
-		ProcessInput();
-		Update(DeltaTime);
-		Render();
+		_Input->ProcessInput();
 
-		ControlFrameRate(CurrentFrameStartTime, clock());
+		Update(_Time->GetDeltaTime());
+		
+		_Graphics->Render();
 
-		LastFrameStartTime = CurrentFrameStartTime;
+		_Time->ControlFrameRate();
+		_Time->UpdateLastFrameStartTime();
 	}
 
 	Shutdown();
 }
 
-void Engine::ProcessInput(void)
+void NPEngine::Engine::ProcessInput()
 {
-	IInput* Input = GetInput();
-	if (Input)
-	{
-		Input->Update();
-	}
 
-	//SDL_Event _Event;
-	//while (SDL_PollEvent(&_Event))
-	//{
-	//	switch (_Event.type)
-	//	{
-	//	case SDL_QUIT:
-	//		_IsRunning = false;
-	//		break;
-	//	}
-	//}
-
-	//_KeyState = SDL_GetKeyboardState(nullptr);
 }
 
 void Engine::Update(float DeltaTime)
 {
+	if (_Input->IsKeyDown(Key_W))
+	{
+		_Logger->DebugMessage("test");
+	}
 	/*if (_KeyState[SDL_SCANCODE_D])
 	{
 		_X += 100 * DeltaTime;
@@ -103,54 +119,40 @@ void Engine::Update(float DeltaTime)
 
 void Engine::Render(void)
 {
-	/*SDL_SetRenderDrawColor(_Renderer, 0, 0, 0, 255);
-	SDL_RenderClear(_Renderer);
+	
 
-	SDL_SetRenderDrawColor(_Renderer, 255, 0, 0, 255);
-	SDL_Rect Rect = {0};
-	Rect.x = _X;
-	Rect.y = 100;
-	Rect.w = 100;
-	Rect.h = 100;
-
-	SDL_RenderDrawRect(_Renderer, &Rect);
-
-	SDL_RenderPresent(_Renderer);*/
-
-}
-
-void Engine::ControlFrameRate(long StartTime, long CurrentTime)
-{
-	const int DesiredFrameDuration = 1000 / _FramesPerSecond;
-	long CurrentFrameTime = (CurrentTime - StartTime) * 1000 / CLOCKS_PER_SEC;
-
-	if (CurrentFrameTime < DesiredFrameDuration)
-	{
-		SDL_Delay(DesiredFrameDuration - CurrentFrameTime);
-	}
 }
 
 void Engine::Shutdown(void)
 {
+	if (_Graphics != nullptr)
+	{
+		delete _Graphics;
+	}
 	if (_Input != nullptr)
 	{
 		delete _Input;
 	}
-	//SDL_DestroyRenderer(_Renderer);
-	//SDL_DestroyWindow(_Window);
-	//SDL_Quit();
+	if (_Time != nullptr)
+	{
+		delete _Time;
+	}
+	if (_Logger)
+	{
+		delete _Logger;
+	}
 }
 
 //Getter, Setter
 
-EngineState& NPEngine::Engine::GetEngineState()
+Engine* Engine::GetEngineInstance()
 {
-	return _EngineState;
+	return _InstanceEngine;
 }
 
-IWindow* Engine::GetWindow()
+EngineState& Engine::GetEngineState()
 {
-	return _Window;
+	return _EngineState;
 }
 
 IGraphics* Engine::GetGraphics()
@@ -166,4 +168,9 @@ IInput* Engine::GetInput()
 ITime* NPEngine::Engine::GetTime()
 {
 	return _Time;
+}
+
+ILogger* NPEngine::Engine::GetLogger()
+{
+	return _Logger;
 }

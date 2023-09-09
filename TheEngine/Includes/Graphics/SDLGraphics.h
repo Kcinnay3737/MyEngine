@@ -16,9 +16,16 @@ namespace NPEngine
 		SDL_Window* _Window = nullptr;
 
 	public:
-		virtual ~SDLGraphics() = default;
+		virtual ~SDLGraphics();
 
 	private:
-		virtual bool InitGraphics(void* Window) override;
+		float X = 100.0f;
+		float Y = 100.0f;
+
+		bool Init() override;
+		bool InitWindow(const char* WindowName, int WindowWidth, int WindowHeight) override;
+		bool InitRenderer() override;
+
+		void Render();
 	};
 }
