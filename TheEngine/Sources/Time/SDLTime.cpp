@@ -34,7 +34,7 @@ void NPEngine::SDLTime::ControlFrameRate()
 	long CurrentTime = SDL_GetTicks();
 
 	const int DesiredFrameDuration = 1000 / _FramesPerSecond;
-	long CurrentFrameTime = (CurrentTime - _CurrentFrameStartTime) * 1000 / CLOCKS_PER_SEC;
+	long CurrentFrameTime = CurrentTime - _CurrentFrameStartTime;
 
 	if (CurrentFrameTime < DesiredFrameDuration)
 	{

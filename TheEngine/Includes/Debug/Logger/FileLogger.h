@@ -11,6 +11,8 @@ namespace NPEngine
 		FileLogger();
 		~FileLogger();
 
+		void SetTextColor(ELogTextColor ForegourndColor = ELogTextColor::White, ELogTextColor BackgroundColor = ELogTextColor::Black) { };
+
 		void DebugMessage(const char* Message, ...) override;
 
 	private:
