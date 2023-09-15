@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include "Engine.h"
+//#include <vld.h>
 
 void InitGameplay(void)
 {

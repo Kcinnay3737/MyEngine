@@ -3,6 +3,8 @@ const fs = require('fs');
 let project = new Project('TheEngine');
   
 project.addProvider = function(proj, isRoot=false){
+    //proj.addIncludeDir("C:/Program Files (x86)/Visual Leak Detector/include");
+    //proj.addLib("C:/Program Files (x86)/Visual Leak Detector/lib/Win64/vld");
     const sdl2 = true;//process.argv.indexOf("--sdl2") >= 0;
     if(sdl2){
         fs.copyFileSync("./SDL/lib/SDL2.dll", "./Deployment/SDL2.dll");
