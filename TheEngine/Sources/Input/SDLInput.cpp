@@ -5,6 +5,19 @@
 
 using namespace NPEngine;
 
+bool SDLInput::Initialize()
+{
+	return true;
+}
+
+void SDLInput::Shutdown()
+{
+	/*if (_KeyStates)
+	{
+		delete _KeyStates;
+	}*/
+}
+
 bool SDLInput::IsKeyDown(EKeyboardKeys Key)
 {
 	return _KeyStates[MapToSDLScancode(Key)];

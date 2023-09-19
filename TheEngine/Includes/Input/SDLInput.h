@@ -24,6 +24,9 @@ namespace NPEngine
 		Uint8 SDLInput::MapToSDLButtonCode(EButtonKeys button);
 
 	private:
+		virtual bool Initialize() override;
+		virtual void Shutdown() override;
+
 		virtual void ProcessInput() override;
 	};
 }

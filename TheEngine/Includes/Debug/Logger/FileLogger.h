@@ -7,15 +7,18 @@ namespace NPEngine
 {
 	class FileLogger final : public ILogger
 	{
-	public:
-		FileLogger();
-		~FileLogger();
+	private:
+		std::ofstream _File;
 
-		void SetTextColor(ELogTextColor ForegourndColor = ELogTextColor::White, ELogTextColor BackgroundColor = ELogTextColor::Black) { };
+	public:
+		~FileLogger() = default;
+
+		void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) { };
 
 		void DebugMessage(const char* Message, ...) override;
 
 	private:
-		std::ofstream _File;
+		virtual bool Initialize() override;
+		virtual void Shutdown() override;
 	};
 }

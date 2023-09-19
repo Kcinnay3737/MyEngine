@@ -19,6 +19,11 @@ namespace NPEngine
 
 	private:
 		friend class Engine;
+		virtual bool Initialise() = 0;
+		friend class Engine;
+		virtual void Shutdown() = 0;
+
+		friend class Engine;
 		virtual void UpdateDeltaTime() = 0;
 		friend class Engine;
 		virtual void UpdateLastFrameStartTime() = 0;

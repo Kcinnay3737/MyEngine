@@ -14,51 +14,41 @@
 #include "Debug/Logger/FileLogger.h"
 #endif
 
-#include <time.h>
-#include <SDL.h>
-
 using namespace NPEngine;
 
 Engine* Engine::_InstanceEngine = nullptr;
 
 bool Engine::InitEngine(const char* Name, int Width, int Height)
 {
-	_Graphics = new SDLGraphics();
-	if (!_Graphics)
-	{
-		return false;
-	}
-	if (!_Graphics->Init())
-	{
-		return false;
-	}
-	if (!_Graphics->InitWindow(Name, Width, Height))
-	{
-		return false;
-	}
-	if (!_Graphics->InitRenderer())
-	{
-		return false;
-	}
-
-	_Input = new SDLInput();
-	if (!_Input)
-	{
-		return false;
-	}
-
-	_Time = new SDLTime();
-	if (!_Time)
-	{
-		return false;
-	}
-	_Time->SetFramePerSecond(60);
-
 #if _DEBUG
 	_Logger = new ConsoleLogger();
 #else
 	_Logger = new FileLogger();
 #endif
+	if (!_Logger || !_Logger->Initialize())
+	{
+		return false;
+	}
+
+	_Graphics = new SDLGraphics();
+	if (!_Graphics || !_Graphics->Initialize(Name, Width, Height))
+	{
+		return false;
+	}
+	_Graphics->SetBackgroundColor(Color::Black);
+	
+	_Input = new SDLInput();
+	if (!_Input || !_Input->Initialize())
+	{
+		return false;
+	}
+
+	_Time = new SDLTime();
+	if (!_Time || !_Time->Initialise())
+	{
+		return false;
+	}
+	_Time->SetFramePerSecond(60);
 
 	_InstanceEngine = this;
 
@@ -87,11 +77,9 @@ void Engine::Start(void)
 		_Time->UpdateCurrentFrameStartTime();
 		_Time->UpdateDeltaTime();
 
-		_Input->ProcessInput();
-
+		ProcessInput();
 		Update(_Time->GetDeltaTime());
-		
-		_Graphics->Render();
+		Render();
 
 		_Time->ControlFrameRate();
 		_Time->UpdateLastFrameStartTime();
@@ -100,9 +88,9 @@ void Engine::Start(void)
 	Shutdown();
 }
 
-void NPEngine::Engine::ProcessInput()
+void Engine::ProcessInput()
 {
-
+	_Input->ProcessInput();
 }
 
 void Engine::Update(float DeltaTime)
@@ -119,26 +107,34 @@ void Engine::Update(float DeltaTime)
 
 void Engine::Render(void)
 {
-	
+	_Graphics->Clear();
 
+	Rectangle2D<float> Rect = Rectangle2D<float>(Vector2D<float>(10.0f, 0.0f), Vector2D<float>(100.0f, 100.0f));
+	_Graphics->DrawTextureTile("D:\\MyEngine\\MyEngine\\Texture\\default.png", Rect, Vector2D<int>(3, 3), Vector2D<int>(0, 1));
+
+	_Graphics->Present();
 }
 
 void Engine::Shutdown(void)
 {
-	if (_Graphics != nullptr)
+	if (_Graphics)
 	{
+		_Graphics->Shutdown();
 		delete _Graphics;
 	}
-	if (_Input != nullptr)
+	if (_Input)
 	{
+		_Input->Shutdown();
 		delete _Input;
 	}
-	if (_Time != nullptr)
+	if (_Time)
 	{
+		_Time->Shutdown();
 		delete _Time;
 	}
 	if (_Logger)
 	{
+		_Logger->Shutdown();
 		delete _Logger;
 	}
 }

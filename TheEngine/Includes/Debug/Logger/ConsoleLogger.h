@@ -1,26 +1,28 @@
 #pragma once
 
 #include "Debug/Logger/ILogger.h"
-#include "Debug/Logger/EnumLog.h"
 #include <concrt.h>
 
 namespace NPEngine
 {
 	class ConsoleLogger final : public ILogger
 	{
-	public:
-		ConsoleLogger();
-		~ConsoleLogger();
+	private:
+		HANDLE _HConsole;
 
-		void SetTextColor(ELogTextColor ForegourndColor, ELogTextColor BackgroundColor) override;
+	public:
+		~ConsoleLogger() = default;
+
+		void SetTextColor(EColor ForegourndColor, EColor BackgroundColor) override;
 
 		void DebugMessage(const char* Message, ...) override;
 
-		uint8_t MapToForegroundColor(ELogTextColor Color);
-		uint8_t MapToBackgroundColor(ELogTextColor Color);
+		uint8_t MapToForegroundColor(EColor Color);
+		uint8_t MapToBackgroundColor(EColor Color);
 
 	private:
-		HANDLE _HConsole;
+		virtual bool Initialize() override;
+		virtual void Shutdown() override;
 
 	};
 }

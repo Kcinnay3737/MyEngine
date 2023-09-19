@@ -3,33 +3,44 @@
 #include <time.h>
 #include <SDL.h>
 
-float NPEngine::SDLTime::GetDeltaTime()
+using namespace NPEngine;
+
+bool SDLTime::Initialise()
+{
+	return true;
+}
+
+void SDLTime::Shutdown()
+{
+}
+
+float SDLTime::GetDeltaTime()
 {
 	return _DeltaTime;
 }
 
-void NPEngine::SDLTime::SetFramePerSecond(int FramePerSecond)
+void SDLTime::SetFramePerSecond(int FramePerSecond)
 {
 	_FramesPerSecond = FramePerSecond;
 	_DesiredFrameDuration = 1000 / FramePerSecond;
 }
 
-void NPEngine::SDLTime::UpdateDeltaTime()
+void SDLTime::UpdateDeltaTime()
 {
 	_DeltaTime = (_CurrentFrameStartTime - _LastFrameStartTime) * 0.001f;
 }
 
-void NPEngine::SDLTime::UpdateLastFrameStartTime()
+void SDLTime::UpdateLastFrameStartTime()
 {
 	_LastFrameStartTime = _CurrentFrameStartTime;
 }
 
-void NPEngine::SDLTime::UpdateCurrentFrameStartTime()
+void SDLTime::UpdateCurrentFrameStartTime()
 {
 	_CurrentFrameStartTime = SDL_GetTicks();
 }
 
-void NPEngine::SDLTime::ControlFrameRate()
+void SDLTime::ControlFrameRate()
 {
 	long CurrentTime = SDL_GetTicks();
 
