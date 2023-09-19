@@ -5,8 +5,6 @@
 #include "Engine.h"
 #include "Debug/Logger/ILogger.h"
 #include <string>
-#include <iostream>
-#include <filesystem>
 
 using namespace NPEngine;
 
@@ -199,7 +197,9 @@ bool SDLGraphics::LoadTexture(const char* Filename)
 {
 	if (_TextureMap.find(Filename) == _TextureMap.end())
 	{
-		SDL_Texture* Texture = IMG_LoadTexture(_Renderer, Filename);
+		std::string FilePath = "..\\Texture\\";
+		FilePath += Filename;
+		SDL_Texture* Texture = IMG_LoadTexture(_Renderer, FilePath.c_str());
 		if (!Texture) return false;
 		_TextureMap[Filename] = Texture;
 	}

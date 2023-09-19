@@ -110,7 +110,7 @@ void Engine::Render(void)
 	_Graphics->Clear();
 
 	Rectangle2D<float> Rect = Rectangle2D<float>(Vector2D<float>(10.0f, 0.0f), Vector2D<float>(100.0f, 100.0f));
-	_Graphics->DrawTextureTile("D:\\MyEngine\\MyEngine\\Texture\\default.png", Rect, Vector2D<int>(3, 3), Vector2D<int>(0, 1));
+	_Graphics->DrawTextureTile("default.png", Rect, Vector2D<int>(3, 3), Vector2D<int>(0, 1));
 
 	_Graphics->Present();
 }
