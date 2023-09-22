@@ -11,7 +11,7 @@ namespace NPEngine
 
 		virtual void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) = 0;
 		
-		virtual void DebugMessage(const char* Message, ...) = 0;
+		virtual void LogMessage(const char* Message, ...) = 0;
 
 	private:
 		friend class Engine;

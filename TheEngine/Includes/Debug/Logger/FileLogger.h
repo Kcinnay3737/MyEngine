@@ -15,7 +15,7 @@ namespace NPEngine
 
 		void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) { };
 
-		void DebugMessage(const char* Message, ...) override;
+		void LogMessage(const char* Message, ...) override;
 
 	private:
 		virtual bool Initialize() override;

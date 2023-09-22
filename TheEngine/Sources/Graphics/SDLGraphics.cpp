@@ -12,7 +12,7 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
-		Engine::GetEngineInstance()->GetLogger()->DebugMessage(SDL_GetError());
+		Engine::GetEngineInstance()->GetLogger()->LogMessage(SDL_GetError());
 		return false;
 	}
 
@@ -22,7 +22,7 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 	_Window = SDL_CreateWindow(WindowName, X, Y, WindowWidth, WindowHeight, Flag);
 	if (!_Window)
 	{
-		Engine::GetEngineInstance()->GetLogger()->DebugMessage(SDL_GetError());
+		Engine::GetEngineInstance()->GetLogger()->LogMessage(SDL_GetError());
 		return false;
 	}
 
@@ -30,7 +30,7 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 	_Renderer = SDL_CreateRenderer(_Window, -1, RenderFlags);
 	if (!_Renderer)
 	{
-		Engine::GetEngineInstance()->GetLogger()->DebugMessage(SDL_GetError());
+		Engine::GetEngineInstance()->GetLogger()->LogMessage(SDL_GetError());
 		return false;
 	}
 

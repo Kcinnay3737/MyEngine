@@ -22,7 +22,7 @@ void ConsoleLogger::Shutdown()
 	FreeConsole();
 }
 
-void ConsoleLogger::DebugMessage(const char* Message, ...)
+void ConsoleLogger::LogMessage(const char* Message, ...)
 {
 	va_list Args;
 	va_start(Args, Message);

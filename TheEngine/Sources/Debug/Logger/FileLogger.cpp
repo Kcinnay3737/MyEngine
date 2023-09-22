@@ -19,7 +19,7 @@ void FileLogger::Shutdown()
 	}
 }
 
-void FileLogger::DebugMessage(const char* Message, ...)
+void FileLogger::LogMessage(const char* Message, ...)
 {
 	if (_File.is_open()) 
 	{

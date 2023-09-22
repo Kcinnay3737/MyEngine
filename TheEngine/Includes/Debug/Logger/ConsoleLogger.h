@@ -15,7 +15,7 @@ namespace NPEngine
 
 		void SetTextColor(EColor ForegourndColor, EColor BackgroundColor) override;
 
-		void DebugMessage(const char* Message, ...) override;
+		void LogMessage(const char* Message, ...) override;
 
 		uint8_t MapToForegroundColor(EColor Color);
 		uint8_t MapToBackgroundColor(EColor Color);
