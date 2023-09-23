@@ -4,6 +4,7 @@
 #include "Input/IInput.h"
 #include "Time/ITime.h"
 #include "Debug/Logger/ILogger.h"
+#include "Audio/IAudio.h"
 
 #include "Graphics/SDLGraphics.h"
 #include "Input/SDLInput.h"
@@ -13,6 +14,7 @@
 #else
 #include "Debug/Logger/FileLogger.h"
 #endif
+#include "Audio/SDLAudio.h"
 
 using namespace NPEngine;
 
@@ -48,7 +50,12 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 	{
 		return false;
 	}
-	_Time->SetFramePerSecond(60);
+
+	_Audio = new SDLAudio();
+	if (!_Audio || !_Audio->Initialize())
+	{
+		return false;
+	}
 
 	_InstanceEngine = this;
 
@@ -56,6 +63,11 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 
 	return true;
 }
+
+static size_t TextureId = 0;
+static size_t FontId = 0;
+static size_t MusicId = 0;
+static size_t SoundId = 0;
 
 void Engine::Start(void)
 {
@@ -69,20 +81,25 @@ void Engine::Start(void)
 
 	GetEngineState().IsRunning = true;
 
-	_Time->UpdateCurrentFrameStartTime();
-	_Time->UpdateLastFrameStartTime();
+	TextureId = _Graphics->LoadTexture("default.png");
+	FontId = _Graphics->LoadFont("Roboto-Black.ttf", 100);
+	MusicId = _Audio->LoadMusic("Dark_House.wav");
+	SoundId = _Audio->LoadSound("Warped_Whoosh_001.wav");
+
+	//_Audio->PlayMusic(MusicId);
+	_Audio->PlaySound(SoundId);
+
+	_Time->InitialiseTime();
 
 	while (GetEngineState().IsRunning)
 	{
-		_Time->UpdateCurrentFrameStartTime();
-		_Time->UpdateDeltaTime();
+		_Time->OnStartFrame();
 
 		ProcessInput();
 		Update(_Time->GetDeltaTime());
 		Render();
 
-		_Time->ControlFrameRate();
-		_Time->UpdateLastFrameStartTime();
+		_Time->OnEndFrame();
 	}
 
 	Shutdown();
@@ -95,6 +112,8 @@ void Engine::ProcessInput()
 
 void Engine::Update(float DeltaTime)
 {
+	_Logger->LogMessage("%f", DeltaTime);
+
 	if (_Input->IsKeyDown(Key_W))
 	{
 		_Logger->LogMessage("test");
@@ -104,6 +123,11 @@ void Engine::Update(float DeltaTime)
 void Engine::Render(void)
 {
 	_Graphics->Clear();
+
+	Rectangle2D<float> DrawRect = Rectangle2D<float>(Vector2D<float>(100.f, 100.f), Vector2D<float>(200.f, 100.f));
+	_Graphics->DrawTexture(TextureId, DrawRect);
+
+	_Graphics->DrawString(FontId, "Allo", Vector2D<int>(0, 0), Color::Blue);
 
 	_Graphics->Present();
 }
@@ -124,6 +148,11 @@ void Engine::Shutdown(void)
 	{
 		_Time->Shutdown();
 		delete _Time;
+	}
+	if (_Audio)
+	{
+		_Audio->Shutdown();
+		delete _Audio;
 	}
 	if (_Logger)
 	{
@@ -146,20 +175,25 @@ EngineState& Engine::GetEngineState()
 
 IGraphics* Engine::GetGraphics()
 {
-	return _Graphics;
+	return GetEngineInstance()->_Graphics;
 }
 
 IInput* Engine::GetInput()
 {
-	return _Input;
+	return GetEngineInstance()->_Input;
 }
 
-ITime* NPEngine::Engine::GetTime()
+ITime* Engine::GetTime()
 {
-	return _Time;
+	return GetEngineInstance()->_Time;
 }
 
-ILogger* NPEngine::Engine::GetLogger()
+ILogger* Engine::GetLogger()
 {
-	return _Logger;
+	return GetEngineInstance()->_Logger;
+}
+
+IAudio* NPEngine::Engine::GetAudio()
+{
+	return GetEngineInstance()->_Audio;
 }

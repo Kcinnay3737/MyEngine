@@ -18,19 +18,23 @@ namespace NPEngine
 		long _DesiredFrameDuration = 1000 / 60;
 
 	private:
+		//<= 0 for unlimited frame
 		friend class Engine;
-		virtual bool Initialise() = 0;
+		virtual bool Initialise(float FramePerSecond = 60) = 0;
 		friend class Engine;
 		virtual void Shutdown() = 0;
 
-		friend class Engine;
 		virtual void UpdateDeltaTime() = 0;
-		friend class Engine;
 		virtual void UpdateLastFrameStartTime() = 0;
-		friend class Engine;
 		virtual void UpdateCurrentFrameStartTime() = 0;
-		friend class Engine;
 		virtual void ControlFrameRate() = 0;
+
+		friend class Engine;
+		virtual void InitialiseTime() = 0;
+		friend class Engine;
+		virtual void OnStartFrame() = 0;
+		friend class Engine;
+		virtual void OnEndFrame() = 0;
 
 	};
 }

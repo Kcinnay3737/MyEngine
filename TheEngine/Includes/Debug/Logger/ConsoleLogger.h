@@ -8,7 +8,7 @@ namespace NPEngine
 	class ConsoleLogger final : public ILogger
 	{
 	private:
-		HANDLE _HConsole;
+		HANDLE _HConsole = HANDLE();
 
 	public:
 		~ConsoleLogger() = default;

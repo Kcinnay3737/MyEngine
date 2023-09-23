@@ -6,6 +6,7 @@ namespace NPEngine
 	class IInput;
 	class ITime;
 	class ILogger;
+	class IAudio;
 
 	struct EngineState
 	{
@@ -27,6 +28,7 @@ namespace NPEngine
 		IInput* _Input = nullptr;
 		ITime* _Time = nullptr;
 		ILogger* _Logger = nullptr;
+		IAudio* _Audio = nullptr;
 
 	public:
 		bool InitEngine(const char* Name, int Widht, int Height);
@@ -44,9 +46,10 @@ namespace NPEngine
 
 		EngineState& GetEngineState();
 
-		IGraphics* GetGraphics();
-		IInput* GetInput();
-		ITime* GetTime();
-		ILogger* GetLogger();
+		static IGraphics* GetGraphics();
+		static IInput* GetInput();
+		static ITime* GetTime();
+		static ILogger* GetLogger();
+		static IAudio* GetAudio();
 	};
 }

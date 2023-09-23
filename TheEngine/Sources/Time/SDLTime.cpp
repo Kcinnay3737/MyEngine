@@ -5,8 +5,9 @@
 
 using namespace NPEngine;
 
-bool SDLTime::Initialise()
+bool SDLTime::Initialise(float FramePerSecond)
 {
+	SetFramePerSecond(FramePerSecond);
 	return true;
 }
 
@@ -22,6 +23,7 @@ float SDLTime::GetDeltaTime()
 void SDLTime::SetFramePerSecond(int FramePerSecond)
 {
 	_FramesPerSecond = FramePerSecond;
+	if (_FramesPerSecond <= 0) return;
 	_DesiredFrameDuration = 1000 / FramePerSecond;
 }
 
@@ -42,13 +44,32 @@ void SDLTime::UpdateCurrentFrameStartTime()
 
 void SDLTime::ControlFrameRate()
 {
+	if (_FramesPerSecond <= 0) return;
+
 	long CurrentTime = SDL_GetTicks();
 
-	const int DesiredFrameDuration = 1000 / _FramesPerSecond;
 	long CurrentFrameTime = CurrentTime - _CurrentFrameStartTime;
 
-	if (CurrentFrameTime < DesiredFrameDuration)
+	if (CurrentFrameTime < _DesiredFrameDuration)
 	{
-		SDL_Delay(DesiredFrameDuration - CurrentFrameTime);
+		SDL_Delay(_DesiredFrameDuration - CurrentFrameTime);
 	}
+}
+
+void SDLTime::InitialiseTime()
+{
+	UpdateCurrentFrameStartTime();
+	UpdateLastFrameStartTime();
+}
+
+void SDLTime::OnStartFrame()
+{
+	UpdateCurrentFrameStartTime();
+	UpdateDeltaTime();
+}
+
+void SDLTime::OnEndFrame()
+{
+	ControlFrameRate();
+	UpdateLastFrameStartTime();
 }

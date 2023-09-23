@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Debug/Logger/ILogger.h"
 #include <string>
+#include <SDL_ttf.h>
 
 using namespace NPEngine;
 
@@ -12,7 +13,7 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
-		Engine::GetEngineInstance()->GetLogger()->LogMessage(SDL_GetError());
+		Engine::GetLogger()->LogMessage(SDL_GetError());
 		return false;
 	}
 
@@ -22,7 +23,7 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 	_Window = SDL_CreateWindow(WindowName, X, Y, WindowWidth, WindowHeight, Flag);
 	if (!_Window)
 	{
-		Engine::GetEngineInstance()->GetLogger()->LogMessage(SDL_GetError());
+		Engine::GetLogger()->LogMessage(SDL_GetError());
 		return false;
 	}
 
@@ -30,7 +31,13 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 	_Renderer = SDL_CreateRenderer(_Window, -1, RenderFlags);
 	if (!_Renderer)
 	{
-		Engine::GetEngineInstance()->GetLogger()->LogMessage(SDL_GetError());
+		Engine::GetLogger()->LogMessage(SDL_GetError());
+		return false;
+	}
+
+	if (TTF_Init() == -1)
+	{
+		Engine::GetLogger()->LogMessage(TTF_GetError());
 		return false;
 	}
 
@@ -41,6 +48,7 @@ void SDLGraphics::Shutdown()
 {
 	SDL_DestroyRenderer(_Renderer);
 	SDL_DestroyWindow(_Window);
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -81,11 +89,9 @@ void SDLGraphics::DrawLine(const Vector2D<float>& Start, const Vector2D<float>& 
 	SDL_RenderDrawLineF(_Renderer, Start.X, Start.Y, End.X, End.Y);
 }
 
-void SDLGraphics::DrawTexture(const char* Filename, const Rectangle2D<float>& DrawRect, const Color& Color, float Angle, const Flip& Flip)
+void SDLGraphics::DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRect, const Color& Color, float Angle, const Flip& Flip)
 {
-	if (!LoadTexture(Filename)) return;
-
-	SDL_Texture* Texture = _TextureMap[Filename];
+	SDL_Texture* Texture = _TextureMap[TextureId];
 	if (!Texture) return;
 
 	SDL_RendererFlip SDLFlip = SDL_FLIP_NONE;
@@ -112,7 +118,7 @@ void SDLGraphics::DrawTexture(const char* Filename, const Rectangle2D<float>& Dr
 	SDLDrawRect.h = DrawRect.Size.Y;
 
 	Rectangle2D<int> TextureRect = Rectangle2D<int>(Vector2D<int>(0, 0), Vector2D<int>(0, 0));
-	GetTextureSize(Filename, &TextureRect.Size);
+	GetTextureSize(TextureId, &TextureRect.Size);
 
 	SDL_Rect SDLTextureRect = { 0 };
 	SDLTextureRect.x = TextureRect.Position.X;
@@ -123,13 +129,11 @@ void SDLGraphics::DrawTexture(const char* Filename, const Rectangle2D<float>& Dr
 	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLDrawRect, Angle, nullptr, SDLFlip);
 }
 
-void NPEngine::SDLGraphics::DrawTextureTile(const char* Filename, const Rectangle2D<float>& DrawRect, const Vector2D<int>& GridSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip)
+void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& GridSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip)
 {
-	if (!LoadTexture(Filename)) return;
-
 	if (GridSize.X <= 0 || GridSize.Y <= 0) return;
 
-	SDL_Texture* Texture = _TextureMap[Filename];
+	SDL_Texture* Texture = _TextureMap[TextureId];
 	if (!Texture) return;
 
 	SDL_RendererFlip SDLFlip = SDL_FLIP_NONE;
@@ -156,7 +160,7 @@ void NPEngine::SDLGraphics::DrawTextureTile(const char* Filename, const Rectangl
 	SDLDrawRect.h = DrawRect.Size.Y;
 
 	Vector2D<int> TextureSize;
-	GetTextureSize(Filename, &TextureSize);
+	GetTextureSize(TextureId, &TextureSize);
 	Vector2D<int> CellSize;
 	CellSize.X = TextureSize.X / GridSize.X;
 	CellSize.Y = TextureSize.Y / GridSize.Y;
@@ -172,14 +176,75 @@ void NPEngine::SDLGraphics::DrawTextureTile(const char* Filename, const Rectangl
 	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLDrawRect, Angle, nullptr, SDLFlip);
 }
 
-void SDLGraphics::GetTextureSize(const char* Filename, Vector2D<int>* Size)
+void SDLGraphics::GetTextureSize(size_t TextureId, Vector2D<int>* Size)
 {
-	if (!LoadTexture(Filename)) return;
-
-	SDL_Texture* Texture = _TextureMap[Filename];
+	SDL_Texture* Texture = _TextureMap[TextureId];
 	if (!Texture) return;
 
 	SDL_QueryTexture(Texture, NULL, NULL, &Size->X, &Size->Y);
+}
+
+size_t SDLGraphics::LoadFont(const char* Filename, int FontSize)
+{
+	std::hash<const char*> Hasher;
+	size_t FontId = Hasher(Filename);
+
+	if (_FontMap.find(FontId) == _FontMap.end())
+	{
+		std::string FilePath = "../Assets/Font/";
+		FilePath += Filename;
+
+		TTF_Font* Font = TTF_OpenFont(FilePath.c_str(), FontSize);
+		if (Font)
+		{
+			_FontMap[FontId] = Font;
+		}
+		else
+		{
+			Engine::GetLogger()->LogMessage(TTF_GetError());
+		}
+	}
+
+	return FontId;
+}
+
+void SDLGraphics::DrawString(size_t FontId, const char* Text, Vector2D<int>& Location, const Color& Color)
+{
+	TTF_Font* Font = _FontMap[FontId];
+
+	SDL_Color SDLColor = SDL_Color();
+	SDLColor.r = Color.rgba.R;
+	SDLColor.g = Color.rgba.G;
+	SDLColor.b = Color.rgba.B;
+	SDLColor.a = Color.rgba.A;
+
+	SDL_Surface* Surface = TTF_RenderText_Solid(Font, Text, SDLColor);
+	SDL_Texture* TextureBuffer = SDL_CreateTextureFromSurface(_Renderer, Surface);
+
+	Vector2D<int> FontSize;
+	GetTextSize(FontId, Text, &FontSize);
+
+	SDL_Rect SDLRect = SDL_Rect();
+	SDLRect.x = Location.X;
+	SDLRect.y = Location.Y;
+	SDLRect.w = FontSize.X;
+	SDLRect.h = FontSize.Y;
+
+	SDL_RenderCopy(_Renderer, TextureBuffer, nullptr, &SDLRect);
+	SDL_FreeSurface(Surface);
+}
+
+void SDLGraphics::GetTextSize(size_t FontId, const char* Text, Vector2D<int>* Size)
+{
+	TTF_Font* Font = _FontMap[FontId];
+	if (!Font) return;
+
+	int Width = 0;
+	int Height = 0;
+	if (TTF_SizeText(Font, Text, &Width, &Height) != 0) return;
+
+	Size->X = Width;
+	Size->Y = Height;
 }
 
 void SDLGraphics::Clear()
@@ -193,16 +258,25 @@ void SDLGraphics::Present()
 	SDL_RenderPresent(_Renderer);
 }
 
-bool SDLGraphics::LoadTexture(const char* Filename)
+size_t SDLGraphics::LoadTexture(const char* Filename)
 {
-	if (_TextureMap.find(Filename) == _TextureMap.end())
+	std::hash<const char*> Hasher;
+	size_t TextureId = Hasher(Filename);
+
+	if (_TextureMap.find(TextureId) == _TextureMap.end())
 	{
-		std::string FilePath = "..\\Texture\\";
+		std::string FilePath = "../Assets/Texture/";
 		FilePath += Filename;
 		SDL_Texture* Texture = IMG_LoadTexture(_Renderer, FilePath.c_str());
-		if (!Texture) return false;
-		_TextureMap[Filename] = Texture;
+		if (Texture)
+		{
+			_TextureMap[TextureId] = Texture;
+		}
+		else
+		{
+			Engine::GetLogger()->LogMessage("Texture not found");
+		}
 	}
 
-	return true;
+	return TextureId;
 }
