@@ -40,11 +40,6 @@ Color::Color(unsigned char R, unsigned char G, unsigned char B, unsigned char A)
 
 Color& Color::operator=(const Color& Other) 
 {
-	if (this == &Other) 
-	{
-		return *this;
-	}
-
 	this->rgba = Other.rgba;
 
 	return *this;

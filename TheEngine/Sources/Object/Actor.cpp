@@ -9,4 +9,5 @@ Actor::Actor(const char* Name) : Object()
 
 Actor::~Actor()
 {
+	
 }

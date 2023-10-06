@@ -3,16 +3,16 @@
 #include "Graphics/IGraphics.h"
 #include "Input/IInput.h"
 #include "Time/ITime.h"
-#include "Debug/Logger/ILogger.h"
+#include "Logger/ILogger.h"
 #include "Audio/IAudio.h"
 
 #include "Graphics/SDLGraphics.h"
 #include "Input/SDLInput.h"
 #include "Time/SDLTime.h"
 #if _DEBUG
-#include "Debug/Logger/ConsoleLogger.h"
+#include "Logger/ConsoleLogger.h"
 #else
-#include "Debug/Logger/FileLogger.h"
+#include "Logger/FileLogger.h"
 #endif
 #include "Audio/SDLAudio.h"
 
@@ -38,15 +38,15 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 		return false;
 	}
 	_Graphics->SetBackgroundColor(Color::Black);
-	
-	_Input = new SDLInput();
-	if (!_Input || !_Input->Initialize())
+
+	_Time = new SDLTime();
+	if (!_Time || !_Time->Initialise())
 	{
 		return false;
 	}
 
-	_Time = new SDLTime();
-	if (!_Time || !_Time->Initialise())
+	_Input = new SDLInput();
+	if (!_Input || !_Input->Initialize())
 	{
 		return false;
 	}
@@ -86,7 +86,7 @@ void Engine::Start(void)
 	MusicId = _Audio->LoadMusic("Dark_House.wav");
 	SoundId = _Audio->LoadSound("Warped_Whoosh_001.wav");
 
-	//_Audio->PlayMusic(MusicId);
+	_Audio->PlayMusic(MusicId);
 	_Audio->PlaySound(SoundId);
 
 	_Time->InitialiseTime();
@@ -108,15 +108,36 @@ void Engine::Start(void)
 void Engine::ProcessInput()
 {
 	_Input->ProcessInput();
+
+	if (_Input->IsKeyDown(Key_Escape))
+	{
+		Engine::GetEngineInstance()->GetEngineState().IsRunning = false;
+	}
 }
+
+static Rectangle2D<float> MovableRect = Rectangle2D<float>(Vector2D<float>(0.0f, 0.0f), Vector2D<float>(100.0f, 100.0f));
 
 void Engine::Update(float DeltaTime)
 {
-	_Logger->LogMessage("%f", DeltaTime);
+	_Logger->LogMessage("DeltaTime: %f", DeltaTime);
+
+	float MoveSpeed = 200.0f * DeltaTime;
 
 	if (_Input->IsKeyDown(Key_W))
 	{
-		_Logger->LogMessage("test");
+		MovableRect.Position.Y -= MoveSpeed;
+	}
+	if (_Input->IsKeyDown(Key_S))
+	{
+		MovableRect.Position.Y += MoveSpeed;
+	}
+	if (_Input->IsKeyDown(Key_A))
+	{
+		MovableRect.Position.X -= MoveSpeed;
+	}
+	if (_Input->IsKeyDown(Key_D))
+	{
+		MovableRect.Position.X += MoveSpeed;
 	}
 }
 
@@ -128,6 +149,8 @@ void Engine::Render(void)
 	_Graphics->DrawTexture(TextureId, DrawRect);
 
 	_Graphics->DrawString(FontId, "Allo", Vector2D<int>(0, 0), Color::Blue);
+
+	_Graphics->DrawRect(MovableRect, Color::Red, true);
 
 	_Graphics->Present();
 }

@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "Engine.h"
-#include "Debug/Logger/ILogger.h"
+#include "Logger/ILogger.h"
 #include <string>
 #include <SDL_ttf.h>
 
@@ -17,16 +17,18 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 		return false;
 	}
 
+	//Init window
 	int X = SDL_WINDOWPOS_CENTERED;
 	int Y = SDL_WINDOWPOS_CENTERED;
-	Uint32 Flag = SDL_WINDOW_TOOLTIP;
-	_Window = SDL_CreateWindow(WindowName, X, Y, WindowWidth, WindowHeight, Flag);
+	Uint32 WindowFlag = SDL_WINDOW_TOOLTIP;
+	_Window = SDL_CreateWindow(WindowName, X, Y, WindowWidth, WindowHeight, WindowFlag);
 	if (!_Window)
 	{
 		Engine::GetLogger()->LogMessage(SDL_GetError());
 		return false;
 	}
 
+	//Init renderer
 	Uint32 RenderFlags = SDL_RENDERER_ACCELERATED;
 	_Renderer = SDL_CreateRenderer(_Window, -1, RenderFlags);
 	if (!_Renderer)
@@ -46,8 +48,24 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 
 void SDLGraphics::Shutdown()
 {
+	for (auto& Texture : _TextureMap)
+	{
+		SDL_DestroyTexture(Texture.second);
+		Texture.second = nullptr;
+	}
+	_TextureMap.clear();
+
+	for (auto& Font : _FontMap)
+	{
+		TTF_CloseFont(Font.second);
+		Font.second = nullptr;
+	}
+	_FontMap.clear();
+
 	SDL_DestroyRenderer(_Renderer);
+	_Renderer = nullptr;
 	SDL_DestroyWindow(_Window);
+	_Window = nullptr;
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -91,9 +109,11 @@ void SDLGraphics::DrawLine(const Vector2D<float>& Start, const Vector2D<float>& 
 
 void SDLGraphics::DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRect, const Color& Color, float Angle, const Flip& Flip)
 {
+	//Get the texture
 	SDL_Texture* Texture = _TextureMap[TextureId];
 	if (!Texture) return;
 
+	//Set flip
 	SDL_RendererFlip SDLFlip = SDL_FLIP_NONE;
 	if (Flip.Horizontal && Flip.Vertical)
 	{
@@ -108,15 +128,18 @@ void SDLGraphics::DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRe
 		SDLFlip = SDL_FLIP_VERTICAL;
 	}
 
+	//Set the color
 	SDL_SetTextureColorMod(Texture, Color.rgba.R, Color.rgba.G, Color.rgba.B);
 	SDL_SetTextureAlphaMod(Texture, Color.rgba.A);
 
-	SDL_FRect SDLDrawRect = { 0.0f };
-	SDLDrawRect.x = DrawRect.Position.X;
-	SDLDrawRect.y = DrawRect.Position.Y;
-	SDLDrawRect.w = DrawRect.Size.X;
-	SDLDrawRect.h = DrawRect.Size.Y;
+	//Set the screen rect
+	SDL_FRect SDLScreenRect = { 0.0f };
+	SDLScreenRect.x = DrawRect.Position.X;
+	SDLScreenRect.y = DrawRect.Position.Y;
+	SDLScreenRect.w = DrawRect.Size.X;
+	SDLScreenRect.h = DrawRect.Size.Y;
 
+	//Set the texture rect
 	Rectangle2D<int> TextureRect = Rectangle2D<int>(Vector2D<int>(0, 0), Vector2D<int>(0, 0));
 	GetTextureSize(TextureId, &TextureRect.Size);
 
@@ -126,16 +149,19 @@ void SDLGraphics::DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRe
 	SDLTextureRect.w = TextureRect.Size.X;
 	SDLTextureRect.h = TextureRect.Size.Y;
 
-	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLDrawRect, Angle, nullptr, SDLFlip);
+	//Draw the texture
+	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLScreenRect, Angle, nullptr, SDLFlip);
 }
 
 void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& GridSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip)
 {
 	if (GridSize.X <= 0 || GridSize.Y <= 0) return;
 
+	//Get the texture
 	SDL_Texture* Texture = _TextureMap[TextureId];
 	if (!Texture) return;
 
+	//Set the texture flip
 	SDL_RendererFlip SDLFlip = SDL_FLIP_NONE;
 	if (Flip.Horizontal && Flip.Vertical)
 	{
@@ -150,15 +176,18 @@ void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& Dr
 		SDLFlip = SDL_FLIP_VERTICAL;
 	}
 
+	//Set the color
 	SDL_SetTextureColorMod(Texture, Color.rgba.R, Color.rgba.G, Color.rgba.B);
 	SDL_SetTextureAlphaMod(Texture, Color.rgba.A);
 
-	SDL_FRect SDLDrawRect = { 0.0f };
-	SDLDrawRect.x = DrawRect.Position.X;
-	SDLDrawRect.y = DrawRect.Position.Y;
-	SDLDrawRect.w = DrawRect.Size.X;
-	SDLDrawRect.h = DrawRect.Size.Y;
+	//Set the screen rect
+	SDL_FRect SDLScreenRect = { 0.0f };
+	SDLScreenRect.x = DrawRect.Position.X;
+	SDLScreenRect.y = DrawRect.Position.Y;
+	SDLScreenRect.w = DrawRect.Size.X;
+	SDLScreenRect.h = DrawRect.Size.Y;
 
+	//Set the texture rect
 	Vector2D<int> TextureSize;
 	GetTextureSize(TextureId, &TextureSize);
 	Vector2D<int> CellSize;
@@ -173,7 +202,8 @@ void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& Dr
 	SDLTextureRect.w = TextureRect.Size.X;
 	SDLTextureRect.h = TextureRect.Size.Y;
 
-	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLDrawRect, Angle, nullptr, SDLFlip);
+	//Draw the texture
+	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLScreenRect, Angle, nullptr, SDLFlip);
 }
 
 void SDLGraphics::GetTextureSize(size_t TextureId, Vector2D<int>* Size)
@@ -186,9 +216,11 @@ void SDLGraphics::GetTextureSize(size_t TextureId, Vector2D<int>* Size)
 
 size_t SDLGraphics::LoadFont(const char* Filename, int FontSize)
 {
+	//Get ID
 	std::hash<const char*> Hasher;
 	size_t FontId = Hasher(Filename);
 
+	//Load font
 	if (_FontMap.find(FontId) == _FontMap.end())
 	{
 		std::string FilePath = "../Assets/Font/";
@@ -210,28 +242,37 @@ size_t SDLGraphics::LoadFont(const char* Filename, int FontSize)
 
 void SDLGraphics::DrawString(size_t FontId, const char* Text, Vector2D<int>& Location, const Color& Color)
 {
+	//Get the font
 	TTF_Font* Font = _FontMap[FontId];
+	if (!Font) return;
 
+	//Set the color
 	SDL_Color SDLColor = SDL_Color();
 	SDLColor.r = Color.rgba.R;
 	SDLColor.g = Color.rgba.G;
 	SDLColor.b = Color.rgba.B;
 	SDLColor.a = Color.rgba.A;
 
+	//Create surface contain the text with font and color
 	SDL_Surface* Surface = TTF_RenderText_Solid(Font, Text, SDLColor);
+	//Create texture with the surface
 	SDL_Texture* TextureBuffer = SDL_CreateTextureFromSurface(_Renderer, Surface);
 
+	//Get the render text size
 	Vector2D<int> FontSize;
 	GetTextSize(FontId, Text, &FontSize);
 
+	//Set the screen rect
 	SDL_Rect SDLRect = SDL_Rect();
 	SDLRect.x = Location.X;
 	SDLRect.y = Location.Y;
 	SDLRect.w = FontSize.X;
 	SDLRect.h = FontSize.Y;
 
+	//Draw font
 	SDL_RenderCopy(_Renderer, TextureBuffer, nullptr, &SDLRect);
 	SDL_FreeSurface(Surface);
+	SDL_DestroyTexture(TextureBuffer);
 }
 
 void SDLGraphics::GetTextSize(size_t FontId, const char* Text, Vector2D<int>* Size)
@@ -260,9 +301,11 @@ void SDLGraphics::Present()
 
 size_t SDLGraphics::LoadTexture(const char* Filename)
 {
+	//Get the ID
 	std::hash<const char*> Hasher;
 	size_t TextureId = Hasher(Filename);
 
+	//Load the texture
 	if (_TextureMap.find(TextureId) == _TextureMap.end())
 	{
 		std::string FilePath = "../Assets/Texture/";

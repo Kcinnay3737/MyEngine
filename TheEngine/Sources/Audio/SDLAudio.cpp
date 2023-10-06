@@ -1,7 +1,7 @@
 #include "Audio/SDLAudio.h"
 
 #include "Engine.h"
-#include "Debug/Logger/ILogger.h"
+#include "Logger/ILogger.h"
 #include <SDL_mixer.h>
 
 using namespace NPEngine;
@@ -19,14 +19,30 @@ bool SDLAudio::Initialize()
 
 void SDLAudio::Shutdown()
 {
+	for (auto& Music : _MusicMap)
+	{
+		Mix_FreeMusic(Music.second);
+		Music.second = nullptr;
+	}
+	_MusicMap.clear();
+
+	for (auto& Sound : _SoundMap)
+	{
+		Mix_FreeChunk(Sound.second);
+		Sound.second = nullptr;
+	}
+	_SoundMap.clear();
+
 	Mix_CloseAudio();
 }
 
 size_t SDLAudio::LoadMusic(const char* Filename)
 {
+	//Get ID
 	std::hash<const char*> Hasher;
 	size_t MusicId = Hasher(Filename);
 
+	//Load the music
 	if (_MusicMap.find(MusicId) == _MusicMap.end())
 	{
 		std::string FilePath = "../Assets/Audio/Music/";
@@ -47,9 +63,11 @@ size_t SDLAudio::LoadMusic(const char* Filename)
 
 size_t SDLAudio::LoadSound(const char* Filename)
 {
+	//Get the ID
 	std::hash<const char*> Hasher;
 	size_t SoundId = Hasher(Filename);
 
+	//Load the sound
 	if (_SoundMap.find(SoundId) == _SoundMap.end())
 	{
 		std::string FilePath = "../Assets/Audio/Sound/";
@@ -70,9 +88,11 @@ size_t SDLAudio::LoadSound(const char* Filename)
 
 void SDLAudio::PlayMusic(size_t MusicId, int Loop)
 {
+	//Get the music
 	Mix_Music* Music = _MusicMap[MusicId];
 	if (Music)
 	{
+		//Play the music
 		if (Mix_PlayMusic(Music, Loop) == -1)
 		{
 			Engine::GetLogger()->LogMessage("Failed to play music");
@@ -86,9 +106,11 @@ void SDLAudio::PlayMusic(size_t MusicId, int Loop)
 
 void SDLAudio::PlaySound(size_t SoundId, int Loop)
 {
+	//Get the sound
 	Mix_Chunk* Sound = _SoundMap[SoundId];
 	if (Sound)
 	{
+		//Play the sound
 		if (Mix_PlayChannel(-1, Sound, Loop) == -1)
 		{
 			Engine::GetLogger()->LogMessage("Failed to play sound");

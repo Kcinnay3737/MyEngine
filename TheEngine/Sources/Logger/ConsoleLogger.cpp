@@ -1,4 +1,4 @@
-#include "Debug/Logger/ConsoleLogger.h"
+#include "Logger/ConsoleLogger.h"
 #include <windows.h>
 #include <stdio.h>
 #include <consoleapi.h>

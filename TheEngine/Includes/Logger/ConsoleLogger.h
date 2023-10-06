@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Debug/Logger/ILogger.h"
+#include "Logger/ILogger.h"
 #include <concrt.h>
 
 namespace NPEngine

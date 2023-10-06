@@ -42,9 +42,9 @@ namespace NPEngine
 
 	public:
 		//Getter, setter
-		static Engine* GetEngineInstance();
-
 		EngineState& GetEngineState();
+
+		static Engine* GetEngineInstance();
 
 		static IGraphics* GetGraphics();
 		static IInput* GetInput();

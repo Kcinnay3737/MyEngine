@@ -12,10 +12,7 @@ bool SDLInput::Initialize()
 
 void SDLInput::Shutdown()
 {
-	/*if (_KeyStates)
-	{
-		delete _KeyStates;
-	}*/
+	_KeyStates = nullptr;
 }
 
 bool SDLInput::IsKeyDown(EKeyboardKeys Key)
