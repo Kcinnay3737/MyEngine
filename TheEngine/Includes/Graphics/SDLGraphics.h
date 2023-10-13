@@ -10,7 +10,6 @@ struct _TTF_Font;
 
 namespace NPEngine
 {
-
 	class SDLGraphics final : public IGraphics
 	{
 	public:

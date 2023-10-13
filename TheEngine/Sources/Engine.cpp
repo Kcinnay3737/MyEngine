@@ -16,12 +16,16 @@
 #endif
 #include "Audio/SDLAudio.h"
 
+//#include <vld.h>
+
 using namespace NPEngine;
 
 Engine* Engine::_InstanceEngine = nullptr;
 
 bool Engine::InitEngine(const char* Name, int Width, int Height)
 {
+	//VLDEnable();
+
 #if _DEBUG
 	_Logger = new ConsoleLogger();
 #else
@@ -182,6 +186,8 @@ void Engine::Shutdown(void)
 		_Logger->Shutdown();
 		delete _Logger;
 	}
+
+	//VLDDisable();
 }
 
 //Getter, Setter
