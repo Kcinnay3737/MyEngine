@@ -45,7 +45,7 @@ size_t SDLAudio::LoadMusic(const char* Filename)
 	//Load the music
 	if (_MusicMap.find(MusicId) == _MusicMap.end())
 	{
-		std::string FilePath = "../Assets/Audio/Music/";
+		std::string FilePath = "./Assets/Audio/Music/";
 		FilePath += Filename;
 		Mix_Music* Music = Mix_LoadMUS(FilePath.c_str());
 		if (Music)
@@ -70,7 +70,7 @@ size_t SDLAudio::LoadSound(const char* Filename)
 	//Load the sound
 	if (_SoundMap.find(SoundId) == _SoundMap.end())
 	{
-		std::string FilePath = "../Assets/Audio/Sound/";
+		std::string FilePath = "./Assets/Audio/Sound/";
 		FilePath += Filename;
 		Mix_Chunk* Sound = Mix_LoadWAV(FilePath.c_str());
 		if (Sound)

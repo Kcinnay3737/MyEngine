@@ -223,7 +223,7 @@ size_t SDLGraphics::LoadFont(const char* Filename, int FontSize)
 	//Load font
 	if (_FontMap.find(FontId) == _FontMap.end())
 	{
-		std::string FilePath = "../Assets/Font/";
+		std::string FilePath = "./Assets/Font/";
 		FilePath += Filename;
 
 		TTF_Font* Font = TTF_OpenFont(FilePath.c_str(), FontSize);
@@ -308,7 +308,7 @@ size_t SDLGraphics::LoadTexture(const char* Filename)
 	//Load the texture
 	if (_TextureMap.find(TextureId) == _TextureMap.end())
 	{
-		std::string FilePath = "../Assets/Texture/";
+		std::string FilePath = "./Assets/Texture/";
 		FilePath += Filename;
 		SDL_Texture* Texture = IMG_LoadTexture(_Renderer, FilePath.c_str());
 		if (Texture)
