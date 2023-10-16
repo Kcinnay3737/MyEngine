@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Logger/ILogger.h"
 #include <SDL_mixer.h>
+#include <string.h>
 
 using namespace NPEngine;
 
