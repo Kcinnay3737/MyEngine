@@ -5,7 +5,7 @@
 
 using namespace NPEngine;
 
-bool SDLTime::Initialise(float FramePerSecond)
+bool SDLTime::Initialise(int FramePerSecond)
 {
 	SetFramePerSecond(FramePerSecond);
 	return true;

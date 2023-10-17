@@ -20,7 +20,7 @@ namespace NPEngine
 	private:
 		//<= 0 for unlimited frame
 		friend class Engine;
-		virtual bool Initialise(float FramePerSecond = 60) = 0;
+		virtual bool Initialise(int FramePerSecond = 60) = 0;
 		friend class Engine;
 		virtual void Shutdown() = 0;
 
