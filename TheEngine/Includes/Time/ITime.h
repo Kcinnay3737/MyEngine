@@ -1,8 +1,10 @@
 #pragma once
 
+#include "IInterface.h"
+
 namespace NPEngine
 {
-	class ITime
+	class ITime : public IInterface
 	{
 	public:
 		virtual ~ITime() = default;

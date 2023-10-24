@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IInterface.h"
 #include "Graphics/Color.h"
 #include "Graphics/Flip.h"
 #include "Math/Vector2D.h"
@@ -7,7 +8,7 @@
 
 namespace NPEngine
 {
-	class IGraphics
+	class IGraphics : public IInterface
 	{
 	protected:
 		Color _BackgroundColor = Color();

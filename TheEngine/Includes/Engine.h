@@ -7,6 +7,7 @@ namespace NPEngine
 	class ITime;
 	class ILogger;
 	class IAudio;
+	class IWorld;
 
 	struct EngineState
 	{
@@ -29,6 +30,7 @@ namespace NPEngine
 		ITime* _Time = nullptr;
 		ILogger* _Logger = nullptr;
 		IAudio* _Audio = nullptr;
+		IWorld* _World = nullptr;
 
 	public:
 		bool InitEngine(const char* Name, int Widht, int Height);
@@ -51,5 +53,6 @@ namespace NPEngine
 		static ITime* GetTime();
 		static ILogger* GetLogger();
 		static IAudio* GetAudio();
+		static IWorld* GetWorld();
 	};
 }

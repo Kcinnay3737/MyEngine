@@ -1,10 +1,10 @@
 #pragma once
 
-#include "World/IWorld.h"
+#include "World/IScene.h"
 
 namespace NPEngine
 {
-	class World final : public IWorld
+	class Scene : public IScene
 	{
 	private:
 		virtual bool Initialise() override;

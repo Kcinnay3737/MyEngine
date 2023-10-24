@@ -1,10 +1,11 @@
 #pragma once
 
+#include "IInterface.h"
 #include "Input/EnumInput.h"
 
 namespace NPEngine
 {
-	class IInput
+	class IInput : public IInterface
 	{
 	public:
 		virtual ~IInput() = default;

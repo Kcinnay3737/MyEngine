@@ -1,10 +1,11 @@
 #pragma once
 
+#include "IInterface.h"
 #include "Graphics/Color.h"
 
 namespace NPEngine
 {
-	class ILogger
+	class ILogger : public IInterface
 	{
 	public:
 		virtual ~ILogger() = default;

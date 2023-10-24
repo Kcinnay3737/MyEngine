@@ -5,6 +5,7 @@
 #include "Time/ITime.h"
 #include "Logger/ILogger.h"
 #include "Audio/IAudio.h"
+#include "World/IWorld.h"
 
 #include "Graphics/SDLGraphics.h"
 #include "Input/SDLInput.h"
@@ -15,6 +16,7 @@
 #include "Logger/FileLogger.h"
 #endif
 #include "Audio/SDLAudio.h"
+#include "World/World.h"
 
 //#include <vld.h>
 
@@ -57,6 +59,12 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 
 	_Audio = new SDLAudio();
 	if (!_Audio || !_Audio->Initialize())
+	{
+		return false;
+	}
+
+	_World = new World();
+	if (!_World || !_World->Initialise())
 	{
 		return false;
 	}
@@ -186,6 +194,11 @@ void Engine::Shutdown(void)
 		_Logger->Shutdown();
 		delete _Logger;
 	}
+	if (_World)
+	{
+		_World->Shutdown();
+		delete _World;
+	}
 
 	//VLDDisable();
 }
@@ -225,4 +238,9 @@ ILogger* Engine::GetLogger()
 IAudio* NPEngine::Engine::GetAudio()
 {
 	return GetEngineInstance()->_Audio;
+}
+
+IWorld* NPEngine::Engine::GetWorld()
+{
+	return GetEngineInstance()->_World;
 }

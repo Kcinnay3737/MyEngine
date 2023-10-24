@@ -1,8 +1,10 @@
 #pragma once
 
+#include "IInterface.h"
+
 namespace NPEngine
 {
-	class IAudio
+	class IAudio : public IInterface
 	{
 	public:
 		virtual ~IAudio() = default;
