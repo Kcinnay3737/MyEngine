@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IInterface.h"
+#include "Audio/IAudioProvider.h"
 
 namespace NPEngine
 {
-	class IAudio : public IInterface
+	class IAudio : public IAudioProvider
 	{
 	public:
 		virtual ~IAudio() = default;
@@ -23,9 +23,7 @@ namespace NPEngine
 		virtual void SetSoundVolume(size_t SoundId, int Volume) = 0;
 
 	private:
-		friend class Engine;
-		virtual bool Initialize() = 0;
-		friend class Engine;
-		virtual void Shutdown() = 0;
+		virtual bool Initialize(const Param& Params) override = 0;
+		virtual void Shutdown(const Param& Params) override = 0;
 	};
 }

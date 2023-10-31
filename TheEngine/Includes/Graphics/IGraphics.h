@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IInterface.h"
+#include "Graphics/IGraphicsProvider.h"
 #include "Graphics/Color.h"
 #include "Graphics/Flip.h"
 #include "Math/Vector2D.h"
@@ -8,7 +8,7 @@
 
 namespace NPEngine
 {
-	class IGraphics : public IInterface
+	class IGraphics : public IGraphicsProvider
 	{
 	protected:
 		Color _BackgroundColor = Color();
@@ -39,18 +39,14 @@ namespace NPEngine
 		virtual void GetTextureSize(size_t TextureId, Vector2D<int>* Size) = 0;
 
 		virtual size_t LoadFont(const char* Filename, int FontSize) = 0;
-		virtual void DrawString(size_t FontId, const char* Text, Vector2D<int>& Location, const Color& Color) = 0;
+		virtual void DrawString(size_t FontId, const char* Text, const Vector2D<int>& Location, const Color& Color) = 0;
 		virtual void GetTextSize(size_t FontId, const char* Text, Vector2D<int>* Size) = 0;
 
 	private:
-		friend class Engine;
-		virtual bool Initialize(const char* Title, int Width, int Height) = 0;
-		friend class Engine;
-		virtual void Shutdown() = 0;
+		virtual bool Initialize(const Param& Params) override = 0;
+		virtual void Shutdown(const Param& Params) override = 0;
 
-		friend class Engine;
-		virtual void Clear() = 0;
-		friend class Engine;
-		virtual void Present() = 0;
+		virtual void Clear() override = 0;
+		virtual void Present() override = 0;
 	};
 }

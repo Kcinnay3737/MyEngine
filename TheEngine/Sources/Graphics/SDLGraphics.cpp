@@ -9,7 +9,7 @@
 
 using namespace NPEngine;
 
-bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int WindowHeight)
+bool SDLGraphics::Initialize(const Param& Params)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
@@ -18,6 +18,12 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 	}
 
 	//Init window
+	auto IT = Params.find("Name");
+	const char* WindowName = IT != Params.end() ? std::any_cast<const char*>(IT->second) : "DefaultName";
+	IT = Params.find("Width");
+	int WindowWidth = IT != Params.end() ? std::any_cast<int>(IT->second) : 800;
+	IT = Params.find("Height");
+	int WindowHeight = IT != Params.end() ? std::any_cast<int>(IT->second) : 600;
 	int X = SDL_WINDOWPOS_CENTERED;
 	int Y = SDL_WINDOWPOS_CENTERED;
 	Uint32 WindowFlag = SDL_WINDOW_TOOLTIP;
@@ -46,7 +52,7 @@ bool SDLGraphics::Initialize(const char* WindowName, int WindowWidth, int Window
 	return true;
 }
 
-void SDLGraphics::Shutdown()
+void SDLGraphics::Shutdown(const Param& Params)
 {
 	for (auto& Texture : _TextureMap)
 	{
@@ -240,7 +246,7 @@ size_t SDLGraphics::LoadFont(const char* Filename, int FontSize)
 	return FontId;
 }
 
-void SDLGraphics::DrawString(size_t FontId, const char* Text, Vector2D<int>& Location, const Color& Color)
+void SDLGraphics::DrawString(size_t FontId, const char* Text, const Vector2D<int>& Location, const Color& Color)
 {
 	//Get the font
 	TTF_Font* Font = _FontMap[FontId];

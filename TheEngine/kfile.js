@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 let project = new Project('TheEngine');
-  
+
 project.addProvider = function(proj, isRoot=false){
     proj.addIncludeDir("C:/Program Files (x86)/Visual Leak Detector/include");
     proj.addLib("C:/Program Files (x86)/Visual Leak Detector/lib/Win64/vld");
@@ -23,6 +23,7 @@ project.addProvider = function(proj, isRoot=false){
     }
 };
 project.kore = false;
+project.setCppStd("C++17");
 
 project.addDefine("KINC_STATIC_COMPILE");
 project.isStaticLib = true;

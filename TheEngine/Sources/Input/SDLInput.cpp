@@ -5,12 +5,12 @@
 
 using namespace NPEngine;
 
-bool SDLInput::Initialize()
+bool SDLInput::Initialize(const Param& Params)
 {
 	return true;
 }
 
-void SDLInput::Shutdown()
+void SDLInput::Shutdown(const Param& Params)
 {
 	_KeyStates = nullptr;
 }

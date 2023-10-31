@@ -7,6 +7,9 @@ project.addFile("BOI/**");
 project.setDebugDir("Deployment");
 
 project.addIncludeDir("./TheEngine/Includes");
+project.addIncludeDir("./BOI/Includes");
+
+project.setCppStd("C++17");
 
 project.flatten();
 

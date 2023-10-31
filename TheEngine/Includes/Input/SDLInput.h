@@ -21,11 +21,11 @@ namespace NPEngine
 		virtual void GetMousePosition(int* x, int* y) override;
 
 		SDL_Scancode MapToSDLScancode(EKeyboardKeys Key);
-		Uint8 SDLInput::MapToSDLButtonCode(EButtonKeys button);
+		Uint8 MapToSDLButtonCode(EButtonKeys button);
 
 	private:
-		virtual bool Initialize() override;
-		virtual void Shutdown() override;
+		virtual bool Initialize(const Param& Params) override;
+		virtual void Shutdown(const Param& Params) override;
 
 		virtual void ProcessInput() override;
 	};

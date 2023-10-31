@@ -17,8 +17,8 @@ namespace NPEngine
 		void SetFramePerSecond(int FramePerSecond) override;
 
 	private:
-		virtual bool Initialise(int FramePerSecond) override;
-		virtual void Shutdown() override;
+		virtual bool Initialize(const Param& Params) override;
+		virtual void Shutdown(const Param& Params) override;
 
 		virtual void UpdateDeltaTime() override;
 		virtual void UpdateLastFrameStartTime() override;

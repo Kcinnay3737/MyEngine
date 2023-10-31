@@ -1,14 +1,18 @@
 #pragma once
 
+#include "Utility/Utility.h"
+#include "Utility/GameplayStatic.h"
+#include "Utility/Delegate.h"
+
+#include "Logger/ILogger.h"
+#include "Time/ITime.h"
+#include "Graphics/IGraphics.h"
+#include "Audio/IAudio.h"
+#include "Input/IInput.h"
+#include "World/World.h"
+
 namespace NPEngine
 {
-	class IGraphics;
-	class IInput;
-	class ITime;
-	class ILogger;
-	class IAudio;
-	class IWorld;
-
 	struct EngineState
 	{
 	public:
@@ -25,21 +29,37 @@ namespace NPEngine
 
 		EngineState _EngineState = EngineState();
 
+		IGraphicsProvider* _GraphicsProvider = nullptr;
 		IGraphics* _Graphics = nullptr;
+		IInputProvider* _InputProvider = nullptr;
 		IInput* _Input = nullptr;
+		ITimeProvider* _TimeProvider = nullptr;
 		ITime* _Time = nullptr;
+		ILoggerProvider* _LoggerProvider = nullptr;
 		ILogger* _Logger = nullptr;
+		IAudioProvider* _AudioProvider = nullptr;
 		IAudio* _Audio = nullptr;
-		IWorld* _World = nullptr;
+		IWorldProvider* _WorldProvider = nullptr;
+		World* _World = nullptr;
 
 	public:
 		bool InitEngine(const char* Name, int Widht, int Height);
 		void Start(void);
 
 	private:
+		void StartFrame();
+
 		void ProcessInput();
+		void PostInput();
+
 		void Update(float DeltaTime);
+		void PostUpdate();
+
 		void Render(void);
+		void PostRender();
+
+		void EndFrame();
+
 		void Shutdown(void);
 
 	public:
@@ -53,6 +73,6 @@ namespace NPEngine
 		static ITime* GetTime();
 		static ILogger* GetLogger();
 		static IAudio* GetAudio();
-		static IWorld* GetWorld();
+		static World* GetWorld();
 	};
 }

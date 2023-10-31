@@ -11,7 +11,7 @@ namespace NPEngine
 		HANDLE _HConsole = HANDLE();
 
 	public:
-		~ConsoleLogger() = default;
+		virtual ~ConsoleLogger() = default;
 
 		void SetTextColor(EColor ForegourndColor, EColor BackgroundColor) override;
 
@@ -21,8 +21,8 @@ namespace NPEngine
 		uint8_t MapToBackgroundColor(EColor Color);
 
 	private:
-		virtual bool Initialize() override;
-		virtual void Shutdown() override;
+		virtual bool Initialize(const Param& Params) override;
+		virtual void Shutdown(const Param& Params) override;
 
 	};
 }

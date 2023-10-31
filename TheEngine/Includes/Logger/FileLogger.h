@@ -11,14 +11,14 @@ namespace NPEngine
 		std::ofstream _File;
 
 	public:
-		~FileLogger() = default;
+		virtual ~FileLogger() = default;
 
 		void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) { };
 
 		void LogMessage(const char* Message, ...) override;
 
 	private:
-		virtual bool Initialize() override;
-		virtual void Shutdown() override;
+		virtual bool Initialize(const Param& Params) override;
+		virtual void Shutdown(const Param& Params) override;
 	};
 }

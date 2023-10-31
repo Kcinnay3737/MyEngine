@@ -6,7 +6,7 @@
 
 using namespace NPEngine;
 
-bool ConsoleLogger::Initialize()
+bool ConsoleLogger::Initialize(const Param& Params)
 {
 	AllocConsole();
 
@@ -17,7 +17,7 @@ bool ConsoleLogger::Initialize()
 	return true;
 }
 
-void ConsoleLogger::Shutdown()
+void ConsoleLogger::Shutdown(const Param& Params)
 {
 	FreeConsole();
 }

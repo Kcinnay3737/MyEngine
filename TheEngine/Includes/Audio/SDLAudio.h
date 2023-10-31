@@ -31,7 +31,7 @@ namespace NPEngine
 		virtual void SetSoundVolume(size_t SoundId, int Volume) override;
 
 	private:
-		virtual bool Initialize() override;
-		virtual void Shutdown() override;
+		virtual bool Initialize(const Param& Params) override;
+		virtual void Shutdown(const Param& Params) override;
 	};
 }

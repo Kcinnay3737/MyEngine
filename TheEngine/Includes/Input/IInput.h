@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IInterface.h"
+#include "Input/IInputProvider.h"
 #include "Input/EnumInput.h"
 
 namespace NPEngine
 {
-	class IInput : public IInterface
+	class IInput : public IInputProvider
 	{
 	public:
 		virtual ~IInput() = default;
@@ -16,13 +16,9 @@ namespace NPEngine
 		virtual void GetMousePosition(int* X, int* Y) = 0;
 	
 	private:
-		friend class Engine;
-		virtual bool Initialize() = 0;
-		friend class Engine;
-		virtual void Shutdown() = 0;
+		virtual bool Initialize(const Param& Params) override = 0;
+		virtual void Shutdown(const Param& Params) override = 0;
 
-		friend class Engine;
-		virtual void ProcessInput() = 0;
-		
+		virtual void ProcessInput() override = 0;
 	};
 }

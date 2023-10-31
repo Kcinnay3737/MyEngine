@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IInterface.h"
+#include "Logger/ILoggerProvider.h"
 #include "Graphics/Color.h"
 
 namespace NPEngine
 {
-	class ILogger : public IInterface
+	class ILogger : public ILoggerProvider
 	{
 	public:
 		virtual ~ILogger() = default;
@@ -15,9 +15,7 @@ namespace NPEngine
 		virtual void LogMessage(const char* Message, ...) = 0;
 
 	private:
-		friend class Engine;
-		virtual bool Initialize() = 0;
-		friend class Engine;
-		virtual void Shutdown() = 0;
+		virtual bool Initialize(const Param& Params) override = 0;
+		virtual void Shutdown(const Param& Params) override = 0;
 	};
 }

@@ -37,12 +37,12 @@ namespace NPEngine
 		virtual void GetTextureSize(size_t TextureId, Vector2D<int>* Size) override;
 
 		virtual size_t LoadFont(const char* Filename, int FontSize) override;
-		virtual void DrawString(size_t FontId, const char* Text, Vector2D<int>& Location, const Color& Color) override;
+		virtual void DrawString(size_t FontId, const char* Text, const Vector2D<int>& Location, const Color& Color) override;
 		virtual void GetTextSize(size_t FontId, const char* Text, Vector2D<int>* Size) override;
 
 	private:
-		virtual bool Initialize(const char* Title, int Width, int Height) override;
-		virtual void Shutdown() override;
+		virtual bool Initialize(const Param& Params) override;
+		virtual void Shutdown(const Param& Params) override;
 
 		virtual void Clear() override;
 		virtual void Present() override;

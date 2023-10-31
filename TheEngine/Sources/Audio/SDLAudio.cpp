@@ -7,7 +7,7 @@
 
 using namespace NPEngine;
 
-bool SDLAudio::Initialize()
+bool SDLAudio::Initialize(const Param& Params)
 {
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
 	{
@@ -18,7 +18,7 @@ bool SDLAudio::Initialize()
 	return true;
 }
 
-void SDLAudio::Shutdown()
+void SDLAudio::Shutdown(const Param& Params)
 {
 	for (auto& Music : _MusicMap)
 	{

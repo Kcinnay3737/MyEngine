@@ -5,13 +5,15 @@
 
 using namespace NPEngine;
 
-bool SDLTime::Initialise(int FramePerSecond)
+bool SDLTime::Initialize(const Param& Params)
 {
+	auto IT = Params.find("FPS");
+	int FramePerSecond = IT != Params.end() ? std::any_cast<int>(IT->second) : 60;
 	SetFramePerSecond(FramePerSecond);
 	return true;
 }
 
-void SDLTime::Shutdown()
+void SDLTime::Shutdown(const Param& Params)
 {
 }
 

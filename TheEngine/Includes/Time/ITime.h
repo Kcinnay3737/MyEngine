@@ -1,10 +1,10 @@
 #pragma once
 
-#include "IInterface.h"
+#include "Time/ITimeProvider.h"
 
 namespace NPEngine
 {
-	class ITime : public IInterface
+	class ITime : public ITimeProvider
 	{
 	public:
 		virtual ~ITime() = default;
@@ -21,22 +21,17 @@ namespace NPEngine
 
 	private:
 		//<= 0 for unlimited frame
-		friend class Engine;
-		virtual bool Initialise(int FramePerSecond = 60) = 0;
-		friend class Engine;
-		virtual void Shutdown() = 0;
+		virtual bool Initialize(const Param& Params) override = 0;
+		virtual void Shutdown(const Param& Params) override = 0;
 
 		virtual void UpdateDeltaTime() = 0;
 		virtual void UpdateLastFrameStartTime() = 0;
 		virtual void UpdateCurrentFrameStartTime() = 0;
 		virtual void ControlFrameRate() = 0;
 
-		friend class Engine;
-		virtual void InitialiseTime() = 0;
-		friend class Engine;
-		virtual void OnStartFrame() = 0;
-		friend class Engine;
-		virtual void OnEndFrame() = 0;
+		virtual void InitialiseTime() override = 0;
+		virtual void OnStartFrame() override = 0;
+		virtual void OnEndFrame() override = 0;
 
 	};
 }

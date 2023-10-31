@@ -4,14 +4,14 @@
 
 using namespace NPEngine;
 
-bool FileLogger::Initialize()
+bool FileLogger::Initialize(const Param& Params)
 {
 	_File.open("LogFile.txt", std::ios::out | std::ios::trunc);
 
 	return true;
 }
 
-void FileLogger::Shutdown()
+void FileLogger::Shutdown(const Param& Params)
 {
 	if (_File.is_open())
 	{
