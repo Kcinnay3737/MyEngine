@@ -5,8 +5,19 @@
 
 namespace NPEngine
 {
+	struct DataInput
+	{
+	public:
+		float TimePressed = 0.0f;
+		bool bIsPressed = false;
+	};
+
 	class IInput : public IInputProvider
 	{
+	private:
+		std::map<EKeyboardKeys, DataInput> _InputState;
+		std::map<EButtonKeys, DataInput> _ButtonState;
+
 	public:
 		virtual ~IInput() = default;
 
