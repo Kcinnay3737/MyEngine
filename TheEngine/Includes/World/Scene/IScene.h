@@ -1,6 +1,6 @@
 #pragma once
 
-#include "World/ISceneProvider.h"
+#include "World/Scene/ISceneProvider.h"
 
 
 namespace NPEngine
@@ -21,7 +21,7 @@ namespace NPEngine
 
 	public:
 		virtual void SetNumberSpawnPrototype(const char* Name, unsigned int Number) = 0;
-		virtual int GetNumberSpawnPrototype(const char* Name) = 0;
+		virtual unsigned int GetNumberSpawnPrototype(const char* Name) = 0;
 		
 	};
 }

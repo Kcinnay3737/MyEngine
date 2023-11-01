@@ -4,17 +4,20 @@
 
 namespace NPEngine
 {
-	class IActorWorld
+	class Actor;
+
+	class IActorComponent
 	{
-		friend class World;
+		friend class Actor;
+	public:
+		virtual ~IActorComponent() = default;
+
 	private:
 		virtual bool Initialise(const Param& Params = Param{}) = 0;
 		virtual void Destroy(const Param& Params = Param{}) = 0;
 
 		virtual void BeginPlay() = 0;
 
-		virtual void Update(float dt) = 0;
-		
-		virtual void Draw() = 0;
+		virtual void SetOwner(Actor* Owner) = 0;
 	};
 }

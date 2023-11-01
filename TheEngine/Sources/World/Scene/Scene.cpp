@@ -1,4 +1,4 @@
-#include "World/Scene.h"
+#include "World/Scene/Scene.h"
 #include "Engine.h"
 
 using namespace NPEngine;
@@ -15,6 +15,18 @@ void Scene::Destroy(const Param& Params)
 
 void Scene::Load(const Param& Params)
 {
+	for (auto& IT : _PrototypeToSpawn)
+	{
+		const std::string& Name = IT.first;
+		const unsigned int& Number = IT.second;
+
+		for (unsigned int i = 0; i < Number; i++)
+		{
+			std::string CopyName = Name + std::to_string(i);
+			Engine::GetInstanceManager()->SpawnCopyInWorldAt(Name, CopyName, Params);
+		}
+	}
+
 	OnLoadScene.Broadcast(Params);
 }
 
@@ -23,7 +35,7 @@ void Scene::SetNumberSpawnPrototype(const char* Name, unsigned int Number)
 	_PrototypeToSpawn[Name] = Number;
 }
 
-int Scene::GetNumberSpawnPrototype(const char* Name)
+unsigned int Scene::GetNumberSpawnPrototype(const char* Name)
 {
 	auto IT = _PrototypeToSpawn.find(Name);
 	if (IT == _PrototypeToSpawn.end()) return 0;

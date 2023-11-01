@@ -7,6 +7,28 @@ using namespace NPEngine;
 
 bool SDLInput::Initialize(const Param& Params)
 {
+	for (uint8_t i = 0; i < EKeyboardKeys::Key_Max; i++)
+	{
+		EKeyboardKeys Key = static_cast<EKeyboardKeys>(i);
+		
+		OnKeyPressed[Key] = Delegate();
+		OnKeyMaintained[Key] = Delegate();
+		OnKeyReleased[Key] = Delegate();
+
+		_DataKey[Key] = DataKey();
+	}
+
+	for (uint8_t i = 0; i < EButtonKeys::Mouse_Max; i++)
+	{
+		EButtonKeys Key = static_cast<EButtonKeys>(i);
+
+		OnButtonPressed[Key] = Delegate();
+		OnButtonMaintained[Key] = Delegate();
+		OnButtonReleased[Key] = Delegate();
+
+		_DataButton[Key] = DataKey();
+	}
+
 	return true;
 }
 
@@ -17,12 +39,19 @@ void SDLInput::Shutdown(const Param& Params)
 
 bool SDLInput::IsKeyDown(EKeyboardKeys Key)
 {
+	if (!_KeyStates) return false;
 	return _KeyStates[MapToSDLScancode(Key)];
 }
 
 bool SDLInput::IsButtonDown(EButtonKeys Key)
 {
-	return SDL_BUTTON(MapToSDLButtonCode(Key));
+	int X, Y = 0;
+	Uint32 MouseState = SDL_GetMouseState(&X, &Y);
+	Uint8 SdlButton = MapToSDLButtonCode(Key);
+
+	if (SdlButton == 0) return false;
+
+	return (MouseState & SDL_BUTTON(SdlButton)) != 0;
 }
 
 void SDLInput::GetMousePosition(int* X, int* Y)
@@ -141,10 +170,10 @@ Uint8 SDLInput::MapToSDLButtonCode(EButtonKeys button)
 
 void SDLInput::ProcessInput()
 {
-	SDL_Event _Event;
-	while (SDL_PollEvent(&_Event))
+	SDL_Event Event;
+	while (SDL_PollEvent(&Event))
 	{
-		switch (_Event.type)
+		switch (Event.type)
 		{
 		case SDL_QUIT:
 			Engine::GetEngineInstance()->GetEngineState().IsRunning = false;
@@ -153,4 +182,65 @@ void SDLInput::ProcessInput()
 	}
 
 	_KeyStates = SDL_GetKeyboardState(nullptr);
+}
+
+void SDLInput::UpdateInputListener(float DeltaTime)
+{
+	for (uint8_t i = 0; i < EKeyboardKeys::Key_Max; i++)
+	{
+		EKeyboardKeys Key = static_cast<EKeyboardKeys>(i);
+		bool bIsDown = IsKeyDown(Key);
+
+		DataKey& CurrDataKey = _DataKey[Key];
+
+		//On Maintained
+		if (bIsDown && CurrDataKey.bIsPressed)
+		{
+			CurrDataKey.TimePressed += DeltaTime;
+			OnKeyMaintained[Key].Broadcast();
+		}
+		//On Pressed
+		else if (bIsDown && !CurrDataKey.bIsPressed)
+		{
+			CurrDataKey.TimePressed = 0.0f;
+			CurrDataKey.bIsPressed = true;
+			OnKeyPressed[Key].Broadcast();
+		}
+		//On Released
+		else if (!bIsDown && CurrDataKey.bIsPressed)
+		{
+			CurrDataKey.TimePressed = 0.0f;
+			CurrDataKey.bIsPressed = false;
+			OnKeyReleased[Key].Broadcast();
+		}
+	}
+
+	for (uint8_t i = 0; i < EButtonKeys::Mouse_Max; i++)
+	{
+		EButtonKeys Key = static_cast<EButtonKeys>(i);
+		bool bIsDown = IsButtonDown(Key);
+
+		DataKey& CurrDataKey = _DataButton[Key];
+
+		//On Maintained
+		if (bIsDown && CurrDataKey.bIsPressed)
+		{
+			CurrDataKey.TimePressed += DeltaTime;
+			OnButtonMaintained[Key].Broadcast();
+		}
+		//On Pressed
+		else if (bIsDown && !CurrDataKey.bIsPressed)
+		{
+			CurrDataKey.TimePressed = 0.0f;
+			CurrDataKey.bIsPressed = true;
+			OnButtonPressed[Key].Broadcast();
+		}
+		//On Released
+		else if (!bIsDown && CurrDataKey.bIsPressed)
+		{
+			CurrDataKey.TimePressed = 0.0f;
+			CurrDataKey.bIsPressed = false;
+			OnButtonReleased[Key].Broadcast();
+		}
+	}
 }

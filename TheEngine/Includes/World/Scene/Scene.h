@@ -1,6 +1,6 @@
 #pragma once
 
-#include "World/IScene.h"
+#include "World/Scene/IScene.h"
 #include "Utility/Delegate.h"
 
 namespace NPEngine
@@ -8,10 +8,10 @@ namespace NPEngine
 	class Scene final : public IScene
 	{
 	public:
-		Delegate OnLoadScene;
+		DelegateParams OnLoadScene;
 
 	private:
-		std::map<const char*, unsigned int> _PrototypeToSpawn;
+		std::map<std::string, unsigned int> _PrototypeToSpawn;
 
 	public:
 		virtual ~Scene() = default;
@@ -23,7 +23,7 @@ namespace NPEngine
 		virtual void Load(const Param& Params) override;
 	
 	public:
-		virtual int GetNumberSpawnPrototype(const char* Name) override;
+		virtual unsigned int GetNumberSpawnPrototype(const char* Name) override;
 		virtual void SetNumberSpawnPrototype(const char* Name, unsigned int Number) override;
 
 	};

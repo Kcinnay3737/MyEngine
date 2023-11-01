@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Input/IInputProvider.h"
+#include "Utility/Delegate.h"
 #include "Input/EnumInput.h"
 
 namespace NPEngine
 {
-	struct DataInput
+	struct DataKey
 	{
 	public:
 		float TimePressed = 0.0f;
@@ -14,9 +15,20 @@ namespace NPEngine
 
 	class IInput : public IInputProvider
 	{
-	private:
-		std::map<EKeyboardKeys, DataInput> _InputState;
-		std::map<EButtonKeys, DataInput> _ButtonState;
+	public:
+		//Key delegate
+		std::map<EKeyboardKeys, Delegate> OnKeyPressed;
+		std::map<EKeyboardKeys, Delegate> OnKeyMaintained;
+		std::map<EKeyboardKeys, Delegate> OnKeyReleased;
+
+		//Button delegate
+		std::map<EButtonKeys, Delegate> OnButtonPressed;
+		std::map<EButtonKeys, Delegate> OnButtonMaintained;
+		std::map<EButtonKeys, Delegate> OnButtonReleased;
+
+	protected:
+		std::map<EKeyboardKeys, DataKey> _DataKey;
+		std::map<EButtonKeys, DataKey> _DataButton;
 
 	public:
 		virtual ~IInput() = default;
@@ -31,5 +43,6 @@ namespace NPEngine
 		virtual void Shutdown(const Param& Params) override = 0;
 
 		virtual void ProcessInput() override = 0;
+		virtual void UpdateInputListener(float DeltaTime) override = 0;
 	};
 }

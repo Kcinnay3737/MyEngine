@@ -1,15 +1,15 @@
 #pragma once
 
 #include "World/IWorld.h"
-#include "World/Scene.h"
-#include <vector>
+#include "World/Scene/Scene.h"
+#include "Object/IObjectManager.h"
 #include <typeindex>
 #include <typeinfo>
 
 namespace NPEngine
 {
+	class Object;
 	class Actor;
-	class IScene;
 
 	struct DataActorToAdd
 	{
@@ -22,7 +22,7 @@ namespace NPEngine
 	struct DataActorToDelete
 	{
 	public:
-		const char* Name = "";
+		std::string Name = "";
 		Param Params = Param{};
 	};
 
@@ -30,40 +30,47 @@ namespace NPEngine
 	{
 	public:
 		bool bLoadScene = false;
-		const char* SceneName = "";
+		std::string SceneName = "";
 		Param Params = Param{};
 	};
 
-	class World final : public IWorld
+	class World final : public IWorld, public IObjectManager
 	{
 	private:
-		std::vector<const char*> _ActorsToCallBeginPlay;
+		std::unordered_map<size_t, Object*> _IDObject;
 
-		std::map<const char*, Actor*> _Actors;
+		std::vector<std::string> _ActorsToCallBeginPlay;
+
+		std::map<std::string, Actor*> _Actors;
 		std::map<std::type_index, std::vector<Actor*>> _ClassActors;
 
 		std::vector<DataActorToAdd> _ActorsToAdd;
 		std::vector<DataActorToDelete> _ActorsToDelete;
 
-		std::map<const char*, Scene*> _Scenes;
+		std::map<std::string, Scene*> _Scenes;
 
 		DataLoadScene _DataLoadScene = DataLoadScene();
+
+		unsigned char _MaxDrawDepth = 0;
+		std::vector<std::vector<Actor*>> _DrawActorOrder;
 
 	public:
 		virtual ~World() = default;
 
 		//Scene function
-		virtual void LoadScene(const char* Name, const Param& Params = Param{}) override;
-		virtual Scene* CreateScene(const char* Name, const Param& Params = Param{}) override;
-		virtual void DeleteScene(const char* Name, const Param& Params = Param{}) override;
+		virtual void LoadScene(std::string& Name, const Param& Params = Param{}) override;
+		virtual Scene* CreateScene(std::string& Name, const Param& Params = Param{}) override;
+		virtual void DeleteScene(std::string& Name, const Param& Params = Param{}) override;
 		//-------------
 
 		//Actor function
 		virtual void AddActor(Actor* Actor, const Param& Params = Param{}) override;
-		virtual void DeleteActorByName(const char* Name, const Param& Params = Param{}) override;
+		virtual void DeleteActorByName(std::string& Name, const Param& Params = Param{}) override;
 		template <typename T>
-		T* CreateActorOfClass(const char* Name, const Param& Params = Param{});
+		T* CreateActorOfClass(std::string& Name, const Param& Params = Param{});
 		//-------------
+		
+		void ResetDrawOrder();
 
 	private:
 		virtual bool Initialize(const Param& Params) override;
@@ -95,11 +102,16 @@ namespace NPEngine
 		virtual void OnCreateActor() override;
 		//-------------
 
+		virtual void AddObject(size_t ID, Object* NewObject) override;
+		virtual void RemoveId(size_t ID) override;
+
 	public:
 		//Getter, Setter
-		virtual Scene* GetSceneByName(const char* Name) override;
+		virtual Object* GetObject(size_t ID) override;
 
-		virtual Actor* GetActorByName(const char* Name) override;
+		virtual Scene* GetSceneByName(std::string& Name) override;
+
+		virtual Actor* GetActorByName(std::string& Name) override;
 		template <typename T>
 		T* GetActorOfClass();
 		template <typename T>
@@ -107,7 +119,7 @@ namespace NPEngine
 	};
 
 	template<typename T>
-	inline T* World::CreateActorOfClass(const char* Name, const Param& Params)
+	inline T* World::CreateActorOfClass(std::string& Name, const Param& Params)
 	{
 		static_assert(std::is_base_of<Actor, T>::value, "T must be a derived class of Actor");
 
@@ -131,12 +143,24 @@ namespace NPEngine
 		static_assert(std::is_base_of<Actor, T>::value, "T must be a derived class of Actor");
 
 		std::type_index TypeIndex(typeid(T));
-		auto IT = _ClassActors.find(TypeIndex);
-		if (IT == _ClassActors.end()) return nullptr;
-		if (IT->second.empty()) return nullptr;
-		T* ActorOfClass = dynamic_cast<T*>(IT->second[0]);
-		if (!ActorOfClass) return nullptr;
-		return ActorOfClass;
+		auto& IT = _ClassActors.find(TypeIndex);
+
+		if (IT != _ClassActors.end() && !IT->second.empty())
+		{
+			T* ActorOfClass = dynamic_cast<T*>(IT->second[0]);
+			if (ActorOfClass) return ActorOfClass;
+		}
+
+		for (auto& IT : _ClassActors)
+		{
+			for (Actor* BaseActor : IT->second)
+			{
+				T* DerivedActor = dynamic_cast<T*>(BaseActor);
+				if (DerivedActor) return DerivedActor;
+			}
+		}
+
+		return nullptr;
 	}
 
 	template<typename T>
@@ -144,19 +168,18 @@ namespace NPEngine
 	{
 		static_assert(std::is_base_of<Actor, T>::value, "T must be a derived class of Actor");
 
-		std::type_index TypeIndex(typeid(T));
-		auto IT = _ClassActors.find(TypeIndex);
-		if (IT == _ClassActors.end()) return std::vector<T*>();
-		
 		std::vector<T*> ActorsOfClass;
-		for (Actor* BaseActor : IT->second) 
+
+		for (auto& IT : _ClassActors)
 		{
-			T* DerivedActor = dynamic_cast<T*>(BaseActor);
-			if (DerivedActor) 
+			for (Actor* BaseActor : IT->second)
 			{
+				T* DerivedActor = dynamic_cast<T*>(BaseActor);
+				if (!DerivedActor) break;
 				ActorsOfClass.push_back(DerivedActor);
 			}
 		}
+
 		return ActorsOfClass;
 	}
 }

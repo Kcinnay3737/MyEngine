@@ -28,5 +28,6 @@ namespace NPEngine
 		virtual void Shutdown(const Param& Params) override;
 
 		virtual void ProcessInput() override;
+		virtual void UpdateInputListener(float DeltaTime) override;
 	};
 }

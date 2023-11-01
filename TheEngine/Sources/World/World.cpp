@@ -1,5 +1,5 @@
 #include "World/World.h"
-#include "Object/Actor.h"
+#include "Object/Actor/Actor.h"
 #include "Engine.h"
 
 using namespace NPEngine;
@@ -34,7 +34,7 @@ void World::StartFrame()
 	//Begin play
 	if (!_ActorsToCallBeginPlay.empty())
 	{
-		for (const char* Name : _ActorsToCallBeginPlay)
+		for (std::string& Name : _ActorsToCallBeginPlay)
 		{
 			Actor* CurrActor = GetActorByName(Name);
 			if (!CurrActor) continue;
@@ -69,15 +69,33 @@ void World::PostUpdate()
 
 void World::Render()
 {
-	for (auto& Value : _Actors)
+	if (_DrawActorOrder.empty())
 	{
-		Actor* CurrActor = Value.second;
-		if (!CurrActor) continue;
-
-		IActorWorld* ActorWorld = static_cast<IActorWorld*>(CurrActor);
-		if (ActorWorld)
+		for (auto& IT : _Actors)
 		{
-			ActorWorld->Draw();
+			Actor* CurrActor = IT.second;
+			if (!CurrActor) continue;
+
+			size_t DrawDepth = CurrActor->GetDrawDepth();
+			if (DrawDepth >= _DrawActorOrder.size()) 
+			{
+				_DrawActorOrder.resize(DrawDepth + 1);
+			}
+			_DrawActorOrder[DrawDepth].push_back(CurrActor);
+		}
+	}
+
+	for (std::vector<Actor*>& Layer : _DrawActorOrder)
+	{
+		for (Actor* DrawActor : Layer)
+		{
+			if(!DrawActor) continue;
+
+			IActorWorld* ActorWorld = static_cast<IActorWorld*>(DrawActor);
+			if (ActorWorld)
+			{
+				ActorWorld->Draw();
+			}
 		}
 	}
 }
@@ -141,6 +159,8 @@ void World::OnDeleteActor()
 
 		delete ActorToRemove;
 	}
+
+	ResetDrawOrder();
 }
 
 void World::OnCreateActor()
@@ -152,7 +172,7 @@ void World::OnCreateActor()
 		//Check if actor is valid
 		if (!NewActor) continue;
 
-		const char* NewActorName = NewActor->GetName();
+		std::string& NewActorName = NewActor->GetName();
 		IActorWorld* ActorWorld = static_cast<IActorWorld*>(NewActor);
 
 		//Check if an actor already has this name
@@ -183,9 +203,11 @@ void World::OnCreateActor()
 		_ClassActors[DataActor.TypeIndex].push_back(NewActor);
 		_ActorsToCallBeginPlay.push_back(NewActorName);
 	}
+
+	ResetDrawOrder();
 }
 
-void World::DeleteActorByName(const char* Name, const Param& Params)
+void World::DeleteActorByName(std::string& Name, const Param& Params)
 {
 	DataActorToDelete DataActor = DataActorToDelete();
 	DataActor.Name = Name;
@@ -221,7 +243,7 @@ void World::UnloadWorld()
 
 //Scene function --------------------------------------------
 
-void World::LoadScene(const char* Name, const Param& Params)
+void World::LoadScene(std::string& Name, const Param& Params)
 {
 	_DataLoadScene.bLoadScene = true;
 	_DataLoadScene.SceneName = Name;
@@ -275,6 +297,8 @@ void World::UnloadScene()
 		delete CurrActor;
 	}
 	_Actors.clear();
+
+	ResetDrawOrder();
 }
 
 void World::OnLoadScene()
@@ -297,7 +321,7 @@ void World::OnLoadScene()
 	SceneProvider->Load(Params);
 }
 
-Scene* World::CreateScene(const char* Name, const Param& Params)
+Scene* World::CreateScene(std::string& Name, const Param& Params)
 {
 	Scene* CheckScene = GetSceneByName(Name);
 	if (CheckScene)
@@ -325,7 +349,7 @@ Scene* World::CreateScene(const char* Name, const Param& Params)
 	return NewScene;
 }
 
-void World::DeleteScene(const char* Name, const Param& Params)
+void World::DeleteScene(std::string& Name, const Param& Params)
 {
 	auto IT = _Scenes.find(Name);
 	if (IT == _Scenes.end())
@@ -345,16 +369,39 @@ void World::DeleteScene(const char* Name, const Param& Params)
 
 //----------------------------------------------------------
 
+void World::ResetDrawOrder()
+{
+	_MaxDrawDepth = 0;
+	_DrawActorOrder.clear();
+}
+
+void World::AddObject(size_t ID, Object* NewObject)
+{
+	_IDObject[ID] = NewObject;
+}
+
+void World::RemoveId(size_t ID)
+{
+	_IDObject.erase(ID);
+}
+
 //Getter, Setter -------------------------------------------
 
-Actor* World::GetActorByName(const char* Name)
+Actor* World::GetActorByName(std::string& Name)
 {
 	auto IT = _Actors.find(Name);
 	if (IT == _Actors.end()) return nullptr;
 	return IT->second;
 }
 
-Scene* World::GetSceneByName(const char* Name)
+Object* World::GetObject(size_t ID)
+{
+	auto IT = _IDObject.find(ID);
+	if (IT == _IDObject.end()) return nullptr;
+	return IT->second;
+}
+
+Scene* World::GetSceneByName(std::string& Name)
 {
 	auto IT = _Scenes.find(Name);
 	if (IT == _Scenes.end()) return nullptr;

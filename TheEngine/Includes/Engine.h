@@ -10,6 +10,7 @@
 #include "Audio/IAudio.h"
 #include "Input/IInput.h"
 #include "World/World.h"
+#include "World/InstanceManager/IInstanceManager.h"
 
 namespace NPEngine
 {
@@ -39,6 +40,8 @@ namespace NPEngine
 		ILogger* _Logger = nullptr;
 		IAudioProvider* _AudioProvider = nullptr;
 		IAudio* _Audio = nullptr;
+		IServiceProvider* _InstanceManagerProvider = nullptr;
+		IInstanceManager* _InstanceManager = nullptr;
 		IWorldProvider* _WorldProvider = nullptr;
 		World* _World = nullptr;
 
@@ -73,6 +76,7 @@ namespace NPEngine
 		static ITime* GetTime();
 		static ILogger* GetLogger();
 		static IAudio* GetAudio();
+		static IInstanceManager* GetInstanceManager();
 		static World* GetWorld();
 	};
 }

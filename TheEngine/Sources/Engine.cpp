@@ -4,6 +4,7 @@
 #include "Input/SDLInput.h"
 #include "Time/SDLTime.h"
 #include "Audio/SDLAudio.h"
+#include "World/InstanceManager/InstanceManager.h"
 
 #if _DEBUG
 #include "Logger/ConsoleLogger.h"
@@ -11,7 +12,7 @@
 #include "Logger/FileLogger.h"
 #endif
 
-//#include <vld.h>
+#include <vld.h>
 
 using namespace NPEngine;
 
@@ -21,7 +22,7 @@ Engine* Engine::_InstanceEngine = nullptr;
 
 bool Engine::InitEngine(const char* Name, int Width, int Height)
 {
-	//VLDEnable();
+	VLDEnable();
 
 	Param Params;
 
@@ -78,6 +79,15 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 	}
 	Params.clear();
 
+	//Initialise Instance Manager
+	_InstanceManager = new InstanceManager();
+	_InstanceManagerProvider = static_cast<IServiceProvider*>(_InstanceManager);
+	if (!_InstanceManager || !_InstanceManagerProvider || !_InstanceManagerProvider->Initialize(Params))
+	{
+		return false;
+	}
+	Params.clear();
+
 	//Initialise world
 	_World = new World();
 	_WorldProvider = static_cast<IWorldProvider*>(_World);
@@ -129,6 +139,7 @@ void Engine::Start(void)
 		StartFrame();
 
 		ProcessInput();
+		PostInput();
 
 		Update(_Time->GetDeltaTime());
 		PostUpdate();
@@ -156,6 +167,7 @@ void Engine::StartFrame()
 void Engine::ProcessInput()
 {
 	_InputProvider->ProcessInput();
+	
 
 	if (_Input->IsKeyDown(Key_Escape))
 	{
@@ -165,6 +177,7 @@ void Engine::ProcessInput()
 
 void Engine::PostInput()
 {
+	_InputProvider->UpdateInputListener(_Time->GetDeltaTime());
 }
 
 static Rectangle2D<float> MovableRect = Rectangle2D<float>(Vector2D<float>(0.0f, 0.0f), Vector2D<float>(100.0f, 100.0f));
@@ -240,6 +253,16 @@ void Engine::Shutdown(void)
 	}
 	Params.clear();
 
+	//Delete instance manager
+	if (_InstanceManager && _InstanceManagerProvider)
+	{
+		_InstanceManagerProvider->Shutdown(Params);
+		delete _InstanceManager;
+		_InstanceManager = nullptr;
+		_InstanceManagerProvider = nullptr;
+	}
+	Params.clear();
+
 	//Delete input
 	if (_Input && _InputProvider)
 	{
@@ -290,7 +313,7 @@ void Engine::Shutdown(void)
 	}
 	Params.clear();
 
-	//VLDDisable();
+	VLDDisable();
 }
 
 //-----------------------------------------------------------------------------------
@@ -330,6 +353,11 @@ ILogger* Engine::GetLogger()
 IAudio* Engine::GetAudio()
 {
 	return GetEngineInstance()->_Audio;
+}
+
+IInstanceManager* Engine::GetInstanceManager()
+{
+	return GetEngineInstance()->_InstanceManager;
 }
 
 World* Engine::GetWorld()

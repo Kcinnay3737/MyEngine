@@ -15,5 +15,6 @@ namespace NPEngine
 		virtual void Shutdown(const Param& Params) = 0;
 
 		virtual void ProcessInput() = 0;
+		virtual void UpdateInputListener(float DeltaTime) = 0;
 	};
 }

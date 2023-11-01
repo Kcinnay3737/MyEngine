@@ -1,8 +1,9 @@
-#include "Object/Actor.h"
+#include "Object/Actor/Actor.h"
+#include "Engine.h"
 
 using namespace NPEngine;
 
-Actor::Actor(const char* Name) : Object()
+Actor::Actor(std::string& Name) : Object()
 {
 	_Name = Name;
 }
@@ -21,7 +22,7 @@ void Actor::Destroy(const Param& Params)
 {
 }
 
-Actor* Actor::Clone(const char* Name)
+Actor* Actor::Clone(std::string& Name)
 {
 	Actor* CloneActor = new Actor(Name);
 	return CloneActor;
@@ -37,4 +38,11 @@ void Actor::Update(float dt)
 
 void Actor::Draw()
 {
+}
+
+void Actor::SetDrawDepth(unsigned char DrawDepth)
+{
+	_DrawDepth = DrawDepth;
+
+	Engine::GetWorld()->ResetDrawOrder();
 }

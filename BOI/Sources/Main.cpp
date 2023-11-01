@@ -5,23 +5,24 @@
 #include "Engine.h"
 #include "Player/Issac.h"
 
-using namespace NPEngine;
-
-Param Test(const Param& yo)
+void Test()
 {
 	Engine::GetLogger()->LogMessage("Test");
-	Engine::GetWorld()->CreateActorOfClass<Isaac>("Issac");
-	return Param{};
 }
 
 void InitGameplay(void)
 {
-	Scene* Level1 = Engine::GetWorld()->CreateScene("Level1");
+	Engine::GetInput()->OnButtonReleased[EButtonKeys::Mouse_Left].AddFunction(Test);
+
+	Isaac* InstanceIsaac = new Isaac(std::string("Isaac"));
+	Engine::GetInstanceManager()->AddInstance(InstanceIsaac);
+
+	Scene* Level1 = Engine::GetWorld()->CreateScene(std::string("Level1"));
 	if (Level1)
 	{
-		Level1->OnLoadScene.AddFunction(Test);
+		Level1->SetNumberSpawnPrototype("Isaac", 1);
 	}
-	Engine::GetWorld()->LoadScene("Level1", Param{ {"Bob", 6}});
+	Engine::GetWorld()->LoadScene(std::string("Level1"));
 }
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
