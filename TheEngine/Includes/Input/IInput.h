@@ -17,14 +17,14 @@ namespace NPEngine
 	{
 	public:
 		//Key delegate
-		std::map<EKeyboardKeys, Delegate> OnKeyPressed;
-		std::map<EKeyboardKeys, Delegate> OnKeyMaintained;
-		std::map<EKeyboardKeys, Delegate> OnKeyReleased;
+		std::map<EKeyboardKeys, Delegate<void, const DataKey&>> OnKeyPressed;
+		std::map<EKeyboardKeys, Delegate<void, const DataKey&>> OnKeyMaintained;
+		std::map<EKeyboardKeys, Delegate<void, const DataKey&>> OnKeyReleased;
 
 		//Button delegate
-		std::map<EButtonKeys, Delegate> OnButtonPressed;
-		std::map<EButtonKeys, Delegate> OnButtonMaintained;
-		std::map<EButtonKeys, Delegate> OnButtonReleased;
+		std::map<EButtonKeys, Delegate<void, const DataKey&>> OnButtonPressed;
+		std::map<EButtonKeys, Delegate<void, const DataKey&>> OnButtonMaintained;
+		std::map<EButtonKeys, Delegate<void, const DataKey&>> OnButtonReleased;
 
 	protected:
 		std::map<EKeyboardKeys, DataKey> _DataKey;

@@ -5,17 +5,17 @@
 #include "Engine.h"
 #include "Player/Issac.h"
 
-void Test()
+void Test(const DataKey& pDataKey)
 {
 	Engine::GetLogger()->LogMessage("Test");
 }
 
 void InitGameplay(void)
 {
-	Engine::GetInput()->OnButtonReleased[EButtonKeys::Mouse_Left].AddFunction(Test);
-
 	Isaac* InstanceIsaac = new Isaac(std::string("Isaac"));
 	Engine::GetInstanceManager()->AddInstance(InstanceIsaac);
+
+	Engine::GetInput()->OnButtonReleased[EButtonKeys::Mouse_Left].AddFunction<Isaac>(InstanceIsaac, &Isaac::Bob);
 
 	Scene* Level1 = Engine::GetWorld()->CreateScene(std::string("Level1"));
 	if (Level1)

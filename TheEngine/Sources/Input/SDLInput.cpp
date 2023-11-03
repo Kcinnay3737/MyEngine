@@ -11,9 +11,9 @@ bool SDLInput::Initialize(const Param& Params)
 	{
 		EKeyboardKeys Key = static_cast<EKeyboardKeys>(i);
 		
-		OnKeyPressed[Key] = Delegate();
-		OnKeyMaintained[Key] = Delegate();
-		OnKeyReleased[Key] = Delegate();
+		OnKeyPressed[Key] = Delegate<void, const DataKey&>();
+		OnKeyMaintained[Key] = Delegate<void, const DataKey&>();
+		OnKeyReleased[Key] = Delegate<void, const DataKey&>();
 
 		_DataKey[Key] = DataKey();
 	}
@@ -22,9 +22,9 @@ bool SDLInput::Initialize(const Param& Params)
 	{
 		EButtonKeys Key = static_cast<EButtonKeys>(i);
 
-		OnButtonPressed[Key] = Delegate();
-		OnButtonMaintained[Key] = Delegate();
-		OnButtonReleased[Key] = Delegate();
+		OnButtonPressed[Key] = Delegate<void, const DataKey&>();
+		OnButtonMaintained[Key] = Delegate<void, const DataKey&>();
+		OnButtonReleased[Key] = Delegate<void, const DataKey&>();
 
 		_DataButton[Key] = DataKey();
 	}
@@ -197,21 +197,21 @@ void SDLInput::UpdateInputListener(float DeltaTime)
 		if (bIsDown && CurrDataKey.bIsPressed)
 		{
 			CurrDataKey.TimePressed += DeltaTime;
-			OnKeyMaintained[Key].Broadcast();
+			OnKeyMaintained[Key].Broadcast(CurrDataKey);
 		}
 		//On Pressed
 		else if (bIsDown && !CurrDataKey.bIsPressed)
 		{
 			CurrDataKey.TimePressed = 0.0f;
 			CurrDataKey.bIsPressed = true;
-			OnKeyPressed[Key].Broadcast();
+			OnKeyPressed[Key].Broadcast(CurrDataKey);
 		}
 		//On Released
 		else if (!bIsDown && CurrDataKey.bIsPressed)
 		{
 			CurrDataKey.TimePressed = 0.0f;
 			CurrDataKey.bIsPressed = false;
-			OnKeyReleased[Key].Broadcast();
+			OnKeyReleased[Key].Broadcast(CurrDataKey);
 		}
 	}
 
@@ -226,21 +226,21 @@ void SDLInput::UpdateInputListener(float DeltaTime)
 		if (bIsDown && CurrDataKey.bIsPressed)
 		{
 			CurrDataKey.TimePressed += DeltaTime;
-			OnButtonMaintained[Key].Broadcast();
+			OnButtonMaintained[Key].Broadcast(CurrDataKey);
 		}
 		//On Pressed
 		else if (bIsDown && !CurrDataKey.bIsPressed)
 		{
 			CurrDataKey.TimePressed = 0.0f;
 			CurrDataKey.bIsPressed = true;
-			OnButtonPressed[Key].Broadcast();
+			OnButtonPressed[Key].Broadcast(CurrDataKey);
 		}
 		//On Released
 		else if (!bIsDown && CurrDataKey.bIsPressed)
 		{
 			CurrDataKey.TimePressed = 0.0f;
 			CurrDataKey.bIsPressed = false;
-			OnButtonReleased[Key].Broadcast();
+			OnButtonReleased[Key].Broadcast(CurrDataKey);
 		}
 	}
 }

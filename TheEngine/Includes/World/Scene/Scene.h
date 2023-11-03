@@ -8,7 +8,7 @@ namespace NPEngine
 	class Scene final : public IScene
 	{
 	public:
-		DelegateParams OnLoadScene;
+		Delegate<void, const Param&> OnLoadScene;
 
 	private:
 		std::map<std::string, unsigned int> _PrototypeToSpawn;

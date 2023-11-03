@@ -1,78 +1,107 @@
 #pragma once
 
-#include "Utility/Utility.h"
+#include <functional>
+#include <unordered_map>
+#include <vector>
+#include <cstddef>
 
 namespace NPEngine
 {
-	struct DelegateReturnParams
+	template<typename ReturnType, typename... Args>
+	class Delegate
 	{
-	public:
-		using FunctionType = Param(*)(const Param&);
-
 	private:
-		std::map<FunctionType, std::function<Param(const Param&)>> Functions;
+		template<typename T>
+		size_t GetHash(T* Instance, ReturnType(T::* Method)(Args...))
+		{
+			std::uintptr_t InstanceIntPtr = reinterpret_cast<std::uintptr_t>(Instance);
+			size_t InstanceHash = std::hash<std::uintptr_t>()(InstanceIntPtr);
+			
+			const auto* MethodPtr = reinterpret_cast<const unsigned char*>(&Method);
+			size_t MethodHash = 0;
+			for (size_t i = 0; i < sizeof(Method); i++) 
+			{
+				MethodHash = (MethodHash * 131) + MethodPtr[i];
+			}
+
+			return InstanceHash ^ (MethodHash << 1);
+		}
+
+		size_t GetHash(ReturnType(*Method)(Args...))
+		{
+			std::hash<ReturnType(*)(Args...)> Hasher;
+			return Hasher(Method);
+		}
+
+		std::unordered_map<size_t, std::function<ReturnType(Args...)>> Functions;
 
 	public:
-		~DelegateReturnParams();
+		template<typename T>
+		void AddFunction(T* Instance, ReturnType(T::* Method)(Args...)) 
+		{
+			size_t Key = GetHash<T>(Instance, Method);
+			Functions[Key] = [Instance, Method](Args... args) -> ReturnType 
+			{
+				return (Instance->*Method)(args...);
+			};
+		}
 
-		void AddFunction(FunctionType FunctionPtr);
+		void AddFunction(ReturnType(*Function)(Args...)) 
+		{
+			size_t Key = GetHash(Function);
+			Functions[Key] = Function;
+		}
 
-		void RemoveFunction(FunctionType FunctionPtr);
+		template<typename T>
+		void RemoveFunction(T* Instance, ReturnType(T::* Method)(Args...)) 
+		{
+			size_t Key = GetHash<T>(Instance, Method);
+			Functions.erase(Key);
+		}
 
-		std::vector<Param> Broadcast(const Param& Params = Param{});
-	};
+		void RemoveFunction(ReturnType(*Function)(Args...)) 
+		{
+			size_t Key = GetHash(Function);
+			Functions.erase(Key);
+		}
 
-	struct DelegateReturn
-	{
-	public:
-		using FunctionType = Param(*)(void);
+		std::vector<ReturnType> BroadcastResult(Args... args)
+		{
+			std::vector<ReturnType> Results;
+			Results.reserve(Functions.size());
+			for (auto& [Key, Function] : Functions)
+			{
+				if (Function != nullptr)
+				{
+					try
+					{
+						Results.push_back(Function(args...));
+					}
+					catch (...)
+					{
+						
+					}
+				}
+			}
+			return Results;
+		}
 
-	private:
-		std::map<FunctionType, std::function<Param(void)>> Functions;
+		void Broadcast(Args... args)
+		{
+			for (auto& [Key, Function] : Functions)
+			{
+				if (Function != nullptr)
+				{
+					try
+					{
+						Function(args...);
+					}
+					catch (...)
+					{
 
-	public:
-		~DelegateReturn();
-
-		void AddFunction(FunctionType FunctionPtr);
-
-		void RemoveFunction(FunctionType FunctionPtr);
-
-		std::vector<Param> Broadcast(void);
-	};
-
-	struct DelegateParams
-	{
-	public:
-		using FunctionType = void(*)(const Param&);
-
-	private:
-		std::map<FunctionType, std::function<void(const Param&)>> Functions;
-
-	public:
-		~DelegateParams();
-
-		void AddFunction(FunctionType FunctionPtr);
-
-		void RemoveFunction(FunctionType FunctionPtr);
-
-		void Broadcast(const Param& Params = Param{});
-	};
-
-	struct Delegate
-	{
-	public:
-		using FunctionType = void(*)(void);
-
-	private:
-		std::map<FunctionType, std::function<void(void)>> Functions;
-
-	public:
-		~Delegate();
-
-		void AddFunction(FunctionType FunctionPtr);
-
-		void RemoveFunction(FunctionType FunctionPtr);
-
-		void Broadcast(void);
+					}
+				}
+			}
+		}
 	};
 }

@@ -12,7 +12,17 @@ Actor* Isaac::Clone(std::string& Name)
 	return CopyIsaac;
 }
 
-void Isaac::Draw()
+void Isaac::Bob(const DataKey& pDataKey)
 {
 	Engine::GetLogger()->LogMessage("testo");
+}
+
+void Isaac::Draw()
+{
+	
+}
+
+void Isaac::Update(float dt)
+{
+	
 }
