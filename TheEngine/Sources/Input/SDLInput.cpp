@@ -209,9 +209,9 @@ void SDLInput::UpdateInputListener(float DeltaTime)
 		//On Released
 		else if (!bIsDown && CurrDataKey.bIsPressed)
 		{
-			CurrDataKey.TimePressed = 0.0f;
 			CurrDataKey.bIsPressed = false;
 			OnKeyReleased[Key].Broadcast(CurrDataKey);
+			CurrDataKey.TimePressed = 0.0f;
 		}
 	}
 
@@ -238,9 +238,9 @@ void SDLInput::UpdateInputListener(float DeltaTime)
 		//On Released
 		else if (!bIsDown && CurrDataKey.bIsPressed)
 		{
-			CurrDataKey.TimePressed = 0.0f;
 			CurrDataKey.bIsPressed = false;
 			OnButtonReleased[Key].Broadcast(CurrDataKey);
+			CurrDataKey.TimePressed = 0.0f;
 		}
 	}
 }

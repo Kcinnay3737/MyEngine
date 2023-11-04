@@ -14,7 +14,7 @@ Actor* Isaac::Clone(std::string& Name)
 
 void Isaac::Bob(const DataKey& pDataKey)
 {
-	Engine::GetLogger()->LogMessage("testo");
+	Engine::GetLogger()->LogMessage("testo%f", pDataKey.TimePressed);
 }
 
 void Isaac::Draw()

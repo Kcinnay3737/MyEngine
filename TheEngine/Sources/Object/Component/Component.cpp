@@ -20,10 +20,6 @@ void Component::Destroy(const Param& Params)
 {
 }
 
-void Component::BeginPlay()
-{
-}
-
 void Component::SetOwner(Actor* Owner)
 {
 	_OwnerActor = Owner;

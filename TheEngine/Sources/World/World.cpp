@@ -31,6 +31,12 @@ void World::StartFrame()
 		_ActorsToAdd.clear();
 	}
 
+	if (!_ActorsToCallCreateComponent.empty())
+	{
+		OnCallActorCreateComponent();
+		_ActorsToCallCreateComponent.clear();
+	}
+
 	//Begin play
 	if (!_ActorsToCallBeginPlay.empty())
 	{
@@ -106,6 +112,12 @@ void World::PostRender()
 
 void World::EndFrame()
 {
+	if (!_ActorsToCallDeleteComponent.empty())
+	{
+		OnCallActorDeleteComponent();
+		_ActorsToCallDeleteComponent.clear();
+	}
+
 	//Check for delete actor
 	if (!_ActorsToDelete.empty())
 	{
@@ -118,14 +130,14 @@ void World::EndFrame()
 
 //Actor function --------------------------------------------
 
-void World::AddActor(Actor* Actor, const Param& Params)
+void World::AddActor(Actor* NewActor, const Param& Params)
 {
-	if (!Actor) return;
+	if (!NewActor) return;
 
-	std::type_index TypeIndex(typeid(*Actor));
+	std::type_index TypeIndex(typeid(*NewActor));
 
 	DataActorToAdd CurrDataActorToAdd = DataActorToAdd();
-	CurrDataActorToAdd.CurrentActor = Actor;
+	CurrDataActorToAdd.CurrentActor = NewActor;
 	CurrDataActorToAdd.TypeIndex = TypeIndex;
 	CurrDataActorToAdd.Params = Params;
 	_ActorsToAdd.push_back(CurrDataActorToAdd);
@@ -207,12 +219,52 @@ void World::OnCreateActor()
 	ResetDrawOrder();
 }
 
-void World::DeleteActorByName(std::string& Name, const Param& Params)
+void World::OnCallActorCreateComponent()
+{
+	for (auto& KeyValue : _ActorsToCallCreateComponent)
+	{
+		const std::string& ActorName = KeyValue.first;
+		Actor* CurrActor = GetActorByName(ActorName);
+		if(!CurrActor) continue;
+		IActorWorld* ActorWorld = static_cast<IActorWorld*>(CurrActor);
+		if (!ActorWorld) return;
+		ActorWorld->OnCreateComponent();
+	}
+}
+
+void World::OnCallActorDeleteComponent()
+{
+	for (auto& KeyValue : _ActorsToCallCreateComponent)
+	{
+		const std::string& ActorName = KeyValue.first;
+		Actor* CurrActor = GetActorByName(ActorName);
+		if (!CurrActor) continue;
+		IActorWorld* ActorWorld = static_cast<IActorWorld*>(CurrActor);
+		if (!ActorWorld) return;
+		ActorWorld->OnDeleteComponent();
+	}
+}
+
+void World::DeleteActorByName(const std::string& Name, const Param& Params)
 {
 	DataActorToDelete DataActor = DataActorToDelete();
 	DataActor.Name = Name;
 	DataActor.Params = Params;
 	_ActorsToDelete.push_back(DataActor);
+}
+
+void World::AddActorToCallCreateComponent(const std::string& Name)
+{
+	auto& IT = _ActorsToCallCreateComponent.find(Name);
+	if (IT != _ActorsToCallCreateComponent.end()) return;
+	_ActorsToCallCreateComponent[Name] = true;
+}
+
+void World::AddActorToCallDeleteComponent(const std::string& Name)
+{
+	auto& IT = _ActorsToCallDeleteComponent.find(Name);
+	if (IT != _ActorsToCallDeleteComponent.end()) return;
+	_ActorsToCallDeleteComponent[Name] = true;
 }
 
 //-----------------------------------------------------------
@@ -243,7 +295,7 @@ void World::UnloadWorld()
 
 //Scene function --------------------------------------------
 
-void World::LoadScene(std::string& Name, const Param& Params)
+void World::LoadScene(const std::string& Name, const Param& Params)
 {
 	_DataLoadScene.bLoadScene = true;
 	_DataLoadScene.SceneName = Name;
@@ -321,7 +373,7 @@ void World::OnLoadScene()
 	SceneProvider->Load(Params);
 }
 
-Scene* World::CreateScene(std::string& Name, const Param& Params)
+Scene* World::CreateScene(const std::string& Name, const Param& Params)
 {
 	Scene* CheckScene = GetSceneByName(Name);
 	if (CheckScene)
@@ -349,7 +401,7 @@ Scene* World::CreateScene(std::string& Name, const Param& Params)
 	return NewScene;
 }
 
-void World::DeleteScene(std::string& Name, const Param& Params)
+void World::DeleteScene(const std::string& Name, const Param& Params)
 {
 	auto IT = _Scenes.find(Name);
 	if (IT == _Scenes.end())
@@ -387,7 +439,7 @@ void World::RemoveId(size_t ID)
 
 //Getter, Setter -------------------------------------------
 
-Actor* World::GetActorByName(std::string& Name)
+Actor* World::GetActorByName(const std::string& Name)
 {
 	auto IT = _Actors.find(Name);
 	if (IT == _Actors.end()) return nullptr;
@@ -401,7 +453,7 @@ Object* World::GetObject(size_t ID)
 	return IT->second;
 }
 
-Scene* World::GetSceneByName(std::string& Name)
+Scene* World::GetSceneByName(const std::string& Name)
 {
 	auto IT = _Scenes.find(Name);
 	if (IT == _Scenes.end()) return nullptr;

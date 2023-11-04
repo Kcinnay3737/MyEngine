@@ -12,13 +12,13 @@ namespace NPEngine
 	public:
 		virtual ~IWorld() = default;
 
-		virtual void LoadScene(std::string& Name, const Param& Params = Param{}) = 0;
-		virtual Scene* CreateScene(std::string& Name, const Param& Params = Param{}) = 0;
-		virtual void DeleteScene(std::string& Name, const Param& Params = Param{}) = 0;
+		virtual void LoadScene(const std::string& Name, const Param& Params = Param{}) = 0;
+		virtual Scene* CreateScene(const std::string& Name, const Param& Params = Param{}) = 0;
+		virtual void DeleteScene(const std::string& Name, const Param& Params = Param{}) = 0;
 
 		virtual void AddActor(Actor* Actor, const Param& Params = Param{}) = 0;
-		virtual void DeleteActorByName(std::string& Name, const Param& Params = Param{}) = 0;
-		virtual Actor* GetActorByName(std::string& Name) = 0;
+		virtual void DeleteActorByName(const std::string& Name, const Param& Params = Param{}) = 0;
+		virtual Actor* GetActorByName(const std::string& Name) = 0;
 
 	private:
 		virtual bool Initialize(const Param& Params) override = 0;
@@ -43,6 +43,6 @@ namespace NPEngine
 		virtual void OnCreateActor() = 0;
 
 	public:
-		virtual Scene* GetSceneByName(std::string& Name) = 0;
+		virtual Scene* GetSceneByName(const std::string& Name) = 0;
 	};
 }

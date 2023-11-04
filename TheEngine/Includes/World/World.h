@@ -41,6 +41,9 @@ namespace NPEngine
 
 		std::vector<std::string> _ActorsToCallBeginPlay;
 
+		std::map<std::string, bool> _ActorsToCallCreateComponent;
+		std::map<std::string, bool> _ActorsToCallDeleteComponent;
+
 		std::map<std::string, Actor*> _Actors;
 		std::map<std::type_index, std::vector<Actor*>> _ClassActors;
 
@@ -58,16 +61,19 @@ namespace NPEngine
 		virtual ~World() = default;
 
 		//Scene function
-		virtual void LoadScene(std::string& Name, const Param& Params = Param{}) override;
-		virtual Scene* CreateScene(std::string& Name, const Param& Params = Param{}) override;
-		virtual void DeleteScene(std::string& Name, const Param& Params = Param{}) override;
+		virtual void LoadScene(const std::string& Name, const Param& Params = Param{}) override;
+		virtual Scene* CreateScene(const std::string& Name, const Param& Params = Param{}) override;
+		virtual void DeleteScene(const std::string& Name, const Param& Params = Param{}) override;
 		//-------------
 
 		//Actor function
 		virtual void AddActor(Actor* Actor, const Param& Params = Param{}) override;
-		virtual void DeleteActorByName(std::string& Name, const Param& Params = Param{}) override;
+		virtual void DeleteActorByName(const std::string& Name, const Param& Params = Param{}) override;
 		template <typename T>
-		T* CreateActorOfClass(std::string& Name, const Param& Params = Param{});
+		T* CreateActorOfClass(const std::string& Name, const Param& Params = Param{});
+
+		void AddActorToCallCreateComponent(const std::string& Name);
+		void AddActorToCallDeleteComponent(const std::string& Name);
 		//-------------
 		
 		void ResetDrawOrder();
@@ -100,6 +106,9 @@ namespace NPEngine
 		//Actor function
 		virtual void OnDeleteActor() override;
 		virtual void OnCreateActor() override;
+
+		void OnCallActorCreateComponent();
+		void OnCallActorDeleteComponent();
 		//-------------
 
 		virtual void AddObject(size_t ID, Object* NewObject) override;
@@ -109,9 +118,9 @@ namespace NPEngine
 		//Getter, Setter
 		virtual Object* GetObject(size_t ID) override;
 
-		virtual Scene* GetSceneByName(std::string& Name) override;
+		virtual Scene* GetSceneByName(const std::string& Name) override;
 
-		virtual Actor* GetActorByName(std::string& Name) override;
+		virtual Actor* GetActorByName(const std::string& Name) override;
 		template <typename T>
 		T* GetActorOfClass();
 		template <typename T>
@@ -119,7 +128,7 @@ namespace NPEngine
 	};
 
 	template<typename T>
-	inline T* World::CreateActorOfClass(std::string& Name, const Param& Params)
+	inline T* World::CreateActorOfClass(const std::string& Name, const Param& Params)
 	{
 		static_assert(std::is_base_of<Actor, T>::value, "T must be a derived class of Actor");
 

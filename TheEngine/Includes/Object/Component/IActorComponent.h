@@ -16,8 +16,6 @@ namespace NPEngine
 		virtual bool Initialise(const Param& Params = Param{}) = 0;
 		virtual void Destroy(const Param& Params = Param{}) = 0;
 
-		virtual void BeginPlay() = 0;
-
 		virtual void SetOwner(Actor* Owner) = 0;
 	};
 }

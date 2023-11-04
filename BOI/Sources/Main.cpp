@@ -7,7 +7,7 @@
 
 void Test(const DataKey& pDataKey)
 {
-	Engine::GetLogger()->LogMessage("Test");
+	Engine::GetLogger()->LogMessage("Test%f", pDataKey.TimePressed);
 }
 
 void InitGameplay(void)

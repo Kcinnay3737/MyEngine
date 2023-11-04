@@ -23,5 +23,8 @@ namespace NPEngine
 		virtual void Update(float dt) = 0;
 		
 		virtual void Draw() = 0;
+
+		virtual void OnCreateComponent() = 0;
+		virtual void OnDeleteComponent() = 0;
 	};
 }
