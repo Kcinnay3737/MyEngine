@@ -45,7 +45,7 @@ namespace NPEngine
 		std::map<std::string, bool> _ActorsToCallDeleteComponent;
 
 		std::map<std::string, Actor*> _Actors;
-		std::map<std::type_index, std::vector<Actor*>> _ClassActors;
+		std::unordered_map<std::type_index, std::vector<Actor*>> _ClassActors;
 
 		std::vector<DataActorToAdd> _ActorsToAdd;
 		std::vector<DataActorToDelete> _ActorsToDelete;
@@ -89,6 +89,8 @@ namespace NPEngine
 		//Scene function
 		virtual void UnloadScene() override;
 		virtual void OnLoadScene() override;
+
+		void ResetDataLoadScene();
 		//-------------
 
 		//Flow function 

@@ -4,6 +4,7 @@
 #include "Object/Actor/IActorWorld.h"
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <typeindex>
 #include <typeinfo>
 
@@ -37,7 +38,7 @@ namespace NPEngine
 
 	public:
 		Actor(std::string& Name);
-		virtual ~Actor();
+		virtual ~Actor() = default;
 
 		virtual Actor* Clone(std::string& Name);
 
@@ -50,7 +51,7 @@ namespace NPEngine
 
 	private:
 		std::map<std::string, Component*> _Components;
-		std::map<std::type_index, std::vector<Component*>> _ClassComponents;
+		std::unordered_map<std::type_index, std::vector<Component*>> _ClassComponents;
 
 		std::map<std::string, IUpdatableComponent*> _UpdatableComponent;
 		std::map<std::string, IDrawableComponent*> _DrawableComponent;
@@ -69,7 +70,7 @@ namespace NPEngine
 		virtual void OnDeleteComponent() override final;
 		
 	public:
-		std::string GetName() { return _Name; }
+		std::string GetName() const { return _Name; }
 
 		virtual void SetDrawDepth(unsigned char DrawDepth) override;
 		virtual unsigned char GetDrawDepth() override { return _DrawDepth; }
@@ -112,7 +113,7 @@ namespace NPEngine
 
 		for (auto& IT : _ClassComponents)
 		{
-			for (Component* BaseComponent : IT->second)
+			for (Component* BaseComponent : IT.second)
 			{
 				T* DerivedComponent = dynamic_cast<T*>(BaseComponent);
 				if (DerivedComponent) return DerivedComponent;

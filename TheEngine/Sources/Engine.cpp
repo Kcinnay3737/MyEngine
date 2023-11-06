@@ -5,6 +5,7 @@
 #include "Time/SDLTime.h"
 #include "Audio/SDLAudio.h"
 #include "World/InstanceManager/InstanceManager.h"
+#include "Physics/Physics.h"
 
 #if _DEBUG
 #include "Logger/ConsoleLogger.h"
@@ -79,6 +80,15 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 	}
 	Params.clear();
 
+	//Initialise physics
+	_Physics = new Physics();
+	_PhysicsProvider = static_cast<IPhysicsProvider*>(_Physics);
+	if (!_Physics || !_PhysicsProvider || !_PhysicsProvider->Initialize(Params))
+	{
+		return false;
+	}
+	Params.clear();
+
 	//Initialise Instance Manager
 	_InstanceManager = new InstanceManager();
 	_InstanceManagerProvider = static_cast<IServiceProvider*>(_InstanceManager);
@@ -105,11 +115,6 @@ bool Engine::InitEngine(const char* Name, int Width, int Height)
 	return true;
 }
 
-static size_t TextureId = 0;
-static size_t FontId = 0;
-static size_t MusicId = 0;
-static size_t SoundId = 0;
-
 void Engine::Start(void)
 {
 	if (!GetEngineState().IsInit)
@@ -122,14 +127,6 @@ void Engine::Start(void)
 
 	GetEngineState().IsRunning = true;
 
-	TextureId = _Graphics->LoadTexture("default.png");
-	FontId = _Graphics->LoadFont("Roboto-Black.ttf", 100);
-	MusicId = _Audio->LoadMusic("Dark_House.wav");
-	SoundId = _Audio->LoadSound("Warped_Whoosh_001.wav");
-
-	_Audio->PlayMusic(MusicId);
-	_Audio->PlaySound(SoundId);
-
 	_TimeProvider->InitialiseTime();
 
 	while (GetEngineState().IsRunning)
@@ -140,6 +137,8 @@ void Engine::Start(void)
 
 		ProcessInput();
 		PostInput();
+
+		UpdatePhysics(_Time->GetDeltaTime());
 
 		Update(_Time->GetDeltaTime());
 		PostUpdate();
@@ -180,32 +179,16 @@ void Engine::PostInput()
 	_InputProvider->UpdateInputListener(_Time->GetDeltaTime());
 }
 
+void Engine::UpdatePhysics(float DeltaTime)
+{
+	_PhysicsProvider->UpdatePhysics(DeltaTime);
+}
+
 static Rectangle2D<float> MovableRect = Rectangle2D<float>(Vector2D<float>(0.0f, 0.0f), Vector2D<float>(100.0f, 100.0f));
 
 void Engine::Update(float DeltaTime)
 {
 	_WorldProvider->Update(DeltaTime);
-
-	//_Logger->LogMessage("DeltaTime: %f", DeltaTime);
-
-	float MoveSpeed = 200.0f * DeltaTime;
-
-	if (_Input->IsKeyDown(Key_W))
-	{
-		MovableRect.Position.Y -= MoveSpeed;
-	}
-	if (_Input->IsKeyDown(Key_S))
-	{
-		MovableRect.Position.Y += MoveSpeed;
-	}
-	if (_Input->IsKeyDown(Key_A))
-	{
-		MovableRect.Position.X -= MoveSpeed;
-	}
-	if (_Input->IsKeyDown(Key_D))
-	{
-		MovableRect.Position.X += MoveSpeed;
-	}
 }
 
 void Engine::PostUpdate()
@@ -218,13 +201,6 @@ void Engine::Render(void)
 	_GraphicsProvider->Clear();
 
 	_WorldProvider->Render();
-
-	Rectangle2D<float> DrawRect = Rectangle2D<float>(Vector2D<float>(100.f, 100.f), Vector2D<float>(200.f, 100.f));
-	_Graphics->DrawTexture(TextureId, DrawRect);
-
-	_Graphics->DrawString(FontId, "Allo", Vector2D<int>(0, 0), Color::Blue);
-
-	_Graphics->DrawRect(MovableRect, Color::Red, true);
 
 	_GraphicsProvider->Present();
 }
@@ -262,6 +238,15 @@ void Engine::Shutdown(void)
 		_InstanceManagerProvider = nullptr;
 	}
 	Params.clear();
+
+	//Delete physics
+	if (_Physics && _PhysicsProvider)
+	{
+		_PhysicsProvider->Shutdown(Params);
+		delete _Physics;
+		_Physics = nullptr;
+		_PhysicsProvider = nullptr;
+	}
 
 	//Delete input
 	if (_Input && _InputProvider)
@@ -363,4 +348,9 @@ IInstanceManager* Engine::GetInstanceManager()
 World* Engine::GetWorld()
 {
 	return GetEngineInstance()->_World;
+}
+
+IPhysics* NPEngine::Engine::GetPhysics()
+{
+	return GetEngineInstance()->_Physics;
 }

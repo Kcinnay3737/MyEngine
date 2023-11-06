@@ -13,6 +13,17 @@ namespace NPEngine
 
 		Vector2D<T> Position;
 		Vector2D<T> Size;
+
+
+		Rectangle2D& operator = (const Rectangle2D& Other)
+		{
+			if (this != &Other)
+			{
+				Position = Other.Position;
+				Size = Other.Size;
+			}
+			return *this;
+		}
 	};
 
 	template<class T>

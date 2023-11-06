@@ -3,32 +3,30 @@
 
 #include <Windows.h>
 #include "Engine.h"
-#include "Player/Issac.h"
 
-void Test(const DataKey& pDataKey)
-{
-	Engine::GetLogger()->LogMessage("Test%f", pDataKey.TimePressed);
-}
+using namespace NPEngine;
 
 void InitGameplay(void)
 {
-	Isaac* InstanceIsaac = new Isaac(std::string("Isaac"));
-	Engine::GetInstanceManager()->AddInstance(InstanceIsaac);
-
-	Engine::GetInput()->OnButtonReleased[EButtonKeys::Mouse_Left].AddFunction<Isaac>(InstanceIsaac, &Isaac::Bob);
-
-	Scene* Level1 = Engine::GetWorld()->CreateScene(std::string("Level1"));
-	if (Level1)
+	Scene* SceneMenu = Engine::GetWorld()->CreateScene(std::string("SceneMenu"));
+	if (SceneMenu)
 	{
-		Level1->SetNumberSpawnPrototype("Isaac", 1);
+
 	}
-	Engine::GetWorld()->LoadScene(std::string("Level1"));
+
+	Scene* SceneGame1 = Engine::GetWorld()->CreateScene(std::string("SceneGame1"));
+	if (SceneGame1)
+	{
+		//Level1->SetNumberSpawnPrototype("Isaac", 1);
+	}
+
+	Engine::GetWorld()->LoadScene(std::string("SceneMenu"));
 }
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
 {
-	NPEngine::Engine TheEngine;
-	if (TheEngine.InitEngine("TestGame", 800, 600))
+	Engine TheEngine;
+	if (TheEngine.InitEngine("TestGame", 1200, 800))
 	{
 		InitGameplay();
 		TheEngine.Start();

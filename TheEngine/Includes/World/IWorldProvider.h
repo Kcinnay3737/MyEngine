@@ -11,8 +11,8 @@ namespace NPEngine
 		virtual ~IWorldProvider() = default;
 
 	private:
-		virtual bool Initialize(const Param& Params) = 0;
-		virtual void Shutdown(const Param& Params) = 0;
+		virtual bool Initialize(const Param& Params) override = 0;
+		virtual void Shutdown(const Param& Params) override = 0;
 
 		virtual void StartFrame() = 0;
 

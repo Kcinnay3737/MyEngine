@@ -1,6 +1,7 @@
 #include "Object/Actor/Actor.h"
 #include "Engine.h"
 #include "Object/Component/Component.h"
+#include "Object/Component/TransformComponent.h"
 
 using namespace NPEngine;
 
@@ -9,20 +10,53 @@ Actor::Actor(std::string& Name) : Object()
 	_Name = Name;
 }
 
-Actor::~Actor()
-{
-	
-}
-
 //Flow ----------------------------------------------------
 
 bool Actor::Initialise(const Param& Params)
 {
+	CreateComponentOfClass<TransformComponent>(std::string("Transform"));
+
 	return true;
 }
 
 void Actor::Destroy(const Param& Params)
 {
+	_ClassComponents.clear();
+
+	_UpdatableComponent.clear();
+	_DrawableComponent.clear();
+
+	_ComponentToDelete.clear();
+
+	for (DataComponentToAdd& DataComponent : _ComponentToAdd)
+	{
+		Component* CurrComponent = DataComponent.CurrentComponent;
+		if (!CurrComponent) continue;
+
+		IActorComponent* ActorComponent = static_cast<IActorComponent*>(CurrComponent);
+		if (ActorComponent)
+		{
+			ActorComponent->Destroy(Params);
+		}
+
+		delete CurrComponent;
+	}
+	_ComponentToAdd.clear();
+
+	for (auto& IT : _Components)
+	{
+		Component* CurrComponent = IT.second;
+		if (!CurrComponent) continue;
+
+		IActorComponent* ActorComponent = static_cast<IActorComponent*>(CurrComponent);
+		if (ActorComponent)
+		{
+			ActorComponent->Destroy(Params);
+		}
+
+		delete ActorComponent;
+	}
+	_Components.clear();
 }
 
 void Actor::BeginPlay()
@@ -104,6 +138,7 @@ void Actor::OnCreateComponent()
 
 		if (ActorComponent)
 		{
+			ActorComponent->SetOwner(this);
 			if (!ActorComponent->Initialise(DataComponent.Params))
 			{
 				Engine::GetLogger()->LogMessage("Initialise failed");

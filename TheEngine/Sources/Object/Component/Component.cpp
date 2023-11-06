@@ -7,10 +7,6 @@ Component::Component(std::string& Name) : Object()
 	_Name = Name;
 }
 
-Component::~Component()
-{
-}
-
 bool Component::Initialise(const Param& Params)
 {
 	return true;

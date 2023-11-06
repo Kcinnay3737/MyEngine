@@ -2,7 +2,6 @@
 
 #include "Utility/Utility.h"
 #include "Utility/GameplayStatic.h"
-#include "Utility/Delegate.h"
 
 #include "Logger/ILogger.h"
 #include "Time/ITime.h"
@@ -11,6 +10,7 @@
 #include "Input/IInput.h"
 #include "World/World.h"
 #include "World/InstanceManager/IInstanceManager.h"
+#include "Physics/IPhysics.h"
 
 namespace NPEngine
 {
@@ -44,6 +44,8 @@ namespace NPEngine
 		IInstanceManager* _InstanceManager = nullptr;
 		IWorldProvider* _WorldProvider = nullptr;
 		World* _World = nullptr;
+		IPhysicsProvider* _PhysicsProvider = nullptr;
+		IPhysics* _Physics = nullptr;
 
 	public:
 		bool InitEngine(const char* Name, int Widht, int Height);
@@ -54,6 +56,8 @@ namespace NPEngine
 
 		void ProcessInput();
 		void PostInput();
+
+		void UpdatePhysics(float DeltaTime);
 
 		void Update(float DeltaTime);
 		void PostUpdate();
@@ -78,5 +82,6 @@ namespace NPEngine
 		static IAudio* GetAudio();
 		static IInstanceManager* GetInstanceManager();
 		static World* GetWorld();
+		static IPhysics* GetPhysics();
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include "Utility/Utility.h"
 
 namespace NPEngine
 {

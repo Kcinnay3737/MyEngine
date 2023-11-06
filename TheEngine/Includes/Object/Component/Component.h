@@ -18,12 +18,13 @@ namespace NPEngine
 
 	public:
 		Component(std::string& Name);
-		virtual ~Component();
+		virtual ~Component() = default;
 
-	private:
+	protected:
 		virtual bool Initialise(const Param& Params = Param{}) override;
 		virtual void Destroy(const Param& Params = Param{}) override;
 
+	private:
 		virtual void SetOwner(Actor* Owner) override;
 
 	public:

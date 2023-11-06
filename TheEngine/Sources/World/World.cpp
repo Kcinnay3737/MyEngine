@@ -314,9 +314,7 @@ void World::UnloadScene()
 	_ActorsToDelete.clear();
 
 	//Reset load scene data
-	_DataLoadScene.bLoadScene = false;
-	_DataLoadScene.SceneName = "";
-	_DataLoadScene.Params.clear();
+	ResetDataLoadScene();
 
 	//Delete all new actor to add and clear list
 	for (DataActorToAdd& DataActor : _ActorsToAdd)
@@ -358,12 +356,14 @@ void World::OnLoadScene()
 	IScene* Scene = GetSceneByName(_DataLoadScene.SceneName);
 	if (!Scene)
 	{
+		ResetDataLoadScene();
 		Engine::GetLogger()->LogMessage("No scene matches the name for load");
 		return;
 	}
 	ISceneProvider* SceneProvider = static_cast<ISceneProvider*>(Scene);
 	if (!SceneProvider)
 	{
+		ResetDataLoadScene();
 		Engine::GetLogger()->LogMessage("The scene provider is not valid for load");
 		return;
 	}
@@ -371,6 +371,13 @@ void World::OnLoadScene()
 	Param Params = _DataLoadScene.Params;
 	UnloadScene();
 	SceneProvider->Load(Params);
+}
+
+void World::ResetDataLoadScene()
+{
+	_DataLoadScene.bLoadScene = false;
+	_DataLoadScene.SceneName = "";
+	_DataLoadScene.Params.clear();
 }
 
 Scene* World::CreateScene(const std::string& Name, const Param& Params)
