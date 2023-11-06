@@ -2,6 +2,11 @@
 #include "Engine.h"
 #include "Object/Component/TransformComponent.h"
 #include "Object/Actor/Actor.h"
+#include "Physics/Collision/PointCollision.h"
+#include "Physics/Collision/LineCollision.h"
+#include "Physics/Collision/BoxCollision.h"
+#include "Physics/Collision/SphereCollision.h"
+#include "Physics/Collision/GridCollision.h"
 
 using namespace NPEngine;
 
@@ -95,10 +100,27 @@ void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)
 		delete _Collision;
 	}
 
-	switch (CollisionType)
+	_CollisionType = CollisionType;
+
+	switch (_CollisionType)
 	{
 	case ECollisionType::None:
 		_Collision = nullptr;
+		break;
+	case ECollisionType::Point:
+		_Collision = new PointCollision();
+		break;
+	case ECollisionType::Line:
+		_Collision = new LineCollision();
+		break;
+	case ECollisionType::Box:
+		_Collision = new BoxCollision();
+		break;
+	case ECollisionType::Sphere:
+		_Collision = new SphereCollision();
+		break;
+	case ECollisionType::Grid:
+		_Collision = new GridCollision();
 		break;
 	default:
 		_Collision = nullptr;

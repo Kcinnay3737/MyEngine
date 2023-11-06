@@ -4,9 +4,16 @@
 
 namespace NPEngine
 {
-	class BoxCollider : public ICollision
+	class BoxCollision : public ICollision
 	{
 	public:
 		Rectangle2D<float> _Rectangle;
+
+	public:
+		virtual CollisionData CheckCollisionWithPoint(const ICollision& OtherCollision) override;
+		virtual CollisionData CheckCollisionWithBox(const ICollision& OtherCollision) override;
+		virtual CollisionData CheckCollisionWithSphere(const ICollision& OtherCollision) override;
+		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) override;
+		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) override;
 	};
 }
