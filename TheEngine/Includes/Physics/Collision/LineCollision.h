@@ -26,6 +26,8 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) override;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) override;
 
+		virtual void DrawCollision() override;
+
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }
 	};
 }

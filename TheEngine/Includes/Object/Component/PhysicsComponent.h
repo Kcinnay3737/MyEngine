@@ -8,7 +8,7 @@
 
 namespace NPEngine
 {
-	class PhysicsComponent : public Component
+	class PhysicsComponent : public Component, public IDrawableComponent
 	{
 	public:
 		Delegate<void, const CollisionData&> OnCollision;
@@ -28,6 +28,8 @@ namespace NPEngine
 	private:
 		virtual bool Initialise(const Param& Params = Param{}) override;
 		virtual void Destroy(const Param& Params = Param{}) override;
+
+		virtual void Draw() override;
 
 	public:
 		Vector2D<float> GetVelocity();

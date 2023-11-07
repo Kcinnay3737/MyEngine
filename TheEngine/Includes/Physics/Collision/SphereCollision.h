@@ -13,6 +13,9 @@ namespace NPEngine
 
 		Actor* _Owner = nullptr;
 
+		Vector2D<float> _Position = Vector2D<float>(0.0f, 0.0f);
+		float _Ray = 0.0f;
+
 	public:
 		SphereCollision(Actor* Owner);
 		virtual ~SphereCollision();
@@ -22,6 +25,8 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithSphere(const ICollision& OtherCollision) override;
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) override;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) override;
+
+		virtual void DrawCollision() override;
 
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }
 	};

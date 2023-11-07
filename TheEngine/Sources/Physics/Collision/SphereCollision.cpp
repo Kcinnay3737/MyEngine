@@ -3,6 +3,7 @@
 #include "Physics/Collision/LineCollision.h"
 #include "Physics/Collision/BoxCollision.h"
 #include "Physics/Collision/GridCollision.h"
+#include "Engine.h"
 
 using namespace NPEngine;
 
@@ -38,4 +39,9 @@ CollisionData SphereCollision::CheckCollisionWithLine(const ICollision& OtherCol
 CollisionData SphereCollision::CheckCollisionWithGrid(const ICollision& OtherCollision)
 {
     return CollisionData();
+}
+
+void SphereCollision::DrawCollision()
+{
+    Engine::GetGraphics()->DrawCircle(_Position, _Ray);
 }

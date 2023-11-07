@@ -3,6 +3,7 @@
 #include "Physics/Collision/LineCollision.h"
 #include "Physics/Collision/PointCollision.h"
 #include "Physics/Collision/GridCollision.h"
+#include "Engine.h"
 
 using namespace NPEngine;
 
@@ -44,4 +45,9 @@ CollisionData BoxCollision::CheckCollisionWithLine(const ICollision& OtherCollis
 CollisionData BoxCollision::CheckCollisionWithGrid(const ICollision& OtherCollision)
 {
     return CollisionData();
+}
+
+void BoxCollision::DrawCollision()
+{
+    Engine::GetGraphics()->DrawRect(_Rectangle);
 }

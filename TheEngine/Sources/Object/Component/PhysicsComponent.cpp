@@ -68,6 +68,14 @@ void PhysicsComponent::Destroy(const Param& Params)
 	}
 }
 
+void PhysicsComponent::Draw()
+{
+	if (_Collision)
+	{
+		_Collision->DrawCollision();
+	}
+}
+
 Vector2D<float> PhysicsComponent::GetVelocity()
 {
 	return _MovementData.Velocity;

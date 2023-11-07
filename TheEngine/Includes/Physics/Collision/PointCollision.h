@@ -13,7 +13,7 @@ namespace NPEngine
 
 		Actor* _Owner = nullptr;
 
-		Vector2D<float> Point = Vector2D<float>(0.0f, 0.0f);
+		Vector2D<float> _Point = Vector2D<float>(0.0f, 0.0f);
 
 	public:
 		PointCollision(Actor* Owner);
@@ -24,6 +24,8 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithSphere(const ICollision& OtherCollision) override;
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) override;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) override;
+
+		virtual void DrawCollision() override;
 
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }
 	};
