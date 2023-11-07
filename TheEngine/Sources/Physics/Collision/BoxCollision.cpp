@@ -3,6 +3,8 @@
 #include "Physics/Collision/LineCollision.h"
 #include "Physics/Collision/PointCollision.h"
 #include "Physics/Collision/GridCollision.h"
+#include "Object/Actor/Actor.h"
+#include "Object/Component/TransformComponent.h"
 #include "Engine.h"
 
 using namespace NPEngine;
@@ -47,7 +49,22 @@ CollisionData BoxCollision::CheckCollisionWithGrid(const ICollision& OtherCollis
     return CollisionData();
 }
 
+void BoxCollision::UpdateCollisionWithActorTransform()
+{
+    if (!_Owner)
+    {
+
+    }
+
+    //TransformComponent* CurrTransformComponent = _Owner->
+}
+
 void BoxCollision::DrawCollision()
 {
     Engine::GetGraphics()->DrawRect(_Rectangle);
+}
+
+void BoxCollision::SetLocationOffset(const Vector2D<float>& LocationOffset)
+{
+    _OffsetLocation = LocationOffset;
 }

@@ -13,6 +13,7 @@ namespace NPEngine
 
 		Actor* _Owner = nullptr;
 
+		Vector2D<float> _OffsetLocation = Vector2D<float>(0.0f, 0.0f);
 		Vector2D<float> _Point = Vector2D<float>(0.0f, 0.0f);
 
 	public:
@@ -25,8 +26,11 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) override;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) override;
 
+		virtual void UpdateCollisionWithActorTransform() override;
+
 		virtual void DrawCollision() override;
 
+		virtual void SetLocationOffset(const Vector2D<float>& LocationOffset) override;
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }
 	};
 }
