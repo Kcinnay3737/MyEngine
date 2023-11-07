@@ -2,6 +2,7 @@
 
 #include "Utility/Utility.h"
 #include "Physics/Collision/CollisionData.h"
+#include "Physics/PhysicsEnum.h"
 
 namespace NPEngine
 {
@@ -15,5 +16,7 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithSphere(const ICollision& OtherCollision) = 0;
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) = 0;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) = 0;
+
+		virtual ECollisionType GetCollisionType() = 0;
 	};
 }

@@ -7,7 +7,7 @@
 
 namespace NPEngine
 {
-	class Actor;
+	//class Actor;
 
 	class Component : public Object, public IActorComponent
 	{

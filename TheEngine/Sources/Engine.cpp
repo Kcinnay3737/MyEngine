@@ -350,7 +350,7 @@ World* Engine::GetWorld()
 	return GetEngineInstance()->_World;
 }
 
-IPhysics* NPEngine::Engine::GetPhysics()
+IPhysics* Engine::GetPhysics()
 {
 	return GetEngineInstance()->_Physics;
 }

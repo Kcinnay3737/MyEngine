@@ -2,10 +2,10 @@
 
 #include "Math/Vector2D.h"
 
-class Actor;
-
 namespace NPEngine
 {
+	class Actor;
+
 	struct CollisionData
 	{
 	public:

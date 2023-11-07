@@ -27,5 +27,7 @@ namespace NPEngine
 		virtual void UpdatePositions(float DeltaTime) override;
 		virtual void DetectCollisions() override;
 		virtual void ResolveCollisions() override;
+
+		virtual std::vector<CollisionData> CheckCollisionWith(const ICollision& Collision) override;
 	};
 }

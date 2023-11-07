@@ -1,9 +1,12 @@
 #pragma once
 
 #include "Physics/IPhysicsProvider.h"
+#include "Physics/Collision/CollisionData.h"
 
 namespace NPEngine
 {
+	class ICollision;
+
 	class IPhysics : public IPhysicsProvider
 	{
 	public:
@@ -23,5 +26,7 @@ namespace NPEngine
 		virtual void UpdatePositions(float DeltaTime) = 0;
 		virtual void DetectCollisions() = 0;
 		virtual void ResolveCollisions() = 0;
+
+		virtual std::vector<CollisionData> CheckCollisionWith(const ICollision& Collision) = 0;
 	};
 }

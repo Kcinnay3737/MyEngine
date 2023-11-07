@@ -108,19 +108,19 @@ void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)
 		_Collision = nullptr;
 		break;
 	case ECollisionType::Point:
-		_Collision = new PointCollision();
+		_Collision = new PointCollision(GetOwner());
 		break;
 	case ECollisionType::Line:
-		_Collision = new LineCollision();
+		_Collision = new LineCollision(GetOwner());
 		break;
 	case ECollisionType::Box:
-		_Collision = new BoxCollision();
+		_Collision = new BoxCollision(GetOwner());
 		break;
 	case ECollisionType::Sphere:
-		_Collision = new SphereCollision();
+		_Collision = new SphereCollision(GetOwner());
 		break;
 	case ECollisionType::Grid:
-		_Collision = new GridCollision();
+		_Collision = new GridCollision(GetOwner());
 		break;
 	default:
 		_Collision = nullptr;

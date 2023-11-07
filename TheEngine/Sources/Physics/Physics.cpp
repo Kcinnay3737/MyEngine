@@ -47,3 +47,8 @@ void Physics::DetectCollisions()
 void Physics::ResolveCollisions()
 {
 }
+
+std::vector<CollisionData> Physics::CheckCollisionWith(const ICollision& Collision)
+{
+    return std::vector<CollisionData>();
+}

@@ -6,6 +6,15 @@
 
 using namespace NPEngine;
 
+PointCollision::PointCollision(Actor* Owner)
+{
+    _Owner = Owner;
+}
+
+PointCollision::~PointCollision()
+{
+}
+
 CollisionData PointCollision::CheckCollisionWithPoint(const ICollision& OtherCollision)
 {
     return CollisionData();

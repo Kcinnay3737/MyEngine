@@ -6,6 +6,15 @@
 
 using namespace NPEngine;
 
+SphereCollision::SphereCollision(Actor* Owner)
+{
+    _Owner = Owner;
+}
+
+SphereCollision::~SphereCollision()
+{
+}
+
 CollisionData SphereCollision::CheckCollisionWithPoint(const ICollision& OtherCollision)
 {
     return CollisionData();

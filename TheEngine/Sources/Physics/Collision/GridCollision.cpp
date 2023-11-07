@@ -6,6 +6,15 @@
 
 using namespace NPEngine;
 
+GridCollision::GridCollision(Actor* Owner)
+{
+    _Owner = Owner;
+}
+
+GridCollision::~GridCollision()
+{
+}
+
 CollisionData GridCollision::CheckCollisionWithPoint(const ICollision& OtherCollision)
 {
     return CollisionData();
