@@ -22,6 +22,8 @@ namespace NPEngine
 
 		virtual void DrawRect(const Rectangle2D<float>& Rect, const Color& Color = Color::Blue, bool bFill = false) = 0;
 		virtual void DrawLine(const Vector2D<float>& Start, const Vector2D<float>& End, const Color& Color = Color::Red) = 0;
+		virtual void DrawPoint(const Vector2D<float>& Position, const Color& Color = Color::Red) = 0;
+		virtual void DrawCircle(const Vector2D<float>& Position, const float Ray, const Color& Color = Color::Red) = 0;
 
 		virtual size_t LoadTexture(const char* Filename) = 0;
 		virtual void DrawTexture(size_t TextureId,

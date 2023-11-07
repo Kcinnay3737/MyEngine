@@ -17,6 +17,6 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) = 0;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) = 0;
 
-		virtual ECollisionType GetCollisionType() = 0;
+		virtual ECollisionType GetCollisionType() const = 0;
 	};
 }

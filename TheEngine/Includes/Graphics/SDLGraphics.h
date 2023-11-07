@@ -31,6 +31,10 @@ namespace NPEngine
 
 		virtual void DrawLine(const Vector2D<float>& Start, const Vector2D<float>& End, const Color& Color) override;
 
+		virtual void DrawPoint(const Vector2D<float>& Position, const Color& Color = Color::Red) override;
+
+		virtual void DrawCircle(const Vector2D<float>& Position, const float Ray, const Color& Color = Color::Red) override;
+
 		virtual size_t LoadTexture(const char* Filename) override;
 		virtual void DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRect, const Color& Color, float Angle, const Flip& Flip) override;
 		virtual void DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& GridSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip) override;

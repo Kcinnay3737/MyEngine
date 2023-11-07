@@ -14,15 +14,15 @@ Actor* Isaac::Clone(std::string& Name)
 
 void Isaac::Bob(const DataKey& pDataKey)
 {
-	Engine::GetLogger()->LogMessage("testo%f", pDataKey.TimePressed);
+	
 }
 
 void Isaac::Draw()
 {
-	
+	Engine::GetGraphics()->DrawCircle(Vector2D<float>(300.0f, 300.0f), 50);
 }
 
 void Isaac::Update(float dt)
 {
-	
+	Engine::GetLogger()->LogMessage("testo");
 }

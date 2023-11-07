@@ -17,6 +17,12 @@ BoxCollision::~BoxCollision()
 
 CollisionData BoxCollision::CheckCollisionWithPoint(const ICollision& OtherCollision)
 {
+    if (OtherCollision.GetCollisionType() != ECollisionType::Point) return CollisionData();
+
+    const PointCollision& OtherPointCollision = static_cast<const PointCollision&>(OtherCollision);
+
+    bool bIsColliding = false;
+
     return CollisionData();
 }
 

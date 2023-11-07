@@ -113,6 +113,29 @@ void SDLGraphics::DrawLine(const Vector2D<float>& Start, const Vector2D<float>& 
 	SDL_RenderDrawLineF(_Renderer, Start.X, Start.Y, End.X, End.Y);
 }
 
+void SDLGraphics::DrawPoint(const Vector2D<float>& Position, const Color& Color)
+{
+	SetColor(Color);
+
+	SDL_RenderDrawPointF(_Renderer, Position.X, Position.Y);
+}
+
+void SDLGraphics::DrawCircle(const Vector2D<float>& Position, const float Ray, const Color& Color)
+{
+	SetColor(Color);
+
+	const int Resolution = 360;
+
+	for (int i = 0; i < Resolution; i++)
+	{
+		float Angle = static_cast<float>(i) / static_cast<float>(Resolution) * (2.0f * M_PI);
+		float X = Position.X + Ray * cos(Angle);
+		float Y = Position.Y + Ray * sin(Angle);
+
+		SDL_RenderDrawPointF(_Renderer, X, Y);
+	}
+}
+
 void SDLGraphics::DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRect, const Color& Color, float Angle, const Flip& Flip)
 {
 	//Get the texture

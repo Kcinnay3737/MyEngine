@@ -3,15 +3,20 @@
 
 #include <Windows.h>
 #include "Engine.h"
+#include "Player/Issac.h"
 
 using namespace NPEngine;
 
 void InitGameplay(void)
 {
+	Isaac* NewIsaac = new Isaac(std::string("Isaac"));
+
+	Engine::GetInstanceManager()->AddInstance(NewIsaac);
+
 	Scene* SceneMenu = Engine::GetWorld()->CreateScene(std::string("SceneMenu"));
 	if (SceneMenu)
 	{
-
+		SceneMenu->SetNumberSpawnPrototype("Isaac", 1);
 	}
 
 	Scene* SceneGame1 = Engine::GetWorld()->CreateScene(std::string("SceneGame1"));
