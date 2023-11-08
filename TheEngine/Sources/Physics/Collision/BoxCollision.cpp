@@ -18,33 +18,30 @@ BoxCollision::~BoxCollision()
 {
 }
 
-CollisionData BoxCollision::CheckCollisionWithPoint(const ICollision& OtherCollision)
+CollisionData BoxCollision::CheckCollisionWithPoint(const ICollision& OtherCollision) const
 {
     if (OtherCollision.GetCollisionType() != ECollisionType::Point) return CollisionData();
-
     const PointCollision& OtherPointCollision = static_cast<const PointCollision&>(OtherCollision);
 
-    bool bIsColliding = false;
-
     return CollisionData();
 }
 
-CollisionData BoxCollision::CheckCollisionWithBox(const ICollision& OtherCollision)
+CollisionData BoxCollision::CheckCollisionWithBox(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData BoxCollision::CheckCollisionWithSphere(const ICollision& OtherCollision)
+CollisionData BoxCollision::CheckCollisionWithSphere(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData BoxCollision::CheckCollisionWithLine(const ICollision& OtherCollision)
+CollisionData BoxCollision::CheckCollisionWithLine(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData BoxCollision::CheckCollisionWithGrid(const ICollision& OtherCollision)
+CollisionData BoxCollision::CheckCollisionWithGrid(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }

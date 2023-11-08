@@ -9,6 +9,15 @@ namespace NPEngine
 	struct DataKey
 	{
 	public:
+		EKeyboardKeys Key = EKeyboardKeys::Key_None;
+		float TimePressed = 0.0f;
+		bool bIsPressed = false;
+	};
+
+	struct DataButton
+	{
+	public:
+		EButtonKeys Key = EButtonKeys::Mouse_None;
 		float TimePressed = 0.0f;
 		bool bIsPressed = false;
 	};
@@ -22,13 +31,13 @@ namespace NPEngine
 		std::map<EKeyboardKeys, Delegate<void, const DataKey&>> OnKeyReleased;
 
 		//Button delegate
-		std::map<EButtonKeys, Delegate<void, const DataKey&>> OnButtonPressed;
-		std::map<EButtonKeys, Delegate<void, const DataKey&>> OnButtonMaintained;
-		std::map<EButtonKeys, Delegate<void, const DataKey&>> OnButtonReleased;
+		std::map<EButtonKeys, Delegate<void, const DataButton&>> OnButtonPressed;
+		std::map<EButtonKeys, Delegate<void, const DataButton&>> OnButtonMaintained;
+		std::map<EButtonKeys, Delegate<void, const DataButton&>> OnButtonReleased;
 
 	protected:
 		std::map<EKeyboardKeys, DataKey> _DataKey;
-		std::map<EButtonKeys, DataKey> _DataButton;
+		std::map<EButtonKeys, DataButton> _DataButton;
 
 	public:
 		virtual ~IInput() = default;

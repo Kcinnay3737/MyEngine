@@ -1,21 +1,13 @@
 #pragma once
 
-#include "Object/Actor/Actor.h"
-#include "Input/IInput.h"
+#include "Object/Actor/Player.h"
 
 using namespace NPEngine;
 
-class Isaac : public Actor
+class Isaac : public Player
 {
 public:
 	Isaac(std::string& Name);
 
-	virtual Actor* Clone(std::string& Name) override;
-
-	void Bob(const DataKey& pDataKey);
-private:
-	virtual void Draw() override;
-	virtual void Update(float dt) override;
-
-	
+	virtual Actor* Clone(std::string& Name, const Param& Params = Param{}) override;
 };

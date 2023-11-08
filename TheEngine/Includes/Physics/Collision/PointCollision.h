@@ -20,11 +20,11 @@ namespace NPEngine
 		PointCollision(Actor* Owner);
 		virtual ~PointCollision();
 
-		virtual CollisionData CheckCollisionWithPoint(const ICollision& OtherCollision) override;
-		virtual CollisionData CheckCollisionWithBox(const ICollision& OtherCollision) override;
-		virtual CollisionData CheckCollisionWithSphere(const ICollision& OtherCollision) override;
-		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) override;
-		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) override;
+		virtual CollisionData CheckCollisionWithPoint(const ICollision& OtherCollision) const override;
+		virtual CollisionData CheckCollisionWithBox(const ICollision& OtherCollision) const override;
+		virtual CollisionData CheckCollisionWithSphere(const ICollision& OtherCollision) const override;
+		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) const override;
+		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) const override;
 
 		virtual void UpdateCollisionWithActorTransform() override;
 

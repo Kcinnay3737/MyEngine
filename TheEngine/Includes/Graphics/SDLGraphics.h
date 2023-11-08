@@ -37,7 +37,8 @@ namespace NPEngine
 
 		virtual size_t LoadTexture(const char* Filename) override;
 		virtual void DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRect, const Color& Color, float Angle, const Flip& Flip) override;
-		virtual void DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& GridSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip) override;
+		virtual void DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& CellSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip) override;
+		virtual void DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& CellSize, const int& CellIndex, const Color& Color = Color::White, float Angle = 0, const Flip& Flip = Flip()) override;
 		virtual void GetTextureSize(size_t TextureId, Vector2D<int>* Size) override;
 
 		virtual size_t LoadFont(const char* Filename, int FontSize) override;

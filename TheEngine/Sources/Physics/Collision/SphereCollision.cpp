@@ -17,27 +17,27 @@ SphereCollision::~SphereCollision()
 {
 }
 
-CollisionData SphereCollision::CheckCollisionWithPoint(const ICollision& OtherCollision)
+CollisionData SphereCollision::CheckCollisionWithPoint(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData SphereCollision::CheckCollisionWithBox(const ICollision& OtherCollision)
+CollisionData SphereCollision::CheckCollisionWithBox(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData SphereCollision::CheckCollisionWithSphere(const ICollision& OtherCollision)
+CollisionData SphereCollision::CheckCollisionWithSphere(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData SphereCollision::CheckCollisionWithLine(const ICollision& OtherCollision)
+CollisionData SphereCollision::CheckCollisionWithLine(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }
 
-CollisionData SphereCollision::CheckCollisionWithGrid(const ICollision& OtherCollision)
+CollisionData SphereCollision::CheckCollisionWithGrid(const ICollision& OtherCollision) const
 {
     return CollisionData();
 }

@@ -33,8 +33,15 @@ namespace NPEngine
 								const Flip& Flip = Flip()) = 0;
 		virtual void DrawTextureTile(size_t TextureId,
 								const Rectangle2D<float>& DrawRect,
-								const Vector2D<int>& GridSize,
+								const Vector2D<int>& CellSize,
 								const Vector2D<int>& CellPosition,
+								const Color& Color = Color::White,
+								float Angle = 0,
+								const Flip& Flip = Flip()) = 0;
+		virtual void DrawTextureTile(size_t TextureId,
+								const Rectangle2D<float>& DrawRect,
+								const Vector2D<int>& CellSize,
+								const int& CellIndex,
 								const Color& Color = Color::White,
 								float Angle = 0,
 								const Flip& Flip = Flip()) = 0;

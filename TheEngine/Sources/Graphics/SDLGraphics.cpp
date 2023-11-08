@@ -182,10 +182,8 @@ void SDLGraphics::DrawTexture(size_t TextureId, const Rectangle2D<float>& DrawRe
 	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLScreenRect, Angle, nullptr, SDLFlip);
 }
 
-void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& GridSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip)
+void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& CellSize, const Vector2D<int>& CellPosition, const Color& Color, float Angle, const Flip& Flip)
 {
-	if (GridSize.X <= 0 || GridSize.Y <= 0) return;
-
 	//Get the texture
 	SDL_Texture* Texture = _TextureMap[TextureId];
 	if (!Texture) return;
@@ -216,13 +214,6 @@ void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& Dr
 	SDLScreenRect.w = DrawRect.Size.X;
 	SDLScreenRect.h = DrawRect.Size.Y;
 
-	//Set the texture rect
-	Vector2D<int> TextureSize;
-	GetTextureSize(TextureId, &TextureSize);
-	Vector2D<int> CellSize;
-	CellSize.X = TextureSize.X / GridSize.X;
-	CellSize.Y = TextureSize.Y / GridSize.Y;
-
 	Rectangle2D<int> TextureRect = Rectangle2D<int>(Vector2D<int>(CellSize.X * CellPosition.X, CellSize.Y * CellPosition.Y), Vector2D<int>(CellSize.X, CellSize.Y));
 
 	SDL_Rect SDLTextureRect = { 0 };
@@ -230,6 +221,56 @@ void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& Dr
 	SDLTextureRect.y = TextureRect.Position.Y;
 	SDLTextureRect.w = TextureRect.Size.X;
 	SDLTextureRect.h = TextureRect.Size.Y;
+
+	//Draw the texture
+	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLScreenRect, Angle, nullptr, SDLFlip);
+}
+
+void SDLGraphics::DrawTextureTile(size_t TextureId, const Rectangle2D<float>& DrawRect, const Vector2D<int>& CellSize, const int& CellIndex, const Color& Color, float Angle, const Flip& Flip)
+{
+	//Get the texture
+	SDL_Texture* Texture = _TextureMap[TextureId];
+	if (!Texture) return;
+
+	// Calculate the number of cells per row in the texture
+	int CellsPerRow;
+	Vector2D<int> TextureSize;
+	GetTextureSize(TextureId, &TextureSize);
+	CellsPerRow = TextureSize.X / CellSize.X;
+
+	// Convert the CellIndex to X and Y coordinates
+	Vector2D<int> CellPosition;
+	CellPosition.X = (CellIndex % CellsPerRow) * CellSize.X;
+	CellPosition.Y = (CellIndex / CellsPerRow) * CellSize.Y;
+
+	//Set the texture flip
+	SDL_RendererFlip SDLFlip = SDL_FLIP_NONE;
+	if (Flip.Horizontal && Flip.Vertical)
+	{
+		SDLFlip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
+	}
+	else if (Flip.Horizontal)
+	{
+		SDLFlip = SDL_FLIP_HORIZONTAL;
+	}
+	else if (Flip.Vertical)
+	{
+		SDLFlip = SDL_FLIP_VERTICAL;
+	}
+
+	//Set the color
+	SDL_SetTextureColorMod(Texture, Color.rgba.R, Color.rgba.G, Color.rgba.B);
+	SDL_SetTextureAlphaMod(Texture, Color.rgba.A);
+
+	//Set the screen rect
+	SDL_FRect SDLScreenRect = { 0.0f };
+	SDLScreenRect.x = DrawRect.Position.X;
+	SDLScreenRect.y = DrawRect.Position.Y;
+	SDLScreenRect.w = DrawRect.Size.X;
+	SDLScreenRect.h = DrawRect.Size.Y;
+
+	// Define the texture rect
+	SDL_Rect SDLTextureRect = { CellPosition.X, CellPosition.Y, CellSize.X, CellSize.Y };
 
 	//Draw the texture
 	SDL_RenderCopyExF(_Renderer, Texture, &SDLTextureRect, &SDLScreenRect, Angle, nullptr, SDLFlip);

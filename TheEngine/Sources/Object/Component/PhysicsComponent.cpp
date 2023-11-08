@@ -28,7 +28,7 @@ bool PhysicsComponent::Initialise(const Param& Params)
 			TransformComponent* CurrTransformComponent = GetOwner()->GetComponentOfClass<TransformComponent>();
 			if (CurrTransformComponent)
 			{
-				PhysicsProvider->AddPhysicsActor(GetOwner());
+				PhysicsProvider->AddPhysicsActor(GetOwner()->GetName(), this);
 			}
 			else
 			{
@@ -70,9 +70,18 @@ void PhysicsComponent::Destroy(const Param& Params)
 
 void PhysicsComponent::Draw()
 {
-	if (_Collision)
+	if (_Collision && _bDrawCollision)
 	{
 		_Collision->DrawCollision();
+	}
+}
+
+void PhysicsComponent::CorrectMagnetude()
+{
+	if (GetVelocity().Magnitude() > _MaxVelocityMagnetude)
+	{
+		_MovementData.Velocity.Normalize();
+		_MovementData.Velocity = _MovementData.Velocity * _MaxVelocityMagnetude;
 	}
 }
 
@@ -84,21 +93,24 @@ Vector2D<float> PhysicsComponent::GetVelocity()
 void PhysicsComponent::SetVelocity(const Vector2D<float>& NewVelocity)
 {
 	_MovementData.Velocity = NewVelocity;
+	CorrectMagnetude();
 }
 
 void PhysicsComponent::AddVelocity(const Vector2D<float>& VelociyToAdd)
 {
 	_MovementData.Velocity += VelociyToAdd;
+	CorrectMagnetude();
 }
 
-float PhysicsComponent::GetDecelerationSpeed()
+void PhysicsComponent::ApplyVelocity(float DeltaTime)
 {
-	return _MovementData.DecelerationSpeed;
-}
+	TransformComponent* CurrTransformComponent = GetOwner()->GetComponentOfClass<TransformComponent>();
+	if (CurrTransformComponent)
+	{
+		CurrTransformComponent->AddPositionOffset(GetVelocity() * DeltaTime);
+	}
 
-void PhysicsComponent::SetDecelerationSpeed(const float& NewDecelationSpeed)
-{
-	_MovementData.DecelerationSpeed = NewDecelationSpeed;
+	SetVelocity(Vector2D<float>(0.0f, 0.0f));
 }
 
 void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)

@@ -12,7 +12,7 @@ namespace NPEngine
 		virtual ~IActorWorld() = default;
 
 		virtual void SetDrawDepth(unsigned char DrawDepth) = 0;
-		virtual unsigned char GetDrawDepth() = 0;
+		virtual unsigned char GetDrawDepth() const = 0;
 
 	private:
 		virtual bool Initialise(const Param& Params = Param{}) = 0;

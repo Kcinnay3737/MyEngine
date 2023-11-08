@@ -15,18 +15,22 @@ bool SDLInput::Initialize(const Param& Params)
 		OnKeyMaintained[Key] = Delegate<void, const DataKey&>();
 		OnKeyReleased[Key] = Delegate<void, const DataKey&>();
 
-		_DataKey[Key] = DataKey();
+		DataKey NewDataKey = DataKey();
+		NewDataKey.Key = Key;
+		_DataKey[Key] = NewDataKey;
 	}
 
 	for (uint8_t i = 0; i < EButtonKeys::Mouse_Max; i++)
 	{
 		EButtonKeys Key = static_cast<EButtonKeys>(i);
 
-		OnButtonPressed[Key] = Delegate<void, const DataKey&>();
-		OnButtonMaintained[Key] = Delegate<void, const DataKey&>();
-		OnButtonReleased[Key] = Delegate<void, const DataKey&>();
+		OnButtonPressed[Key] = Delegate<void, const DataButton&>();
+		OnButtonMaintained[Key] = Delegate<void, const DataButton&>();
+		OnButtonReleased[Key] = Delegate<void, const DataButton&>();
 
-		_DataButton[Key] = DataKey();
+		DataButton NewDataButton = DataButton();
+		NewDataButton.Key = Key;
+		_DataButton[Key] = NewDataButton;
 	}
 
 	return true;
@@ -220,7 +224,7 @@ void SDLInput::UpdateInputListener(float DeltaTime)
 		EButtonKeys Key = static_cast<EButtonKeys>(i);
 		bool bIsDown = IsButtonDown(Key);
 
-		DataKey& CurrDataKey = _DataButton[Key];
+		DataButton& CurrDataKey = _DataButton[Key];
 
 		//On Maintained
 		if (bIsDown && CurrDataKey.bIsPressed)

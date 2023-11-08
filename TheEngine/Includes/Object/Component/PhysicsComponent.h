@@ -21,6 +21,8 @@ namespace NPEngine
 
 		MovementData _MovementData = MovementData();
 
+		float _MaxVelocityMagnetude = 100.0f;
+
 	public:
 		PhysicsComponent(std::string& Name);
 		virtual ~PhysicsComponent() = default;
@@ -31,16 +33,19 @@ namespace NPEngine
 
 		virtual void Draw() override;
 
+		void CorrectMagnetude();
+
 	public:
 		Vector2D<float> GetVelocity();
 		void SetVelocity(const Vector2D<float>& NewVelocity);
 		void AddVelocity(const Vector2D<float>& VelociyToAdd);
-
-		float GetDecelerationSpeed();
-		void SetDecelerationSpeed(const float& NewDecelationSpeed);
+		void ApplyVelocity(float DeltaTime);
 
 		void SetCollision(const ECollisionType& CollisionType);
 		const ICollision* GetCollision() const;
+
+		void SetMaxVelocityMagnetude(float MaxVelocityMagnetude) { _MaxVelocityMagnetude = MaxVelocityMagnetude; }
+		float GetMaxVelocityMagntude() const { return _MaxVelocityMagnetude; }
 
 	};
 }

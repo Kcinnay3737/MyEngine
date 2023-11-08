@@ -7,8 +7,9 @@ enum EButtonKeys : uint8_t
 	Mouse_Left = 0,
 	Mouse_Right = 1,
 	Mouse_Middle = 3,
+	Mouse_None = 4,
 
-	Mouse_Max = 4
+	Mouse_Max = 5
 };
 
 enum EKeyboardKeys : uint8_t
@@ -104,5 +105,6 @@ enum EKeyboardKeys : uint8_t
 	Key_NumpadDivide = 77,
 
 	//End enum
-	Key_Max = 78
+	Key_None = 78,
+	Key_Max = 79
 };

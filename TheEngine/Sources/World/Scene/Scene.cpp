@@ -23,7 +23,7 @@ void Scene::Load(const Param& Params)
 		for (unsigned int i = 0; i < Number; i++)
 		{
 			std::string CopyName = Name + std::to_string(i);
-			Engine::GetInstanceManager()->SpawnCopyInWorldAt(Name, CopyName, Params);
+			Engine::GetInstanceManager()->SpawnCopyInWorldAt(Name, CopyName);
 		}
 	}
 

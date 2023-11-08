@@ -8,6 +8,6 @@ namespace NPEngine
 	{
 	public:
 		Vector2D<float> Velocity;
-		float DecelerationSpeed = 0.0f;
+		float MaxSpeed = 10.0f;
 	};
 }

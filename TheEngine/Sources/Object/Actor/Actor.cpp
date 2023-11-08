@@ -14,7 +14,34 @@ Actor::Actor(std::string& Name) : Object()
 
 bool Actor::Initialise(const Param& Params)
 {
-	CreateComponentOfClass<TransformComponent>(std::string("Transform"));
+	auto& IT = Params.find(std::string("DrawDepth"));
+	if (IT != Params.end())
+	{
+		int DrawDepth = std::any_cast<int>(IT->second);
+		SetDrawDepth(DrawDepth);
+	}
+
+	TransformComponent* NewTransformComponent = CreateComponentOfClass<TransformComponent>(std::string("Transform"));
+	if (NewTransformComponent)
+	{
+		Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
+
+		IT = Params.find(std::string("Position"));
+		if (IT != Params.end())
+		{
+			Position = std::any_cast<Vector2D<float>>(IT->second);
+		}
+
+		Vector2D<float> Size = Vector2D<float>(100.0f, 100.0f);
+		IT = Params.find(std::string("Size"));
+		if (IT != Params.end())
+		{
+			Size = std::any_cast<Vector2D<float>>(IT->second);
+		}
+
+		NewTransformComponent->SetPosition(Position);
+		NewTransformComponent->SetSize(Size);
+	}
 
 	return true;
 }
@@ -202,7 +229,7 @@ void Actor::OnDeleteComponent()
 
 //---------------------------------------------------------
 
-Actor* Actor::Clone(std::string& Name)
+Actor* Actor::Clone(std::string& Name, const Param& Params)
 {
 	Actor* CloneActor = new Actor(Name);
 	return CloneActor;
@@ -217,7 +244,7 @@ void Actor::SetDrawDepth(unsigned char DrawDepth)
 
 //Getter, setter -----------------------------------------
 
-Component* Actor::GetComponentByName(std::string& Name)
+Component* Actor::GetComponentByName(std::string& Name) const
 {
 	auto& IT = _Components.find(Name);
 	if (IT == _Components.end()) return nullptr;

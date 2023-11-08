@@ -4,7 +4,7 @@
 
 namespace NPEngine
 {
-	class Actor;
+	class PhysicsComponent;
 
 	class IPhysicsProvider : public IServiceProvider
 	{
@@ -19,7 +19,7 @@ namespace NPEngine
 
 		virtual void UpdatePhysics(float DeltaTime) = 0;
 
-		virtual void AddPhysicsActor(const Actor* ActorToAdd) = 0;
+		virtual void AddPhysicsActor(const std::string& ActorName, PhysicsComponent* PhysicsComponentToAdd) = 0;
 		virtual void RemovePhysicsActor(const std::string& Name) = 0;
 
 		virtual void OnPhysicsComponentStateChanged(const std::string& Name) = 0;

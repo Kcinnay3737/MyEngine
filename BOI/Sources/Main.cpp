@@ -2,20 +2,40 @@
 #define VC_EXTRALEAN
 
 #include <Windows.h>
+
 #include "Engine.h"
+
+#include "Object/Actor/TileMap.h"
+
 #include "Player/Issac.h"
 
 using namespace NPEngine;
 
 void InitGameplay(void)
 {
+	//Create instance
+	TileMap* TileMapLevel1 = new TileMap(std::string("TileMapLevel1"));
+
 	Isaac* NewIsaac = new Isaac(std::string("Isaac"));
 
-	Engine::GetInstanceManager()->AddInstance(NewIsaac);
+	//Add instance into instance manager
+	Engine::GetInstanceManager()->AddInstance(TileMapLevel1,
+	{
+		{"LayerPath", std::vector<std::string> {"MapBOI_Layer1.csv", "MapBOI_Layer2.csv"}},
+		{"TileSetPath", std::string("TileSetMapBOI.png")},
+		{"CellSize", Vector2D<int>(32, 32)}
+	});
 
+	Engine::GetInstanceManager()->AddInstance(NewIsaac,
+	{
+		{"DrawDepth", 1}
+	});
+
+	//Create the scene
 	Scene* SceneMenu = Engine::GetWorld()->CreateScene(std::string("SceneMenu"));
 	if (SceneMenu)
 	{
+		SceneMenu->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneMenu->SetNumberSpawnPrototype("Isaac", 1);
 	}
 
@@ -25,13 +45,14 @@ void InitGameplay(void)
 		//Level1->SetNumberSpawnPrototype("Isaac", 1);
 	}
 
+	//Load first scene
 	Engine::GetWorld()->LoadScene(std::string("SceneMenu"));
 }
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
 {
 	Engine TheEngine;
-	if (TheEngine.InitEngine("TestGame", 1200, 800))
+	if (TheEngine.InitEngine("TestGame", 1280, 960))
 	{
 		InitGameplay();
 		TheEngine.Start();
