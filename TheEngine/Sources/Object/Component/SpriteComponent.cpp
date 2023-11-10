@@ -9,20 +9,64 @@ SpriteComponent::SpriteComponent(std::string& Name) : Component(Name)
 {
 }
 
-void SpriteComponent::Draw()
+void SpriteComponent::LoadTexture(const std::string& TexturePath)
 {
-	TransformComponent* CurrTransformComponent = GetOwner()->GetComponentOfClass<TransformComponent>();
-	
-	Rectangle2D<float> DrawRect = Rectangle2D<float>(Vector2D<float>(0.0f, 0.0f), Vector2D<float>(0.0f, 0.0f));
+	_TextureID = Engine::GetGraphics()->LoadTexture(TexturePath.c_str());
+	_bTextureIsLoaded = true;
+}
 
-	if (CurrTransformComponent)
+bool SpriteComponent::Initialise(const Param& Params)
+{
+	Component::Initialise(Params);
+
+	auto& IT = Params.find("TexturePath");
+	if (IT != Params.end())
 	{
-		DrawRect.Position = CurrTransformComponent->GetPosition();
-		DrawRect.Size = CurrTransformComponent->GetSize();
+		const std::string& TexturePath = std::any_cast<const std::string&>(IT->second);
+		LoadTexture(TexturePath);
 	}
 
-	DrawRect.Position += _OffsetPosition;
-	DrawRect.Size += _OffsetSize;
+	return true;
+}
 
-	Engine::GetGraphics()->DrawRect(DrawRect, Color::Blue, true);
+void SpriteComponent::Draw()
+{
+	if (_bTextureIsLoaded)
+	{
+		Engine::GetGraphics()->DrawTexture(_TextureID, Rectangle2D<float>(GetPosition(), GetSize()), Color::White, 0.0f, _Flip);
+	}
+}
+
+Vector2D<float> SpriteComponent::GetPosition() const
+{
+	Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
+	
+	if (_OwnerActor)
+	{
+		TransformComponent* CurrTransformComponent = _OwnerActor->GetComponentOfClass<TransformComponent>();
+		if (CurrTransformComponent)
+		{
+			Position += CurrTransformComponent->GetPosition();
+		}
+	}
+	Position += _OffsetPosition;
+
+	return Position;
+}
+
+Vector2D<float> SpriteComponent::GetSize() const
+{
+	Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
+
+	if (_OwnerActor)
+	{
+		TransformComponent* CurrTransformComponent = _OwnerActor->GetComponentOfClass<TransformComponent>();
+		if (CurrTransformComponent)
+		{
+			Position += CurrTransformComponent->GetSize();
+		}
+	}
+	Position += _OffsetSize;
+
+	return Position;
 }

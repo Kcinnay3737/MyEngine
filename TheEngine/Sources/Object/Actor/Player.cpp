@@ -3,7 +3,7 @@
 
 using namespace NPEngine;
 
-Player::Player(std::string& Name) : Pawn(Name)
+Player::Player(const std::string& Name) : Pawn(Name)
 {
 }
 

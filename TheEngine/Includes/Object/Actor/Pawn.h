@@ -7,8 +7,10 @@ namespace NPEngine
 	class Pawn : public Actor
 	{
 	public:
-		Pawn(std::string& Name);
+		Pawn(const std::string& Name);
 		virtual ~Pawn() = default;
+
+		virtual Actor* Clone(std::string& Name, const Param& Params = Param{}) override;
 
 	protected:
 		virtual bool Initialise(const Param& Params) override;

@@ -11,6 +11,8 @@ namespace NPEngine
 	public:
 		virtual ~Physics() = default;
 
+		virtual std::vector<CollisionData> CheckCollisionWith(const ICollision* Collision) override;
+
 	private:
 		std::map<std::string, PhysicsComponent*> _PhysicsActors;
 
@@ -21,13 +23,5 @@ namespace NPEngine
 
 		virtual void AddPhysicsActor(const std::string& ActorName, PhysicsComponent* PhysicsComponentToAdd) override;
 		virtual void RemovePhysicsActor(const std::string& Name) override;
-
-		virtual void OnPhysicsComponentStateChanged(const std::string& Name) override;
-
-		virtual void UpdatePositions(float DeltaTime) override;
-		virtual void DetectCollisions() override;
-		virtual void ResolveCollisions() override;
-
-		virtual std::vector<CollisionData> CheckCollisionWith(const ICollision& Collision) override;
 	};
 }

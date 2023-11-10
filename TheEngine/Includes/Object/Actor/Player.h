@@ -7,7 +7,7 @@ namespace NPEngine
 	class Player : public Pawn
 	{
 	public:
-		Player(std::string& Name);
+		Player(const std::string& Name);
 		virtual ~Player() = default;
 
 	protected:

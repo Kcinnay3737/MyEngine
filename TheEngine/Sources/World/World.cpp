@@ -51,6 +51,7 @@ void World::StartFrame()
 				ActorWorld->BeginPlay();
 			}
 		}
+		_ActorsToCallBeginPlay.clear();
 	}
 }
 

@@ -2,7 +2,7 @@
 
 using namespace NPEngine;
 
-Button::Button(std::string& Name) : Actor(Name)
+Button::Button(const std::string& Name) : Actor(Name)
 {
 }
 

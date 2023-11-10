@@ -1,12 +1,14 @@
 #include "Object/Actor/TileMap.h"
 #include "Engine.h"
+#include "Object/Component/PhysicsComponent.h"
+#include "Physics/Collision/GridCollision.h"
 
 #include <fstream>
 #include <sstream>
 
 using namespace NPEngine;
 
-TileMap::TileMap(std::string& Name) : Actor(Name)
+TileMap::TileMap(const std::string& Name) : Actor(Name)
 {
 }
 
@@ -14,7 +16,15 @@ bool TileMap::Initialise(const Param& Params)
 {
 	Actor::Initialise(Params);
 
-	auto& IT = Params.find("LayerPath");
+	CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"));
+
+	auto& IT = Params.find("CollisionLayer");
+	if (IT != Params.end())
+	{
+		_CollisionLayer = std::any_cast<const std::vector<int>&>(IT->second);
+	}
+
+	IT = Params.find("LayerPath");
 	if (IT != Params.end())
 	{
 		const std::vector<std::string>& LayerPath = std::any_cast<const std::vector<std::string>&>(IT->second);
@@ -32,7 +42,7 @@ bool TileMap::Initialise(const Param& Params)
 	IT = Params.find("CellSize");
 	if (IT != Params.end())
 	{
-		_CellSize = std::any_cast<Vector2D<int>>(IT->second);
+		_CellSize = std::any_cast<Vector2D<float>>(IT->second);
 	}
 
 	return true;
@@ -45,6 +55,25 @@ void TileMap::Destroy(const Param& Params)
 
 }
 
+void TileMap::BeginPlay()
+{
+	Actor::BeginPlay();
+
+	PhysicsComponent* CurrPhysicsComponent = GetComponentOfClass<PhysicsComponent>();
+	if (CurrPhysicsComponent)
+	{
+		CurrPhysicsComponent->SetIsMovable(false);
+		CurrPhysicsComponent->SetIsCalculeCollision(false);
+
+		CurrPhysicsComponent->SetCollision(ECollisionType::Grid);
+		//CurrPhysicsComponent->SetDrawCollision(true);
+
+		GridCollision* CurrGridCollision = static_cast<GridCollision*>(CurrPhysicsComponent->GetCollision());
+		CurrGridCollision->SetCellSize(_CellSize);
+		CurrGridCollision->SetGrid(GetCollisionGrid());
+	}
+}
+
 Actor* TileMap::Clone(std::string& Name, const Param& Params)
 {
 	TileMap* CloneActor = new TileMap(Name);
@@ -53,23 +82,24 @@ Actor* TileMap::Clone(std::string& Name, const Param& Params)
 
 void TileMap::Draw()
 {
-	Actor::Draw();
-	
 	for (const std::vector<std::vector<int>>& CurrLayer : _TileMap)
 	{
-		Rectangle2D<float> CurrDrawRectangle = Rectangle2D<float>(Vector2D<float>(0.0f, 0.0f), Vector2D<float>(_CellSize.X, _CellSize.Y));
+		Rectangle2D<float> CurrDrawRectangle = Rectangle2D<float>(Vector2D<float>(0.0f, 0.0f), _CellSize);
 
 		for (const std::vector<int>& CurrRow : CurrLayer)
 		{
 			CurrDrawRectangle.Position.X = 0;
 			for (const int& Cell : CurrRow)
 			{
-				Engine::GetGraphics()->DrawTextureTile(_TileSetID, CurrDrawRectangle, _CellSize, Cell);
-				CurrDrawRectangle.Position.X += static_cast<float>(_CellSize.X);
+				Vector2D<int> CellSizeInt = Vector2D<int>(static_cast<int>(_CellSize.X), static_cast<int>(_CellSize.Y));
+				Engine::GetGraphics()->DrawTextureTile(_TileSetID, CurrDrawRectangle, CellSizeInt, Cell);
+				CurrDrawRectangle.Position.X += _CellSize.X;
 			}
-			CurrDrawRectangle.Position.Y += static_cast<float>(_CellSize.Y);
+			CurrDrawRectangle.Position.Y += _CellSize.Y;
 		}
 	}
+
+	Actor::Draw();
 }
 
 void TileMap::LoadTileSet(const std::string& TileSetPath)
@@ -109,4 +139,33 @@ void TileMap::LoadTileMap(const std::vector<std::string>& LayerPath)
 			File.close();
 		}
 	}
+}
+
+std::vector<std::vector<bool>> TileMap::GetCollisionGrid() const
+{
+	if (_TileMap.empty()) return std::vector<std::vector<bool>>();
+
+	std::vector<std::vector<bool>> CollisionGrid(
+		_TileMap[0].size(),
+		std::vector<bool>(_TileMap[0][0].size(), false)
+	);
+
+	for (const int& LayerIndex : _CollisionLayer) 
+	{
+		if (LayerIndex < _TileMap.size()) 
+		{
+			for (int Y = 0; Y < _TileMap[LayerIndex].size(); Y++)
+			{
+				for (int X = 0; X < _TileMap[LayerIndex][Y].size(); X++)
+				{
+					if (_TileMap[LayerIndex][Y][X] != -1 && !CollisionGrid[Y][X]) 
+					{
+						CollisionGrid[Y][X] = true;
+					}
+				}
+			}
+		}
+	}
+
+	return CollisionGrid;
 }

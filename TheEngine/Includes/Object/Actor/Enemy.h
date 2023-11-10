@@ -7,7 +7,7 @@ namespace NPEngine
 	class Enemy : public Pawn
 	{
 	public:
-		Enemy(std::string& Name);
+		Enemy(const std::string& Name);
 		virtual ~Enemy() = default;
 
 	protected:

@@ -7,7 +7,7 @@ namespace NPEngine
 	class Button : public Actor
 	{
 	public:
-		Button(std::string& Name);
+		Button(const std::string& Name);
 		virtual ~Button() = default;
 
 	protected:

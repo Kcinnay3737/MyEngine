@@ -26,14 +26,53 @@ namespace NPEngine
 			return *this;
 		}
 
-		Vector2D& operator += (const Vector2D& other)
+		Vector2D& operator += (const Vector2D& Other)
 		{
-			X += other.X;
-			Y += other.Y;
+			X += Other.X;
+			Y += Other.Y;
 			return *this;
 		}
 
+		Vector2D& operator -= (const Vector2D& Other)
+		{
+			X -= Other.X;
+			Y -= Other.Y;
+			return *this;
+		}
+
+		Vector2D& operator *= (const Vector2D& Other)
+		{
+			X *= Other.X;
+			Y *= Other.Y;
+			return *this;
+		}
+
+		Vector2D& operator /= (const Vector2D& Other)
+		{
+			X /= Other.X;
+			Y /= Other.Y;
+			return *this;
+		}
+
+		bool operator == (const Vector2D<T>& Other) const
+		{
+			return X == Other.X && Y == Other.Y;
+		}
+
+		bool operator != (const Vector2D<T>& Other) const
+		{
+			return X != Other.X || Y != Other.Y;
+		}
+
+		Vector2D<T> operator + (const Vector2D<T>& Other);
+		Vector2D<T> operator - (const Vector2D<T>& Other);
+		Vector2D<T> operator * (const Vector2D<T>& Other);
+		Vector2D<T> operator / (const Vector2D<T>& Other);
+
 		Vector2D<T> operator * (const T& Scalar);
+		Vector2D<T> operator / (const T& Scalar);
+		Vector2D<T> operator + (const T& Value);
+		Vector2D<T> operator - (const T& Value);
 	};
 
 	template<class T>
@@ -62,8 +101,50 @@ namespace NPEngine
 	}
 
 	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator+(const Vector2D<T>& Other)
+	{
+		return Vector2D<T>(X + Other.X, Y + Other.Y);
+	}
+
+	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator-(const Vector2D<T>& Other)
+	{
+		return Vector2D<T>(X - Other.X, Y - Other.Y);
+	}
+
+	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator*(const Vector2D<T>& Other)
+	{
+		return Vector2D<T>(X * Other.X, Y * Other.Y);
+	}
+
+	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator/(const Vector2D<T>& Other)
+	{
+		return Vector2D<T>(X / Other.X, Y / Other.Y);
+	}
+
+	template<class T>
 	inline Vector2D<T> Vector2D<T>::operator*(const T& Scalar)
 	{
 		return Vector2D<T>(X * Scalar, Y * Scalar);
+	}
+
+	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator/(const T& Scalar)
+	{
+		return Vector2D<T>(X / Scalar, Y / Scalar);
+	}
+
+	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator+(const T& Value)
+	{
+		return Vector2D<T>(X + Value, Y + Value);
+	}
+
+	template<class T>
+	inline Vector2D<T> Vector2D<T>::operator-(const T& Value)
+	{
+		return Vector2D<T>(X - Value, Y - Value);
 	}
 }

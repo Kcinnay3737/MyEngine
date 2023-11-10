@@ -42,16 +42,16 @@ void ControllerComponent::OnMoveKeyPressed(const DataKey& CurrDataKey)
 	switch (CurrDataKey.Key)
 	{
 	case EKeyboardKeys::Key_W:
-		VelocityToAdd.Y += -100.0f;
+		VelocityToAdd.Y += -_MoveSpeed;
 		break;
 	case EKeyboardKeys::Key_A:
-		VelocityToAdd.X += -100.0f;
+		VelocityToAdd.X += -_MoveSpeed;
 		break;
 	case EKeyboardKeys::Key_S:
-		VelocityToAdd.Y += 100.0f;
+		VelocityToAdd.Y += _MoveSpeed;
 		break;
 	case EKeyboardKeys::Key_D:
-		VelocityToAdd.X += 100.0f;
+		VelocityToAdd.X += _MoveSpeed;
 		break;
 	}
 

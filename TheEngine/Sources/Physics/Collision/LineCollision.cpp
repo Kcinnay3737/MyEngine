@@ -4,6 +4,7 @@
 #include "Physics/Collision/PointCollision.h"
 #include "Physics/Collision/GridCollision.h"
 #include "Object/Component/TransformComponent.h"
+#include "Object/Actor/Actor.h"
 #include "Engine.h"
 
 using namespace NPEngine;
@@ -42,16 +43,41 @@ CollisionData LineCollision::CheckCollisionWithGrid(const ICollision& OtherColli
     return CollisionData();
 }
 
-void LineCollision::UpdateCollisionWithActorTransform()
-{
-}
-
 void LineCollision::DrawCollision()
 {
-    Engine::GetGraphics()->DrawLine(_StartPoint, _EndPoint);
+    Engine::GetGraphics()->DrawLine(GetStartPoint(), GetEndPoint());
 }
 
-void LineCollision::SetLocationOffset(const Vector2D<float>& LocationOffset)
+Vector2D<float> LineCollision::GetStartPoint() const
 {
-    _OffsetLocation = LocationOffset;
+    Vector2D<float> CurrPoint = Vector2D<float>(0.0f, 0.0f);
+
+    if (_Owner)
+    {
+        TransformComponent* CurrTransformComponent = _Owner->GetComponentOfClass<TransformComponent>();
+        if (CurrTransformComponent)
+        {
+            CurrPoint += CurrTransformComponent->GetPosition();
+        }
+    }
+    CurrPoint += _StartPointOffset;
+
+    return CurrPoint;
+}
+
+Vector2D<float> LineCollision::GetEndPoint() const
+{
+	Vector2D<float> CurrPoint = Vector2D<float>(0.0f, 0.0f);
+
+	if (_Owner)
+	{
+		TransformComponent* CurrTransformComponent = _Owner->GetComponentOfClass<TransformComponent>();
+		if (CurrTransformComponent)
+		{
+			CurrPoint += CurrTransformComponent->GetPosition();
+		}
+	}
+	CurrPoint += _EndPointOffset;
+
+	return CurrPoint;
 }

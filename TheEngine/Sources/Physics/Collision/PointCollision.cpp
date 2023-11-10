@@ -4,6 +4,7 @@
 #include "Physics/Collision/SphereCollision.h"
 #include "Physics/Collision/GridCollision.h"
 #include "Object/Component/TransformComponent.h"
+#include "Object/Actor/Actor.h"
 #include "Engine.h"
 
 using namespace NPEngine;
@@ -42,16 +43,29 @@ CollisionData PointCollision::CheckCollisionWithGrid(const ICollision& OtherColl
     return CollisionData();
 }
 
-void PointCollision::UpdateCollisionWithActorTransform()
-{
-}
-
 void PointCollision::DrawCollision()
 {
-    Engine::GetGraphics()->DrawPoint(_Point);
+    Engine::GetGraphics()->DrawPoint(GetPosition());
 }
 
-void PointCollision::SetLocationOffset(const Vector2D<float>& LocationOffset)
+void PointCollision::SetPositionOffset(const Vector2D<float>& PositionOffset)
 {
-    _OffsetLocation = LocationOffset;
+    _PositionOffset = PositionOffset;
+}
+
+Vector2D<float> PointCollision::GetPosition() const
+{
+	Vector2D<float> CurrPoint = Vector2D<float>(0.0f, 0.0f);
+
+	if (_Owner)
+	{
+		TransformComponent* CurrTransformComponent = _Owner->GetComponentOfClass<TransformComponent>();
+		if (CurrTransformComponent)
+		{
+			CurrPoint += CurrTransformComponent->GetPosition();
+		}
+	}
+	CurrPoint += _PositionOffset;
+
+	return CurrPoint;
 }

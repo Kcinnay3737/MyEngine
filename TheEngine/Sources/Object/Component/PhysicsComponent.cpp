@@ -102,7 +102,7 @@ void PhysicsComponent::AddVelocity(const Vector2D<float>& VelociyToAdd)
 	CorrectMagnetude();
 }
 
-void PhysicsComponent::ApplyVelocity(float DeltaTime)
+std::vector<CollisionData> PhysicsComponent::ApplyVelocity(float DeltaTime)
 {
 	TransformComponent* CurrTransformComponent = GetOwner()->GetComponentOfClass<TransformComponent>();
 	if (CurrTransformComponent)
@@ -111,6 +111,41 @@ void PhysicsComponent::ApplyVelocity(float DeltaTime)
 	}
 
 	SetVelocity(Vector2D<float>(0.0f, 0.0f));
+
+	return CorrectMovement();
+}
+
+std::vector<CollisionData> PhysicsComponent::CheckCollision()
+{
+	return Engine::GetPhysics()->CheckCollisionWith(GetCollision());
+}
+
+std::vector<CollisionData> PhysicsComponent::CorrectMovement()
+{
+	std::vector<CollisionData> AllCollisionData = CheckCollision();
+
+	Vector2D<float> CurrentCorrectionMovement = Vector2D<float>(0.0f, 0.0f);
+
+	for (CollisionData& CurrCollisionData : AllCollisionData)
+	{
+		if (std::abs(CurrCollisionData.MovementCorrection.X) > std::abs(CurrentCorrectionMovement.X))
+		{
+			CurrentCorrectionMovement.X = CurrCollisionData.MovementCorrection.X;
+		}
+
+		if (std::abs(CurrCollisionData.MovementCorrection.Y) > std::abs(CurrentCorrectionMovement.Y))
+		{
+			CurrentCorrectionMovement.Y = CurrCollisionData.MovementCorrection.Y;
+		}
+	}
+
+	TransformComponent* CurrTransformComponent = GetOwner()->GetComponentOfClass<TransformComponent>();
+	if (CurrTransformComponent)
+	{
+		CurrTransformComponent->AddPositionOffset(CurrentCorrectionMovement);
+	}
+
+	return AllCollisionData;
 }
 
 void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)
@@ -134,13 +169,13 @@ void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)
 		_Collision = new LineCollision(GetOwner());
 		break;
 	case ECollisionType::Box:
-		_Collision = new BoxCollision(GetOwner());
+		_Collision = new BoxCollision(GetOwner(), this);
 		break;
 	case ECollisionType::Sphere:
 		_Collision = new SphereCollision(GetOwner());
 		break;
 	case ECollisionType::Grid:
-		_Collision = new GridCollision(GetOwner());
+		_Collision = new GridCollision(GetOwner(), this);
 		break;
 	default:
 		_Collision = nullptr;
@@ -148,7 +183,29 @@ void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)
 	}
 }
 
-const ICollision* PhysicsComponent::GetCollision() const
+ICollision* PhysicsComponent::GetCollision() const
 {
 	return _Collision;
+}
+
+void PhysicsComponent::AddIgnoreActorClass(std::type_index TypeIndex)
+{
+	_IgnoreActorClass[TypeIndex] = true;
+}
+
+void PhysicsComponent::RemoveIgnoreActorClass(std::type_index TypeIndex)
+{
+	_IgnoreActorClass.erase(TypeIndex);
+}
+
+bool PhysicsComponent::GetIgnoreActorClass(Actor* CheckActor)
+{
+	if (!CheckActor) return false;
+
+	std::type_index TypeIndex(typeid(*CheckActor));
+
+	auto& IT = _IgnoreActorClass.find(TypeIndex);
+	if (IT == _IgnoreActorClass.end()) return false;
+
+	return true;
 }

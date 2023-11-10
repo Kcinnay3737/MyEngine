@@ -5,7 +5,7 @@
 
 using namespace NPEngine;
 
-Actor::Actor(std::string& Name) : Object()
+Actor::Actor(const std::string& Name) : Object()
 {
 	_Name = Name;
 }
@@ -21,8 +21,8 @@ bool Actor::Initialise(const Param& Params)
 		SetDrawDepth(DrawDepth);
 	}
 
-	TransformComponent* NewTransformComponent = CreateComponentOfClass<TransformComponent>(std::string("Transform"));
-	if (NewTransformComponent)
+	_TransformComponent = CreateComponentOfClass<TransformComponent>(std::string("Transform"));
+	if (_TransformComponent)
 	{
 		Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
 
@@ -39,8 +39,8 @@ bool Actor::Initialise(const Param& Params)
 			Size = std::any_cast<Vector2D<float>>(IT->second);
 		}
 
-		NewTransformComponent->SetPosition(Position);
-		NewTransformComponent->SetSize(Size);
+		_TransformComponent->SetPosition(Position);
+		_TransformComponent->SetSize(Size);
 	}
 
 	return true;
@@ -249,4 +249,28 @@ Component* Actor::GetComponentByName(std::string& Name) const
 	auto& IT = _Components.find(Name);
 	if (IT == _Components.end()) return nullptr;
 	return IT->second;
+}
+
+void Actor::SetPosition(const Vector2D<float>& Position)
+{
+	if (!_TransformComponent) return;
+	_TransformComponent->SetPosition(Position);
+}
+
+Vector2D<float> Actor::GetPosition() const
+{
+	if (!_TransformComponent) return Vector2D<float>(0.0f, 0.0f);
+	return _TransformComponent->GetPosition();
+}
+
+void Actor::SetSize(const Vector2D<float>& Size)
+{
+	if (!_TransformComponent) return;
+	_TransformComponent->SetSize(Size);
+}
+
+Vector2D<float> Actor::GetSize() const
+{
+	if (!_TransformComponent) return Vector2D<float>(0.0f, 0.0f);
+	return _TransformComponent->GetSize();
 }

@@ -16,21 +16,39 @@ void Physics::Shutdown(const Param& Params)
 
 void Physics::UpdatePhysics(float DeltaTime)
 {
+    std::map<PhysicsComponent*, std::vector<CollisionData>> MapCurrentCollision;
+
     for (auto& IT : _PhysicsActors)
     {
         PhysicsComponent* CurrPhysicsComponent = IT.second;
         if(!CurrPhysicsComponent) continue;
         
-        CurrPhysicsComponent->ApplyVelocity(DeltaTime);
+        if (CurrPhysicsComponent->GetIsMovable())
+        {
+            std::vector<CollisionData> CurrCollisionsData = CurrPhysicsComponent->ApplyVelocity(DeltaTime);
+
+            if (!CurrCollisionsData.empty())
+            {
+                MapCurrentCollision[CurrPhysicsComponent] = CurrCollisionsData;
+            }
+        }
+        else if (CurrPhysicsComponent->GetIsCalculeCollision())
+        {
+            std::vector<CollisionData> CurrCollisionsData = CurrPhysicsComponent->CheckCollision();
+
+			if (!CurrCollisionsData.empty())
+			{
+				MapCurrentCollision[CurrPhysicsComponent] = CurrCollisionsData;
+			}
+        }
     }
 
-
-    //Appliquer les Forces
-
-    //Mettre a jour velo
-
-    //Detecter les collision
-
+    for (auto& IT : MapCurrentCollision)
+    {
+		PhysicsComponent* CurrPhysicsComponent = IT.first;
+		if (!CurrPhysicsComponent) continue;
+        CurrPhysicsComponent->OnCollision.Broadcast(IT.second);
+    }
 }
 
 void Physics::AddPhysicsActor(const std::string& ActorName, PhysicsComponent* PhysicsComponentToAdd)
@@ -45,53 +63,44 @@ void Physics::RemovePhysicsActor(const std::string& Name)
     _PhysicsActors.erase(Name);
 }
 
-void Physics::OnPhysicsComponentStateChanged(const std::string& Name)
-{
-}
-
-void Physics::UpdatePositions(float DeltaTime)
-{
-}
-
-void Physics::DetectCollisions()
-{
-}
-
-void Physics::ResolveCollisions()
-{
-}
-
-std::vector<CollisionData> Physics::CheckCollisionWith(const ICollision& Collision)
+std::vector<CollisionData> Physics::CheckCollisionWith(const ICollision* Collision)
 {
     std::vector<CollisionData> CollisionsData;
+
+    if (!Collision) return CollisionsData;
 
     for (auto& IT : _PhysicsActors)
     {
         const PhysicsComponent* OtherPhysicsComponent = IT.second;
         const ICollision* OtherCollision = OtherPhysicsComponent->GetCollision();
-        if(!OtherCollision) continue;
+        if(!OtherCollision || OtherCollision == Collision) continue;
         
         CollisionData CurrCollisionData = CollisionData();
 
         switch (OtherCollision->GetCollisionType())
         {
         case ECollisionType::Box:
-            CurrCollisionData = Collision.CheckCollisionWithBox(*OtherCollision);
+            CurrCollisionData = Collision->CheckCollisionWithBox(*OtherCollision);
             break;
         case ECollisionType::Grid:
-            CurrCollisionData = Collision.CheckCollisionWithGrid(*OtherCollision);
+            CurrCollisionData = Collision->CheckCollisionWithGrid(*OtherCollision);
             break;
         case ECollisionType::Line:
-            CurrCollisionData = Collision.CheckCollisionWithLine(*OtherCollision);
+            CurrCollisionData = Collision->CheckCollisionWithLine(*OtherCollision);
             break;
         case ECollisionType::Point:
-            CurrCollisionData = Collision.CheckCollisionWithPoint(*OtherCollision);
+            CurrCollisionData = Collision->CheckCollisionWithPoint(*OtherCollision);
             break;
         case ECollisionType::Sphere:
-            CurrCollisionData = Collision.CheckCollisionWithSphere(*OtherCollision);
+            CurrCollisionData = Collision->CheckCollisionWithSphere(*OtherCollision);
             break;
         case ECollisionType::None:
             break;
+        }
+
+        if (CurrCollisionData.bCollision)
+        {
+            CollisionsData.push_back(CurrCollisionData);
         }
     }
     

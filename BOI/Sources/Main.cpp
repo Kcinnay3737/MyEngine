@@ -21,13 +21,16 @@ void InitGameplay(void)
 	//Add instance into instance manager
 	Engine::GetInstanceManager()->AddInstance(TileMapLevel1,
 	{
+		{"Size", Vector2D<float>(0.0f, 0.0f)},
 		{"LayerPath", std::vector<std::string> {"MapBOI_Layer1.csv", "MapBOI_Layer2.csv"}},
 		{"TileSetPath", std::string("TileSetMapBOI.png")},
-		{"CellSize", Vector2D<int>(32, 32)}
+		{"CellSize", Vector2D<float>(32.0f, 32.0f)},
+		{"CollisionLayer", std::vector<int> {1}}
 	});
 
 	Engine::GetInstanceManager()->AddInstance(NewIsaac,
 	{
+		{"Position", Vector2D<float>(600.0f, 300.0f)},
 		{"DrawDepth", 1}
 	});
 
@@ -37,6 +40,7 @@ void InitGameplay(void)
 	{
 		SceneMenu->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneMenu->SetNumberSpawnPrototype("Isaac", 1);
+		SceneMenu->SetNumberSpawnPrototype("TestPawn", 1);
 	}
 
 	Scene* SceneGame1 = Engine::GetWorld()->CreateScene(std::string("SceneGame1"));

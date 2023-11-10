@@ -21,7 +21,5 @@ namespace NPEngine
 
 		virtual void AddPhysicsActor(const std::string& ActorName, PhysicsComponent* PhysicsComponentToAdd) = 0;
 		virtual void RemovePhysicsActor(const std::string& Name) = 0;
-
-		virtual void OnPhysicsComponentStateChanged(const std::string& Name) = 0;
 	};
 }

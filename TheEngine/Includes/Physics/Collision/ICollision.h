@@ -6,6 +6,9 @@
 
 namespace NPEngine
 {
+	class Actor;
+	class PhysicsComponent;
+
 	class ICollision
 	{
 	public:
@@ -17,11 +20,11 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) const = 0;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) const = 0;
 
-		virtual void UpdateCollisionWithActorTransform() = 0;
-		virtual void SetLocationOffset(const Vector2D<float>& LocationOffset) = 0;
-
 		virtual void DrawCollision() = 0;
 
 		virtual ECollisionType GetCollisionType() const = 0;
+
+		virtual Actor* GetOwner() const = 0;
+		virtual PhysicsComponent* GetOwnerPhysicsComponent() const = 0;
 	};
 }

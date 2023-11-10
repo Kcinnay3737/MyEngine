@@ -135,10 +135,10 @@ void Engine::Start(void)
 
 		StartFrame();
 
+		UpdatePhysics(_Time->GetDeltaTime());
+
 		ProcessInput();
 		PostInput();
-
-		UpdatePhysics(_Time->GetDeltaTime());
 
 		Update(_Time->GetDeltaTime());
 		PostUpdate();

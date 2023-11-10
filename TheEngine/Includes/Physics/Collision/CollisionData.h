@@ -9,7 +9,8 @@ namespace NPEngine
 	struct CollisionData
 	{
 	public:
+		bool bCollision = false;
 		Actor* OtherActor = nullptr;
-		Vector2D<float> Normal;
+		Vector2D<float> MovementCorrection = Vector2D<float>(0.0f, 0.0f);
 	};
 }

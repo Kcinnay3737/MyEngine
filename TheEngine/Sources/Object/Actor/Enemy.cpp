@@ -2,7 +2,7 @@
 
 using namespace NPEngine;
 
-Enemy::Enemy(std::string& Name) : Pawn(Name)
+Enemy::Enemy(const std::string& Name) : Pawn(Name)
 {
 }
 

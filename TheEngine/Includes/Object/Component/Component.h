@@ -11,7 +11,7 @@ namespace NPEngine
 
 	class Component : public Object, public IActorComponent
 	{
-	private:
+	protected:
 		std::string _Name = "";
 
 		Actor* _OwnerActor = nullptr;

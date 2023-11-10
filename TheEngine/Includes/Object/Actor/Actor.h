@@ -13,6 +13,7 @@ namespace NPEngine
 	class Component;
 	class IUpdatableComponent;
 	class IDrawableComponent;
+	class TransformComponent;
 
 	struct DataComponentToAdd
 	{
@@ -36,8 +37,11 @@ namespace NPEngine
 
 		std::string _Name;
 
+	protected:
+		TransformComponent* _TransformComponent = nullptr;
+
 	public:
-		Actor(std::string& Name);
+		Actor(const std::string& Name);
 		virtual ~Actor() = default;
 
 		virtual Actor* Clone(std::string& Name, const Param& Params = Param{});
@@ -83,6 +87,11 @@ namespace NPEngine
 		template <typename T>
 		std::vector<T*> GetAllComponentOfClass() const;
 		//---------
+
+		void SetPosition(const Vector2D<float>& Position);
+		Vector2D<float> GetPosition() const;
+		void SetSize(const Vector2D<float>& Size);
+		Vector2D<float> GetSize() const;
 
 	};
 
