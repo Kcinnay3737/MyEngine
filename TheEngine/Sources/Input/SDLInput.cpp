@@ -63,6 +63,13 @@ void SDLInput::GetMousePosition(int* X, int* Y)
 	SDL_GetMouseState(X, Y);
 }
 
+Vector2D<int> SDLInput::GetMousePosition()
+{
+	Vector2D<int> MousePosition = Vector2D<int>(0, 0);
+	GetMousePosition(&MousePosition.X, &MousePosition.Y);
+	return MousePosition;
+}
+
 SDL_Scancode SDLInput::MapToSDLScancode(EKeyboardKeys Key)
 {
 	switch (Key)

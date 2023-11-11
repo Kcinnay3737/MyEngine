@@ -76,7 +76,7 @@ void InstanceManager::DeleteInstanceAt(std::string Name)
 InstanceActor& InstanceManager::GetInstanceAt(std::string Name)
 {
 	auto IT = _Instances.find(Name);
-	if (IT == _Instances.end()) return InstanceActor();
+	if (IT == _Instances.end()) return _BaseInstanceActor;
 	return IT->second;
 }
 

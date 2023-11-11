@@ -16,7 +16,7 @@ bool TileMap::Initialise(const Param& Params)
 {
 	Actor::Initialise(Params);
 
-	CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"));
+	CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"), Params);
 
 	auto& IT = Params.find("CollisionLayer");
 	if (IT != Params.end())

@@ -14,15 +14,13 @@ namespace NPEngine
 		template<typename T>
 		size_t GetHash(T* Instance, ReturnType(T::* Method)(Args...))
 		{
-			std::uintptr_t InstanceIntPtr = reinterpret_cast<std::uintptr_t>(Instance);
-			size_t InstanceHash = std::hash<std::uintptr_t>()(InstanceIntPtr);
-			
-			const auto* MethodPtr = reinterpret_cast<const unsigned char*>(&Method);
-			size_t MethodHash = 0;
-			for (size_t i = 0; i < sizeof(Method); i++) 
-			{
-				MethodHash = (MethodHash * 131) + MethodPtr[i];
-			}
+			std::hash<std::uintptr_t> PtrHasher;
+
+			std::uintptr_t InstancePtr = reinterpret_cast<std::uintptr_t>(Instance);
+			size_t InstanceHash = PtrHasher(InstancePtr);
+
+			std::uintptr_t MethodPtr = reinterpret_cast<std::uintptr_t&>(Method);
+			size_t MethodHash = PtrHasher(MethodPtr);
 
 			return InstanceHash ^ (MethodHash << 1);
 		}

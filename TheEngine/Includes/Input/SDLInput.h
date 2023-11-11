@@ -19,6 +19,7 @@ namespace NPEngine
 		virtual bool IsButtonDown(EButtonKeys Key) override;
 
 		virtual void GetMousePosition(int* x, int* y) override;
+		virtual Vector2D<int> GetMousePosition() override;
 
 		SDL_Scancode MapToSDLScancode(EKeyboardKeys Key);
 		Uint8 MapToSDLButtonCode(EButtonKeys button);

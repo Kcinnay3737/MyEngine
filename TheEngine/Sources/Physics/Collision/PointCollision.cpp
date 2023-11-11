@@ -9,9 +9,10 @@
 
 using namespace NPEngine;
 
-PointCollision::PointCollision(Actor* Owner)
+PointCollision::PointCollision(Actor* Owner, PhysicsComponent* OwnerPhysicsComponent)
 {
     _Owner = Owner;
+	_OwnerPhysicsComponent = OwnerPhysicsComponent;
 }
 
 PointCollision::~PointCollision()

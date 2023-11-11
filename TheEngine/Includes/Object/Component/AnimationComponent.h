@@ -18,6 +18,8 @@ namespace NPEngine
 	private:
 		AnimationData& _CurrentAnimation = AnimationData();
 
+		AnimationData _BaseAnimationData = AnimationData();
+
 		std::map<std::string, AnimationData> _Animations;
 
 		float _CurrentFrameTime = 0.0f;

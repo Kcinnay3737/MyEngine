@@ -24,8 +24,8 @@ bool Projectil::Initialise(const Param& Params)
 {
 	Actor::Initialise(Params);
 
-	_PhysicsComponent = CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"));
-	CreateComponentOfClass<SpriteComponent>(std::string("SpriteComponent"));
+	_PhysicsComponent = CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"), Params);
+	CreateComponentOfClass<SpriteComponent>(std::string("SpriteComponent"), Params);
 
 	auto& IT = Params.find("Direction");
 	if (IT != Params.end())
@@ -38,19 +38,6 @@ bool Projectil::Initialise(const Param& Params)
 	if (IT != Params.end())
 	{
 		_MoveSpeed = std::any_cast<float>(IT->second);
-	}
-
-	IT = Params.find("IgnoreActor");
-	if (IT != Params.end())
-	{
-		if (_PhysicsComponent)
-		{
-			const std::vector<std::type_index>& IgnoreActorClass = std::any_cast<const std::vector<std::type_index>&>(IT->second);
-			for (const std::type_index& TypeIndex : IgnoreActorClass)
-			{
-				_PhysicsComponent->AddIgnoreActorClass(TypeIndex);
-			}
-		}
 	}
 
 	return true;

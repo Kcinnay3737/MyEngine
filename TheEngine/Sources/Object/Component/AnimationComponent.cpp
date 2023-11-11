@@ -19,7 +19,7 @@ void AnimationComponent::RemoveAnimation(const std::string& AnimationName)
 AnimationData& AnimationComponent::GetAnimationData(const std::string& AnimationName)
 {
 	auto& IT = _Animations.find(AnimationName);
-	if (IT == _Animations.end()) return AnimationData();
+	if (IT == _Animations.end()) return _BaseAnimationData;
 	return IT->second;
 }
 

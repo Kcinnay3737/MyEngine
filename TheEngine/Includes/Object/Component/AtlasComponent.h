@@ -15,6 +15,8 @@ namespace NPEngine
 		virtual ~AtlasComponent() = default;
 
 	private:
+		virtual bool Initialise(const Param& Params = Param{}) override;
+
 		virtual void Draw() override;
 		
 	public:

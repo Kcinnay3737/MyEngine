@@ -46,7 +46,8 @@ namespace NPEngine
 		virtual bool IsButtonDown(EButtonKeys Key) = 0;
 
 		virtual void GetMousePosition(int* X, int* Y) = 0;
-	
+		virtual Vector2D<int> GetMousePosition() = 0;
+
 	private:
 		virtual bool Initialize(const Param& Params) override = 0;
 		virtual void Shutdown(const Param& Params) override = 0;

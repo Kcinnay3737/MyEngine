@@ -128,7 +128,7 @@ void SDLGraphics::DrawCircle(const Vector2D<float>& Position, const float Ray, c
 
 	for (int i = 0; i < Resolution; i++)
 	{
-		float Angle = static_cast<float>(i) / static_cast<float>(Resolution) * (2.0f * M_PI);
+		float Angle = static_cast<float>(i) / static_cast<float>(Resolution) * (2.0f * static_cast<float>(M_PI));
 		float X = Position.X + Ray * cos(Angle);
 		float Y = Position.Y + Ray * sin(Angle);
 
@@ -356,6 +356,15 @@ void SDLGraphics::GetTextSize(size_t FontId, const char* Text, Vector2D<int>* Si
 
 	Size->X = Width;
 	Size->Y = Height;
+}
+
+Vector2D<int> SDLGraphics::GetScreenSize() const
+{
+	Vector2D<int> ScreenSize = Vector2D<int>(0, 0);
+
+	SDL_GetWindowSize(_Window, &ScreenSize.X, &ScreenSize.Y);
+
+	return ScreenSize;
 }
 
 void SDLGraphics::Clear()

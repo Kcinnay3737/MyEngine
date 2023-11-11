@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Object/Actor/Player.h"
+#include "Object/Actor/Actor.h"
 #include "Object/Component/PhysicsComponent.h"
 #include "Object/Component/AtlasComponent.h"
 #include "Object/Component/AnimationComponent.h"
 
 using namespace NPEngine;
 
-class Isaac : public Player
+class Isaac : public Actor
 {
 private:
 	Vector2D<float> _LastVeloDir = Vector2D<float>(0.0f, 1.0f);

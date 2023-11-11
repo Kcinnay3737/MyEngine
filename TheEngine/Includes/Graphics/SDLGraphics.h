@@ -45,6 +45,8 @@ namespace NPEngine
 		virtual void DrawString(size_t FontId, const char* Text, const Vector2D<int>& Location, const Color& Color) override;
 		virtual void GetTextSize(size_t FontId, const char* Text, Vector2D<int>* Size) override;
 
+		virtual Vector2D<int> GetScreenSize() const override;
+
 	private:
 		virtual bool Initialize(const Param& Params) override;
 		virtual void Shutdown(const Param& Params) override;

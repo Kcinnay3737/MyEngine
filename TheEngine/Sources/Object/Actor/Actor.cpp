@@ -14,33 +14,13 @@ Actor::Actor(const std::string& Name) : Object()
 
 bool Actor::Initialise(const Param& Params)
 {
+	_TransformComponent = CreateComponentOfClass<TransformComponent>(std::string("Transform"), Params);
+
 	auto& IT = Params.find(std::string("DrawDepth"));
 	if (IT != Params.end())
 	{
 		int DrawDepth = std::any_cast<int>(IT->second);
 		SetDrawDepth(DrawDepth);
-	}
-
-	_TransformComponent = CreateComponentOfClass<TransformComponent>(std::string("Transform"));
-	if (_TransformComponent)
-	{
-		Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
-
-		IT = Params.find(std::string("Position"));
-		if (IT != Params.end())
-		{
-			Position = std::any_cast<Vector2D<float>>(IT->second);
-		}
-
-		Vector2D<float> Size = Vector2D<float>(100.0f, 100.0f);
-		IT = Params.find(std::string("Size"));
-		if (IT != Params.end())
-		{
-			Size = std::any_cast<Vector2D<float>>(IT->second);
-		}
-
-		_TransformComponent->SetPosition(Position);
-		_TransformComponent->SetSize(Size);
 	}
 
 	return true;

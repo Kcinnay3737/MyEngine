@@ -6,17 +6,19 @@
 #include <typeindex>
 #include <typeinfo>
 
-Isaac::Isaac(std::string& Name) : Player(Name)
+Isaac::Isaac(std::string& Name) : Actor(Name)
 {
 
 }
 
 bool Isaac::Initialise(const Param& Params)
 {
-	Player::Initialise(Params);
+	Actor::Initialise(Params);
 
-	CreateComponentOfClass<AtlasComponent>(std::string("AtlasComponent"));
-	CreateComponentOfClass<AnimationComponent>(std::string("AnimationComponent"));
+	CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"), Params);
+	CreateComponentOfClass<ControllerComponent>(std::string("ControllerComponent"), Params);
+	CreateComponentOfClass<AtlasComponent>(std::string("AtlasComponent"), Params);
+	CreateComponentOfClass<AnimationComponent>(std::string("AnimationComponent"), Params);
 
 	return true;
 }

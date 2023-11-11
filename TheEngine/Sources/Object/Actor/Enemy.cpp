@@ -2,13 +2,13 @@
 
 using namespace NPEngine;
 
-Enemy::Enemy(const std::string& Name) : Pawn(Name)
+Enemy::Enemy(const std::string& Name) : Actor(Name)
 {
 }
 
 bool Enemy::Initialise(const Param& Params)
 {
-    Pawn::Initialise(Params);
+    Actor::Initialise(Params);
 
-    return false;
+    return true;
 }

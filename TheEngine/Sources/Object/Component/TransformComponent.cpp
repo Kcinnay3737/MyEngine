@@ -14,6 +14,30 @@ TransformComponent::TransformComponent(std::string& Name) : Component(Name)
 	_Angle = 0.0f;
 }
 
+bool TransformComponent::Initialise(const Param& Params)
+{
+	Component::Initialise(Params);
+
+	Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
+	auto& IT = Params.find(std::string("Position"));
+	if (IT != Params.end())
+	{
+		Position = std::any_cast<Vector2D<float>>(IT->second);
+	}
+
+	Vector2D<float> Size = Vector2D<float>(100.0f, 100.0f);
+	IT = Params.find(std::string("Size"));
+	if (IT != Params.end())
+	{
+		Size = std::any_cast<Vector2D<float>>(IT->second);
+	}
+
+	SetPosition(Position);
+	SetSize(Size);
+
+	return true;
+}
+
 Vector2D<float> TransformComponent::GetPosition()
 {
 	return _Position;

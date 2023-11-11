@@ -19,6 +19,16 @@ bool PhysicsComponent::Initialise(const Param& Params)
 {
 	bool Success = Component::Initialise(Params);
 
+	auto& IT = Params.find("IgnoreActor");
+	if (IT != Params.end())
+	{
+		const std::vector<std::type_index>& IgnoreActorClass = std::any_cast<const std::vector<std::type_index>&>(IT->second);
+		for (const std::type_index& TypeIndex : IgnoreActorClass)
+		{
+			AddIgnoreActorClass(TypeIndex);
+		}
+	}
+
 	IPhysics* Physics = Engine::GetPhysics();
 	if (Physics)
 	{
@@ -163,7 +173,7 @@ void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)
 		_Collision = nullptr;
 		break;
 	case ECollisionType::Point:
-		_Collision = new PointCollision(GetOwner());
+		_Collision = new PointCollision(GetOwner(), this);
 		break;
 	case ECollisionType::Line:
 		_Collision = new LineCollision(GetOwner());

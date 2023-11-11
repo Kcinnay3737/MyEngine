@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Object/Actor/Pawn.h"
+#include "Object/Actor/Actor.h"
 
 namespace NPEngine
 {
-	class Enemy : public Pawn
+	class Enemy : public Actor
 	{
 	public:
 		Enemy(const std::string& Name);

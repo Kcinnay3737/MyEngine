@@ -16,6 +16,8 @@ namespace NPEngine
 		virtual ~TransformComponent() = default;
 
 	private:
+		virtual bool Initialise(const Param& Params = Param{}) override;
+
 		void AdjustsAngleBetweenValue(float MinAngle, float MaxAngle);
 
 	public:

@@ -17,7 +17,7 @@ namespace NPEngine
 		Vector2D<float> _PositionOffset = Vector2D<float>(0.0f, 0.0f);
 
 	public:
-		PointCollision(Actor* Owner);
+		PointCollision(Actor* Owner, PhysicsComponent* OwnerPhysicsComponent);
 		virtual ~PointCollision();
 
 		virtual CollisionData CheckCollisionWithPoint(const ICollision& OtherCollision) const override;

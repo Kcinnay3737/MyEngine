@@ -43,19 +43,20 @@ CollisionData GridCollision::CheckCollisionWithGrid(const ICollision& OtherColli
     return CollisionData();
 }
 
+//Pas encore implementer
 std::vector<Vector2D<int>> GridCollision::GetIndexInRect(const Rectangle2D<float>& Rect) const
 {
-    Vector2D<float> StartPosition = Vector2D<float>(0.0f, 0.0f);
+    //Vector2D<float> StartPosition = Vector2D<float>(0.0f, 0.0f);
 
-    if (_OwnerActor)
-    {
-        TransformComponent* CurrTransformComponent = _OwnerActor->GetComponentOfClass<TransformComponent>();
-        if (CurrTransformComponent)
-        {
-            StartPosition += CurrTransformComponent->GetPosition();
-        }
-    }
-    StartPosition += _PositionOffset;
+    //if (_OwnerActor)
+    //{
+    //    TransformComponent* CurrTransformComponent = _OwnerActor->GetComponentOfClass<TransformComponent>();
+    //    if (CurrTransformComponent)
+    //    {
+    //        StartPosition += CurrTransformComponent->GetPosition();
+    //    }
+    //}
+    //StartPosition += _PositionOffset;
 
     return std::vector<Vector2D<int>>();
 }

@@ -25,7 +25,44 @@ CollisionData BoxCollision::CheckCollisionWithPoint(const ICollision& OtherColli
     if (OtherCollision.GetCollisionType() != ECollisionType::Point) return CollisionData();
     const PointCollision& OtherPointCollision = static_cast<const PointCollision&>(OtherCollision);
 
-    return CollisionData();
+	if (_OwnerPhysicsComponent)
+	{
+		if (_OwnerPhysicsComponent->GetIgnoreActorClass(OtherCollision.GetOwner())) return CollisionData();
+	}
+
+    CollisionData CurrentCollisionData = CollisionData();
+
+	Vector2D<float> Position = GetPosition();
+	Vector2D<float> Size = GetSize();
+
+    Vector2D<float> OtherPoint = OtherPointCollision.GetPosition();
+
+    //Check if collide
+	if (OtherPoint.X >= Position.X &&
+		OtherPoint.X <= Position.X + Size.X &&
+		OtherPoint.Y >= Position.Y &&
+		OtherPoint.Y <= Position.Y + Size.Y)
+	{
+		CurrentCollisionData.bCollision = true;
+		CurrentCollisionData.OtherActor = OtherCollision.GetOwner();
+
+        //Calcule correction
+        if (_OwnerPhysicsComponent && _OwnerPhysicsComponent->GetIsPhysicsVolume() && OtherCollision.GetOwnerPhysicsComponent() && OtherCollision.GetOwnerPhysicsComponent()->GetIsPhysicsVolume())
+        {
+			Vector2D<float> Center = Position + (Size / 2);
+
+			float DirectionX = (OtherPoint.X < Center.X) ? -1.0f : 1.0f;
+			float DirectionY = (OtherPoint.Y < Center.Y) ? -1.0f : 1.0f;
+
+			float OverlapX = std::max(0.0f, std::abs(Center.X - OtherPoint.X) - Size.X / 2.0f);
+			float OverlapY = std::max(0.0f, std::abs(Center.Y - OtherPoint.Y) - Size.Y / 2.0f);
+
+			CurrentCollisionData.MovementCorrection.X += OverlapX * DirectionX;
+			CurrentCollisionData.MovementCorrection.Y += OverlapY * DirectionY;
+        }
+	}
+
+    return CurrentCollisionData;
 }
 
 CollisionData BoxCollision::CheckCollisionWithBox(const ICollision& OtherCollision) const
@@ -40,12 +77,13 @@ CollisionData BoxCollision::CheckCollisionWithBox(const ICollision& OtherCollisi
 
     CollisionData CurrentCollisionData = CollisionData();
 
-    Vector2D<float> Position = GetPosition();
-    Vector2D<float> Size = GetSize();
+	Vector2D<float> Position = GetPosition();
+	Vector2D<float> Size = GetSize();
 
     Vector2D<float> OtherPosition = OtherBoxCollision.GetPosition();
     Vector2D<float> OtherSize = OtherBoxCollision.GetSize();
 
+    //Check collision
     if (Position.X < OtherPosition.X + OtherSize.X &&
         Position.X + Size.X > OtherPosition.X &&
         Position.Y < OtherPosition.Y + OtherSize.Y &&
@@ -54,6 +92,7 @@ CollisionData BoxCollision::CheckCollisionWithBox(const ICollision& OtherCollisi
         CurrentCollisionData.bCollision = true;
         CurrentCollisionData.OtherActor = OtherCollision.GetOwner();
 
+        //Calcule correction
         if (_OwnerPhysicsComponent && _OwnerPhysicsComponent->GetIsPhysicsVolume() && OtherCollision.GetOwnerPhysicsComponent() && OtherCollision.GetOwnerPhysicsComponent()->GetIsPhysicsVolume())
         {
 			//Movement correction calcule

@@ -11,6 +11,8 @@ namespace NPEngine
 	private:
 		std::map<std::string, InstanceActor> _Instances;
 
+		InstanceActor _BaseInstanceActor = InstanceActor();
+
 	public:
 		virtual ~InstanceManager() = default;
 
