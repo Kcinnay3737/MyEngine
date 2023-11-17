@@ -50,12 +50,14 @@ project.addFiles(
     "External/AI-Toolbox/src/MDP/Policies/WoLFPolicy.cpp",
     "External/AI-Toolbox/src/MDP/Policies/PGAAPPPolicy.cpp",
     "External/AI-Toolbox/src/MDP/Environments/Utils/GridWorld.cpp",
+    //Add in eigen --> blas et lapack
 );
 
 project.setDebugDir("Deployment");
 
 project.addIncludeDir("./TheEngine/Includes");
 project.addIncludeDir("./External/AI-Toolbox/include");
+project.addIncludeDir("./External/eigen/Eigen");//Todo
 project.addIncludeDir("./BOI/Includes");
 
 
