@@ -22,9 +22,9 @@ private:
 	float _CurrShootDelay = 0.0f;
 
 public:
-	Isaac(std::string& Name);
+	Isaac(const std::string& Name);
 
-	virtual Actor* Clone(std::string& Name, const Param& Params = Param{}) override;
+	virtual Actor* Clone(const std::string& Name, const Param& Params = Param{}) override;
 
 private:
 	virtual bool Initialise(const Param& Params) override;

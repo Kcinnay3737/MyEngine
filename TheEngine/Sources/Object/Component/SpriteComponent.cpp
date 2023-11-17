@@ -5,7 +5,7 @@
 
 using namespace NPEngine;
 
-SpriteComponent::SpriteComponent(std::string& Name) : Component(Name)
+SpriteComponent::SpriteComponent(const std::string& Name) : Component(Name)
 {
 }
 
@@ -19,7 +19,7 @@ bool SpriteComponent::Initialise(const Param& Params)
 {
 	Component::Initialise(Params);
 
-	auto& IT = Params.find("TexturePath");
+	auto IT = Params.find("TexturePath");
 	if (IT != Params.end())
 	{
 		const std::string& TexturePath = std::any_cast<const std::string&>(IT->second);

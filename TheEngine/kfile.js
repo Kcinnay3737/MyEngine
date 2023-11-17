@@ -23,13 +23,17 @@ project.addProvider = function(proj, isRoot=false){
     }
 };
 project.kore = false;
-project.setCppStd("C++17");
+project.setCppStd("C++20");
 
 project.addDefine("KINC_STATIC_COMPILE");
 project.isStaticLib = true;
 
 project.addIncludeDir(path.resolve("./TheEngine/Includes"));
 project.addFiles('Sources/**','Includes/**');
+
+//project.addIncludeDir("D:/MyEngine/MyEngine/External/boost_1_83_0/boost");
+//project.addIncludeDir("D:/MyEngine/MyEngine/External/eigen-3.4.0/Eigen");
+//project.addIncludeDir("D:/MyEngine/MyEngine/External/AI-Toolbox/include");
 
 project.addProvider(project,false);
 

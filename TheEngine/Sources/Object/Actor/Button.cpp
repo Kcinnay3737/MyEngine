@@ -37,7 +37,7 @@ void Button::BeginPlay()
 	Engine::GetInput()->OnButtonReleased[EButtonKeys::Mouse_Left].AddFunction(this, &Button::OnLeftMouseReleased);
 }
 
-Actor* Button::Clone(std::string& Name, const Param& Params)
+Actor* Button::Clone(const std::string& Name, const Param& Params)
 {
 	Button* NewButton = new Button(Name);
 	return NewButton;

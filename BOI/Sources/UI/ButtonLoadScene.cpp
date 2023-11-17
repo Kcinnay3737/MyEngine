@@ -10,7 +10,7 @@ bool ButtonLoadScene::Initialise(const Param& Params)
 {
 	Button::Initialise(Params);
 
-	auto& IT = Params.find("LoadSceneName");
+	auto IT = Params.find("LoadSceneName");
 	if (IT != Params.end())
 	{
 		_LoadSceneName = std::any_cast<std::string>(IT->second);
@@ -33,7 +33,7 @@ void ButtonLoadScene::BeginPlay()
 	OnClicked.AddFunction(this, &ButtonLoadScene::LoadScene);
 }
 
-Actor* ButtonLoadScene::Clone(std::string& Name, const Param& Params)
+Actor* ButtonLoadScene::Clone(const std::string& Name, const Param& Params)
 {
 	ButtonLoadScene* NewButtonLoadScene = new ButtonLoadScene(Name);
 	return NewButtonLoadScene;

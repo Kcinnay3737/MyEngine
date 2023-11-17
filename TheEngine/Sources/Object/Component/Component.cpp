@@ -2,7 +2,7 @@
 
 using namespace NPEngine;
 
-Component::Component(std::string& Name) : Object()
+Component::Component(const std::string& Name) : Object()
 {
 	_Name = Name;
 }

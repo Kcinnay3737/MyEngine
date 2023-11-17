@@ -6,7 +6,7 @@
 #include <typeindex>
 #include <typeinfo>
 
-Isaac::Isaac(std::string& Name) : Actor(Name)
+Isaac::Isaac(const std::string& Name) : Actor(Name)
 {
 
 }
@@ -274,7 +274,7 @@ void Isaac::UpdateHeadAtlas()
 	}
 }
 
-Actor* Isaac::Clone(std::string& Name, const Param& Params)
+Actor* Isaac::Clone(const std::string& Name, const Param& Params)
 {
 	Isaac* CopyIsaac = new Isaac(Name);
 	return CopyIsaac;

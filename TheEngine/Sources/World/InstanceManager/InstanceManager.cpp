@@ -53,7 +53,7 @@ void InstanceManager::AddInstance(Actor* ActorInstance, const Param& InitialiseP
 
 void InstanceManager::DeleteInstanceAt(std::string Name)
 {
-	auto& IT = _Instances.find(Name);
+	auto IT = _Instances.find(Name);
 	if (IT == _Instances.end()) return;
 
 	InstanceActor CurrInstanceActor = IT->second;

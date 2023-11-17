@@ -44,13 +44,13 @@ namespace NPEngine
 		Actor(const std::string& Name);
 		virtual ~Actor() = default;
 
-		virtual Actor* Clone(std::string& Name, const Param& Params = Param{});
+		virtual Actor* Clone(const std::string& Name, const Param& Params = Param{});
 
 		//Component
 		void AddComponent(Component* Component, const Param& Params = Param{});
-		void DeleteComponentByName(std::string& Name, const Param& Params = Param{});
+		void DeleteComponentByName(const std::string& Name, const Param& Params = Param{});
 		template <typename T>
-		T* CreateComponentOfClass(std::string& Name, const Param& Params = Param{});
+		T* CreateComponentOfClass(const std::string& Name, const Param& Params = Param{});
 		//---------
 
 	protected:
@@ -81,8 +81,8 @@ namespace NPEngine
 		virtual unsigned char GetDrawDepth() const override { return _DrawDepth; }
 
 		//Component
-		Component* GetComponentByName(std::string& Name) const;
-		template <typename T>
+		Component* GetComponentByName(const std::string& Name) const;
+		template <typename T> 
 		T* GetComponentOfClass() const;
 		template <typename T>
 		std::vector<T*> GetAllComponentOfClass() const;
@@ -96,7 +96,7 @@ namespace NPEngine
 	};
 
 	template<typename T>
-	inline T* Actor::CreateComponentOfClass(std::string& Name, const Param& Params)
+	inline T* Actor::CreateComponentOfClass(const std::string& Name, const Param& Params)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must be a derived class of Component");
 
@@ -113,7 +113,7 @@ namespace NPEngine
 		static_assert(std::is_base_of<Component, T>::value, "T must be a derived class of Component");
 
 		std::type_index TypeIndex(typeid(T));
-		auto& IT = _ClassComponents.find(TypeIndex);
+		auto IT = _ClassComponents.find(TypeIndex);
 
 		if (IT != _ClassComponents.end() && !IT->second.empty())
 		{

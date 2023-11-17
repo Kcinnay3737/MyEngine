@@ -16,16 +16,16 @@ namespace NPEngine
 	class AnimationComponent : public AtlasComponent, public IUpdatableComponent
 	{
 	private:
-		AnimationData& _CurrentAnimation = AnimationData();
-
 		AnimationData _BaseAnimationData = AnimationData();
+
+		AnimationData& _CurrentAnimation = _BaseAnimationData;
 
 		std::map<std::string, AnimationData> _Animations;
 
 		float _CurrentFrameTime = 0.0f;
 
 	public:
-		AnimationComponent(std::string& Name);
+		AnimationComponent(const std::string& Name);
 		virtual ~AnimationComponent() = default;
 
 		void AddAnimation(const std::string& AnimationName, const AnimationData& NewAnimationData);

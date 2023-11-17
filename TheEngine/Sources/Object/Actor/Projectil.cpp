@@ -14,7 +14,7 @@ Projectil::Projectil(const std::string& Name) : Actor(Name)
 
 }
 
-Actor* Projectil::Clone(std::string& Name, const Param& Params)
+Actor* Projectil::Clone(const std::string& Name, const Param& Params)
 {
 	Projectil* NewProjectil = new Projectil(Name);
 	return NewProjectil;
@@ -27,7 +27,7 @@ bool Projectil::Initialise(const Param& Params)
 	_PhysicsComponent = CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"), Params);
 	CreateComponentOfClass<SpriteComponent>(std::string("SpriteComponent"), Params);
 
-	auto& IT = Params.find("Direction");
+	auto IT = Params.find("Direction");
 	if (IT != Params.end())
 	{
 		_Direction = std::any_cast<Vector2D<float>>(IT->second);

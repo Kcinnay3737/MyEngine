@@ -11,7 +11,7 @@ namespace NPEngine
 		int _CurrTileIndex = 0;
 
 	public:
-		AtlasComponent(std::string& Name);
+		AtlasComponent(const std::string& Name);
 		virtual ~AtlasComponent() = default;
 
 	private:

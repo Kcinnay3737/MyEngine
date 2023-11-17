@@ -12,7 +12,7 @@ namespace NPEngine
 		float _Angle = 0.0f;
 
 	public:
-		TransformComponent(std::string& Name);
+		TransformComponent(const std::string& Name);
 		virtual ~TransformComponent() = default;
 
 	private:

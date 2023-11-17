@@ -6,7 +6,7 @@
 
 using namespace NPEngine;
 
-ControllerComponent::ControllerComponent(std::string& Name) : Component(Name)
+ControllerComponent::ControllerComponent(const std::string& Name) : Component(Name)
 {
 }
 

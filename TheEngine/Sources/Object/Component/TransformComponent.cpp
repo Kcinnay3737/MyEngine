@@ -3,7 +3,7 @@
 
 using namespace NPEngine;
 
-TransformComponent::TransformComponent(std::string& Name) : Component(Name)
+TransformComponent::TransformComponent(const std::string& Name) : Component(Name)
 {
 	_Position.X = 0.0f;
 	_Position.Y = 0.0f;
@@ -19,7 +19,7 @@ bool TransformComponent::Initialise(const Param& Params)
 	Component::Initialise(Params);
 
 	Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
-	auto& IT = Params.find(std::string("Position"));
+	auto IT = Params.find(std::string("Position"));
 	if (IT != Params.end())
 	{
 		Position = std::any_cast<Vector2D<float>>(IT->second);

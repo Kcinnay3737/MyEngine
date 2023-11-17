@@ -23,7 +23,7 @@ namespace NPEngine
 		Button(const std::string& Name);
 		virtual ~Button() = default;
 
-		virtual Actor* Clone(std::string& Name, const Param& Params = Param{}) override;
+		virtual Actor* Clone(const std::string& Name, const Param& Params = Param{}) override;
 
 	protected:
 		virtual bool Initialise(const Param& Params) override;

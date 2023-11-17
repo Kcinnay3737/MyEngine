@@ -17,7 +17,7 @@ namespace NPEngine
 		Actor* _OwnerActor = nullptr;
 
 	public:
-		Component(std::string& Name);
+		Component(const std::string& Name);
 		virtual ~Component() = default;
 
 	protected:

@@ -185,7 +185,7 @@ void World::OnCreateActor()
 		//Check if actor is valid
 		if (!NewActor) continue;
 
-		std::string& NewActorName = NewActor->GetName();
+		std::string NewActorName = NewActor->GetName();
 		IActorWorld* ActorWorld = static_cast<IActorWorld*>(NewActor);
 
 		//Check if an actor already has this name
@@ -256,14 +256,14 @@ void World::DeleteActorByName(const std::string& Name, const Param& Params)
 
 void World::AddActorToCallCreateComponent(const std::string& Name)
 {
-	auto& IT = _ActorsToCallCreateComponent.find(Name);
+	auto IT = _ActorsToCallCreateComponent.find(Name);
 	if (IT != _ActorsToCallCreateComponent.end()) return;
 	_ActorsToCallCreateComponent[Name] = true;
 }
 
 void World::AddActorToCallDeleteComponent(const std::string& Name)
 {
-	auto& IT = _ActorsToCallDeleteComponent.find(Name);
+	auto IT = _ActorsToCallDeleteComponent.find(Name);
 	if (IT != _ActorsToCallDeleteComponent.end()) return;
 	_ActorsToCallDeleteComponent[Name] = true;
 }

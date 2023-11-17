@@ -18,7 +18,7 @@ namespace NPEngine
 		Flip _Flip = Flip();
 
 	public:
-		SpriteComponent(std::string& Name);
+		SpriteComponent(const std::string& Name);
 		virtual ~SpriteComponent() = default;
 
 		void LoadTexture(const std::string& TexturePath);

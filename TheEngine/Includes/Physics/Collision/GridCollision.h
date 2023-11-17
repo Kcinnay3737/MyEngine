@@ -35,7 +35,7 @@ namespace NPEngine
 
 		virtual void DrawCollision() override;
 
-		void SetGrid(std::vector<std::vector<bool>>& Grid) { _Grid = Grid; }
+		void SetGrid(const std::vector<std::vector<bool>>& Grid) { _Grid = Grid; }
 		const std::vector<std::vector<bool>>& GetGrid() const { return _Grid; }
 
 		void SetPositionOffset(Vector2D<float> PositionOffset) { _PositionOffset = PositionOffset; }

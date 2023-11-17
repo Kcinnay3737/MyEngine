@@ -32,7 +32,7 @@ namespace NPEngine
 		std::unordered_map<std::type_index, bool> _IgnoreActorClass;
 
 	public:
-		PhysicsComponent(std::string& Name);
+		PhysicsComponent(const std::string& Name);
 		virtual ~PhysicsComponent() = default;
 
 	private:

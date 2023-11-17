@@ -11,7 +11,7 @@ namespace NPEngine
 		float _MoveSpeed = 200.0f;
 
 	public:
-		ControllerComponent(std::string& Name);
+		ControllerComponent(const std::string& Name);
 		virtual ~ControllerComponent() = default;
 
 	private:

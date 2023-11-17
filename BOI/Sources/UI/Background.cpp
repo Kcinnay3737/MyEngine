@@ -15,7 +15,7 @@ bool Background::Initialise(const Param& Params)
 }
 
 
-Actor* Background::Clone(std::string& Name, const Param& Params)
+Actor* Background::Clone(const std::string& Name, const Param& Params)
 {
 	Background* NewBackground = new  Background(Name);
 	return NewBackground;

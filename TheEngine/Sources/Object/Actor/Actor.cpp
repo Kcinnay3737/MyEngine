@@ -16,7 +16,7 @@ bool Actor::Initialise(const Param& Params)
 {
 	_TransformComponent = CreateComponentOfClass<TransformComponent>(std::string("Transform"), Params);
 
-	auto& IT = Params.find(std::string("DrawDepth"));
+	auto IT = Params.find(std::string("DrawDepth"));
 	if (IT != Params.end())
 	{
 		int DrawDepth = std::any_cast<int>(IT->second);
@@ -109,7 +109,7 @@ void Actor::AddComponent(Component* Component, const Param& Params)
 	Engine::GetWorld()->AddActorToCallCreateComponent(GetName());
 }
 
-void Actor::DeleteComponentByName(std::string& Name, const Param& Params)
+void Actor::DeleteComponentByName(const std::string& Name, const Param& Params)
 {
 	DataComponentToDelete DataActor = DataComponentToDelete();
 	DataActor.ComponentName = Name;
@@ -127,7 +127,7 @@ void Actor::OnCreateComponent()
 
 		if (!NewComponent) continue;
 
-		std::string& NewComponentName = NewComponent->GetName();
+		std::string NewComponentName = NewComponent->GetName();
 		IActorComponent* ActorComponent = static_cast<IActorComponent*>(NewComponent);
 
 		//Check if an compoennt already has this name
@@ -209,7 +209,7 @@ void Actor::OnDeleteComponent()
 
 //---------------------------------------------------------
 
-Actor* Actor::Clone(std::string& Name, const Param& Params)
+Actor* Actor::Clone(const std::string& Name, const Param& Params)
 {
 	Actor* CloneActor = new Actor(Name);
 	return CloneActor;
@@ -224,9 +224,9 @@ void Actor::SetDrawDepth(unsigned char DrawDepth)
 
 //Getter, setter -----------------------------------------
 
-Component* Actor::GetComponentByName(std::string& Name) const
+Component* Actor::GetComponentByName(const std::string& Name) const
 {
-	auto& IT = _Components.find(Name);
+	auto IT = _Components.find(Name);
 	if (IT == _Components.end()) return nullptr;
 	return IT->second;
 }

@@ -3,7 +3,7 @@
 
 using namespace NPEngine;
 
-AtlasComponent::AtlasComponent(std::string& Name) : SpriteComponent(Name)
+AtlasComponent::AtlasComponent(const std::string& Name) : SpriteComponent(Name)
 {
 }
 
@@ -11,7 +11,7 @@ bool AtlasComponent::Initialise(const Param& Params)
 {
 	SpriteComponent::Initialise(Params);
 
-	auto& IT = Params.find("TileSize");
+	auto IT = Params.find("TileSize");
 	if (IT != Params.end())
 	{
 		_TileSize = std::any_cast<Vector2D<int>>(IT->second);

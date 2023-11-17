@@ -10,7 +10,7 @@
 
 using namespace NPEngine;
 
-PhysicsComponent::PhysicsComponent(std::string& Name) : Component(Name)
+PhysicsComponent::PhysicsComponent(const std::string& Name) : Component(Name)
 {
 
 }
@@ -19,7 +19,7 @@ bool PhysicsComponent::Initialise(const Param& Params)
 {
 	bool Success = Component::Initialise(Params);
 
-	auto& IT = Params.find("IgnoreActor");
+	auto IT = Params.find("IgnoreActor");
 	if (IT != Params.end())
 	{
 		const std::vector<std::type_index>& IgnoreActorClass = std::any_cast<const std::vector<std::type_index>&>(IT->second);
@@ -214,7 +214,7 @@ bool PhysicsComponent::GetIgnoreActorClass(Actor* CheckActor)
 
 	std::type_index TypeIndex(typeid(*CheckActor));
 
-	auto& IT = _IgnoreActorClass.find(TypeIndex);
+	auto IT = _IgnoreActorClass.find(TypeIndex);
 	if (IT == _IgnoreActorClass.end()) return false;
 
 	return true;

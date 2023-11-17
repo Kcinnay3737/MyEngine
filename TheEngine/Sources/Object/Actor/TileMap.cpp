@@ -18,7 +18,7 @@ bool TileMap::Initialise(const Param& Params)
 
 	CreateComponentOfClass<PhysicsComponent>(std::string("PhysicsComponent"), Params);
 
-	auto& IT = Params.find("CollisionLayer");
+	auto IT = Params.find("CollisionLayer");
 	if (IT != Params.end())
 	{
 		_CollisionLayer = std::any_cast<const std::vector<int>&>(IT->second);
@@ -74,7 +74,7 @@ void TileMap::BeginPlay()
 	}
 }
 
-Actor* TileMap::Clone(std::string& Name, const Param& Params)
+Actor* TileMap::Clone(const std::string& Name, const Param& Params)
 {
 	TileMap* CloneActor = new TileMap(Name);
 	return CloneActor;

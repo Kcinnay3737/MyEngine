@@ -22,7 +22,7 @@ namespace NPEngine
 		Projectil(const std::string& Name);
 		virtual ~Projectil() = default;
 
-		virtual Actor* Clone(std::string& Name, const Param& Params = Param{});
+		virtual Actor* Clone(const std::string& Name, const Param& Params = Param{});
 
 	private:
 		virtual bool Initialise(const Param& Params) override;

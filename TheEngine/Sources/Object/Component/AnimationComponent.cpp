@@ -2,7 +2,7 @@
 
 using namespace NPEngine;
 
-AnimationComponent::AnimationComponent(std::string& Name) : AtlasComponent(Name)
+AnimationComponent::AnimationComponent(const std::string& Name) : AtlasComponent(Name)
 {
 }
 
@@ -18,14 +18,14 @@ void AnimationComponent::RemoveAnimation(const std::string& AnimationName)
 
 AnimationData& AnimationComponent::GetAnimationData(const std::string& AnimationName)
 {
-	auto& IT = _Animations.find(AnimationName);
+	auto IT = _Animations.find(AnimationName);
 	if (IT == _Animations.end()) return _BaseAnimationData;
 	return IT->second;
 }
 
 void AnimationComponent::SetCurrentAnimation(const std::string AnimationName)
 {
-	auto& IT = _Animations.find(AnimationName);
+	auto IT = _Animations.find(AnimationName);
 	if (IT == _Animations.end()) return;
 
 	_CurrentAnimation = IT->second;
