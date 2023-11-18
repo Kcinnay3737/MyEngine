@@ -3,7 +3,4 @@ Deployment/**
 !Deployment/Keepme
 !Deployment/Assets
 !Deployment/Assets/**
-
-External/**
-!External/Download
-!Deployment/Download/**
+External/Boost/Libs/**

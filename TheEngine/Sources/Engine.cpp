@@ -6,7 +6,7 @@
 #include "Audio/SDLAudio.h"
 #include "World/InstanceManager/InstanceManager.h"
 #include "Physics/Physics.h"
-//#include <AIToolbox/MDP/Algorithms/QLearning.hpp>
+#include <AIToolbox/MDP/Algorithms/QLearning.hpp>
 #if _DEBUG
 #include "Logger/ConsoleLogger.h"
 #else
