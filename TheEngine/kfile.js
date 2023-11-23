@@ -29,12 +29,18 @@ project.addDefine("KINC_STATIC_COMPILE");
 project.isStaticLib = true;
 
 project.addIncludeDir(path.resolve("./TheEngine/Includes"));
-project.addIncludeDir("./External/AI-Toolbox/include");
-project.addIncludeDir("./External/eigen");
-project.addIncludeDir("./External/Boost");
-project.addFiles('Sources/**','Includes/**',
-    "External/eigen/Eigen/**",
-    "External/AI-Toolbox/src/MDP/**"
+project.addIncludeDir(path.resolve("./External/eigen"));
+project.addIncludeDir(path.resolve("./External/Boost"));
+project.addIncludeDir(path.resolve("./External/AI-Toolbox/include"));
+
+project.addFiles(
+    'Sources/**',
+    'Includes/**',
+    //path.resolve("./External/AI-Toolbox/src/Bandit/**"),
+    //path.resolve("./External/AI-Toolbox/src/Factored/**"),
+    path.resolve("./External/AI-Toolbox/src/MDP/**"),
+    path.resolve("./External/AI-Toolbox/src/Utils/**"),
+    path.resolve("./External/AI-Toolbox/src/Seeder/**")
 );
 
 project.addProvider(project,false);
