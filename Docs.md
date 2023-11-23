@@ -12,6 +12,10 @@ j'ai par la suite fini l'importation des libraries au projet et fais le menage d
 et je n'avais pas bien inclus tout les fichier cpp necessaire je me suis donc acharner a chercher tout les folder donc j'avais besoin ce 
 qui au final jai reussi a trouver.
 
+3. J'ai voulus incorporer la libraries AI toolbox dans la game et non dans l'engine mais cela me causai quelque probleme et je n'arrivais pas
+a incorporer les library sans mettre le projet en static lib ce qui ne fonctionne pas donc jai pris la decision de les mettre dans l'engine
+et de faire un provider pour permettre a la game d'y acceder.
+
 # Outils choisis et justifications
 Comme outils pour m'aider a accomplir la tache jai choisis AI-Toolbox qui est une library contenant plusieur algorithme 
 pour faire du reinforcement learning ecrite en c++ ce qui correspond bien a l'objectif que je tentes d'accomplir.

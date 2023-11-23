@@ -18,5 +18,15 @@ namespace NPEngine
 		AITBQLearning();
 		virtual ~AITBQLearning() = default;
 
+		//IAIQLearning interface
+		virtual void Initialize(int StateSize, int ActionSize, double LearningRate, double DiscountFactor) override;
+
+		virtual int GetAction(int State) const override;
+
+		virtual void UpdateQTable(int CurrentState, int Action, double Reward, int NewState) override;
+
+		virtual void SaveQTable(const std::string& filePath) override;
+		virtual void LoadQTable(const std::string& filePath) override;
+		//---------------------
 	};
 }
