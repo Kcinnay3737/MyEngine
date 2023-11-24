@@ -27,5 +27,13 @@ namespace NPEngine
 		virtual void BeginPlay() override;
 		virtual void Update(float DeltaTime) override;
 
+		//AI function
+		virtual int GetCurrentState();
+		virtual void PerformAction(int Action);
+		virtual int ObserveNewState();
+		virtual double ObserveReward();
+		//----------
+
+	public:
 	};
 }

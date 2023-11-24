@@ -2,28 +2,65 @@
 
 using namespace NPEngine;
 
-AITBQLearning::AITBQLearning()
+AITBQLearning::AITBQLearning(int StateSize, int ActionSize, double LearningRate, double DiscountFactor, double Epsilon)
 {
-	
+	_Model = new AIToolbox::MDP::Model(StateSize, ActionSize, DiscountFactor);
+	_QLearning = new AIToolbox::MDP::QLearning(StateSize, ActionSize, DiscountFactor, LearningRate);
+	_QGreedyPolicy = new AIToolbox::MDP::QGreedyPolicy(_QLearning->getQFunction());
+	_EpsilonPolicy = new AIToolbox::MDP::EpsilonPolicy(*_QGreedyPolicy, Epsilon);
+	_Epsilon = Epsilon;
 }
 
-void NPEngine::AITBQLearning::Initialize(int StateSize, int ActionSize, double LearningRate, double DiscountFactor)
+AITBQLearning::~AITBQLearning()
 {
+	delete _Model;
+	delete _QLearning;
+	delete _QGreedyPolicy;
+	delete _EpsilonPolicy;
 }
 
-int NPEngine::AITBQLearning::GetAction(int State) const
+void AITBQLearning::Initialize(int StateSize, int ActionSize, double LearningRate, double DiscountFactor, double Epsilon)
 {
-	return 0;
+	delete _Model;
+	delete _QLearning;
+	delete _QGreedyPolicy;
+	delete _EpsilonPolicy;
+
+	_Model = new AIToolbox::MDP::Model(StateSize, ActionSize, DiscountFactor);
+	_QLearning = new AIToolbox::MDP::QLearning(StateSize, ActionSize, DiscountFactor, LearningRate);
+	_QGreedyPolicy = new AIToolbox::MDP::QGreedyPolicy(_QLearning->getQFunction());
+	_EpsilonPolicy = new AIToolbox::MDP::EpsilonPolicy(*_QGreedyPolicy, Epsilon);
+	_Epsilon = Epsilon;
 }
 
-void NPEngine::AITBQLearning::UpdateQTable(int CurrentState, int Action, double Reward, int NewState)
+int AITBQLearning::GetAction(int State) const
 {
+	return _EpsilonPolicy->sampleAction(State);
 }
 
-void NPEngine::AITBQLearning::SaveQTable(const std::string& filePath)
+void AITBQLearning::UpdateQTable(int CurrentState, int Action, double Reward, int NewState)
 {
+	_QLearning->stepUpdateQ(CurrentState, Action, NewState, Reward);
+	_EpsilonPolicy = new AIToolbox::MDP::EpsilonPolicy(*_QGreedyPolicy, _Epsilon);
 }
 
-void NPEngine::AITBQLearning::LoadQTable(const std::string& filePath)
+void AITBQLearning::SetLearningRate(double LearningRate)
 {
+	_QLearning->setLearningRate(LearningRate);
+}
+
+double AITBQLearning::GetLearningRate() const
+{
+	return _QLearning->getLearningRate();
+}
+
+void AITBQLearning::SetDiscountFactor(double DiscountFactor)
+{
+	_Model->setDiscount(DiscountFactor);
+	_QLearning->setDiscount(DiscountFactor);
+}
+
+double AITBQLearning::GetDiscountFactor() const
+{
+	return _QLearning->getDiscount();
 }
