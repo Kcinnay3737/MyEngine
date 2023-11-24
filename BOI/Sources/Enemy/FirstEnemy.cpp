@@ -31,3 +31,22 @@ void FirstEnemy::Update(float DeltaTime)
 {
 	AI::Update(DeltaTime);
 }
+
+int FirstEnemy::GetCurrentState()
+{
+	return 0;
+}
+
+void FirstEnemy::PerformAction(int Action)
+{
+}
+
+int FirstEnemy::GetNewState()
+{
+	return 0;
+}
+
+double FirstEnemy::GetReward()
+{
+	return 0.0;
+}

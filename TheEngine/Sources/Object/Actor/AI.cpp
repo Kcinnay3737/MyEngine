@@ -45,8 +45,8 @@ void AI::Update(float DeltaTime)
 
 	PerformAction(Action);
 
-	int NewState = ObserveNewState();
-	double Reward = ObserveReward();
+	int NewState = GetNewState();
+	double Reward = GetReward();
 
 	_IAQLearning->UpdateQTable(CurrentState, Action, Reward, NewState);
 }
@@ -60,12 +60,12 @@ void AI::PerformAction(int Action)
 {
 }
 
-int AI::ObserveNewState()
+int AI::GetNewState()
 {
 	return 0;
 }
 
-double AI::ObserveReward()
+double AI::GetReward()
 {
 	return 0.0;
 }

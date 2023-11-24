@@ -9,12 +9,16 @@
 #include "Player/Issac.h"
 #include "UI/ButtonLoadScene.h"
 #include "UI/Background.h"
+#include "Enemy/FirstEnemy.h"
 
 using namespace NPEngine;
 
 void InitGameplay(void)
 {
 	Vector2D<int> ScreenSize = Engine::GetGraphics()->GetScreenSize();
+
+	//AI
+	FirstEnemy* NewFirstEnemy = new FirstEnemy(std::string("FirstEnemy"));
 
 	//Create and Add instance into instance manager
 	TileMap* TileMapLevel1 = new TileMap(std::string("TileMapLevel1"));

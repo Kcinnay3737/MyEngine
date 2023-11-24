@@ -30,8 +30,8 @@ namespace NPEngine
 		//AI function
 		virtual int GetCurrentState();
 		virtual void PerformAction(int Action);
-		virtual int ObserveNewState();
-		virtual double ObserveReward();
+		virtual int GetNewState();
+		virtual double GetReward();
 		//----------
 
 	public:
