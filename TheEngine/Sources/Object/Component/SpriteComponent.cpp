@@ -31,6 +31,8 @@ bool SpriteComponent::Initialise(const Param& Params)
 
 void SpriteComponent::Draw()
 {
+	if (!_bDraw) return;
+
 	if (_bTextureIsLoaded)
 	{
 		Engine::GetGraphics()->DrawTexture(_TextureID, Rectangle2D<float>(GetPosition(), GetSize()), Color::White, 0.0f, _Flip);
@@ -56,17 +58,17 @@ Vector2D<float> SpriteComponent::GetPosition() const
 
 Vector2D<float> SpriteComponent::GetSize() const
 {
-	Vector2D<float> Position = Vector2D<float>(0.0f, 0.0f);
+	Vector2D<float> Size = Vector2D<float>(0.0f, 0.0f);
 
 	if (_OwnerActor)
 	{
 		TransformComponent* CurrTransformComponent = _OwnerActor->GetComponentOfClass<TransformComponent>();
 		if (CurrTransformComponent)
 		{
-			Position += CurrTransformComponent->GetSize();
+			Size += CurrTransformComponent->GetSize();
 		}
 	}
-	Position += _OffsetSize;
+	Size += _OffsetSize;
 
-	return Position;
+	return Size;
 }

@@ -37,6 +37,8 @@ namespace NPEngine
 	class World final : public IWorld, public IObjectManager
 	{
 	private:
+		Param _PersistenteData;
+
 		std::unordered_map<size_t, Object*> _IDObject;
 
 		std::vector<std::string> _ActorsToCallBeginPlay;
@@ -77,6 +79,9 @@ namespace NPEngine
 		//-------------
 		
 		void ResetDrawOrder();
+
+		void AddInPersistenteData(const std::string& Key, std::any Value);
+		void RemoveInPersitenteData(const std::string& Key);
 
 	private:
 		virtual bool Initialize(const Param& Params) override;
@@ -154,7 +159,7 @@ namespace NPEngine
 		static_assert(std::is_base_of<Actor, T>::value, "T must be a derived class of Actor");
 
 		std::type_index TypeIndex(typeid(T));
-		auto& IT = _ClassActors.find(TypeIndex);
+		auto IT = _ClassActors.find(TypeIndex);
 
 		if (IT != _ClassActors.end() && !IT->second.empty())
 		{
@@ -162,9 +167,9 @@ namespace NPEngine
 			if (ActorOfClass) return ActorOfClass;
 		}
 
-		for (auto& IT : _ClassActors)
+		for (auto ITClassActor : _ClassActors)
 		{
-			for (Actor* BaseActor : IT->second)
+			for (Actor* BaseActor : ITClassActor.second)
 			{
 				T* DerivedActor = dynamic_cast<T*>(BaseActor);
 				if (DerivedActor) return DerivedActor;
@@ -181,9 +186,9 @@ namespace NPEngine
 
 		std::vector<T*> ActorsOfClass;
 
-		for (auto& IT : _ClassActors)
+		for (auto IT : _ClassActors)
 		{
-			for (Actor* BaseActor : IT->second)
+			for (Actor* BaseActor : IT.second)
 			{
 				T* DerivedActor = dynamic_cast<T*>(BaseActor);
 				if (!DerivedActor) break;

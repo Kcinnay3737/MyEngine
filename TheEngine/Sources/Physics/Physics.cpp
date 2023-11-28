@@ -22,24 +22,13 @@ void Physics::UpdatePhysics(float DeltaTime)
     {
         PhysicsComponent* CurrPhysicsComponent = IT.second;
         if(!CurrPhysicsComponent) continue;
-        
-        if (CurrPhysicsComponent->GetIsMovable())
-        {
-            std::vector<CollisionData> CurrCollisionsData = CurrPhysicsComponent->ApplyVelocity(DeltaTime);
 
-            if (!CurrCollisionsData.empty())
-            {
-                MapCurrentCollision[CurrPhysicsComponent] = CurrCollisionsData;
-            }
-        }
-        else if (CurrPhysicsComponent->GetIsCalculeCollision())
+		CurrPhysicsComponent->ApplyVelocity(DeltaTime);
+
+        if (CurrPhysicsComponent->GetIsCalculeCollision())
         {
             std::vector<CollisionData> CurrCollisionsData = CurrPhysicsComponent->CheckCollision();
-
-			if (!CurrCollisionsData.empty())
-			{
-				MapCurrentCollision[CurrPhysicsComponent] = CurrCollisionsData;
-			}
+            MapCurrentCollision[CurrPhysicsComponent] = CurrCollisionsData;
         }
     }
 
@@ -47,7 +36,7 @@ void Physics::UpdatePhysics(float DeltaTime)
     {
 		PhysicsComponent* CurrPhysicsComponent = IT.first;
 		if (!CurrPhysicsComponent) continue;
-        CurrPhysicsComponent->OnCollision.Broadcast(IT.second);
+        CurrPhysicsComponent->CorrectMovement(IT.second);
     }
 }
 

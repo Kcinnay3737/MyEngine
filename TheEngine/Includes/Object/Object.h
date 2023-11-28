@@ -17,6 +17,8 @@ namespace NPEngine
 		Object();
 		virtual ~Object();
 
+		size_t GetID() const { return _ID; }
+
 	private:
 		size_t GetNextID();
 	};

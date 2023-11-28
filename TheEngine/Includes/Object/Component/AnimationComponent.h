@@ -9,6 +9,7 @@ namespace NPEngine
 		float FrameInterval = 0.0f;
 		int StartIndex = 0;
 		int EndIndex = 0;
+		bool bLoop = true;
 
 		Flip AnimationFlip = Flip();
 	};

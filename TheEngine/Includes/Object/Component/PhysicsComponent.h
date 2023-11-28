@@ -28,6 +28,7 @@ namespace NPEngine
 		bool _bIsMovable = true;
 		bool _bIsPhysicsVolume = true;
 		bool _bCalculeCollision = true;
+		bool _bCorrectMovement = true;
 
 		std::unordered_map<std::type_index, bool> _IgnoreActorClass;
 
@@ -43,15 +44,16 @@ namespace NPEngine
 
 		void CorrectMagnetude();
 
-		std::vector<CollisionData> CorrectMovement();
-
 	public:
 		void SetDrawCollision(bool bDrawCollision) { _bDrawCollision = bDrawCollision; }
 
 		Vector2D<float> GetVelocity();
 		void SetVelocity(const Vector2D<float>& NewVelocity);
 		void AddVelocity(const Vector2D<float>& VelociyToAdd);
-		std::vector<CollisionData> ApplyVelocity(float DeltaTime);
+		void ApplyVelocity(float DeltaTime);
+
+		void CorrectMovement(const std::vector<CollisionData>& AllCollisionData);
+
 
 		bool GetIsMovable() const { return _bIsMovable; }
 		void SetIsMovable(bool IsMovable) { _bIsMovable = IsMovable; }
@@ -61,6 +63,9 @@ namespace NPEngine
 
 		bool GetIsPhysicsVolume() const { return _bIsPhysicsVolume; }
 		void SetIsPhysicsVolume(bool bIsPhyscicsVolume) { _bIsPhysicsVolume = bIsPhyscicsVolume; }
+
+		bool GetCorrectMovement() const { return _bCorrectMovement; }
+		void SetCorrectMovement(bool bCorrectMovement) { _bCorrectMovement = bCorrectMovement; }
 
 		std::vector<CollisionData> CheckCollision();
 

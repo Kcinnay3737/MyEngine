@@ -22,6 +22,8 @@ bool AtlasComponent::Initialise(const Param& Params)
 
 void AtlasComponent::Draw()
 {
+	if (!_bDraw) return;
+
 	if (_bTextureIsLoaded)
 	{
 		Engine::GetGraphics()->DrawTextureTile(_TextureID, Rectangle2D<float>(GetPosition(), GetSize()), _TileSize, _CurrTileIndex, Color::White, 0.0f, _Flip);

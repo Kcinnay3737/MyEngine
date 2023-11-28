@@ -17,7 +17,7 @@ bool AI::Initialise(const Param& Params)
 {
 	bool bSucces = Actor::Initialise(Params);
 
-	_IAQLearning = new AITBQLearning(0, 0, 0.0, 0.0, 0.0);
+	_IAQLearning = new AITBQLearning(1, 1, 0.1, 0.1, 0.1, 0.99, 0.1f);
 
 	return bSucces;
 }
@@ -49,6 +49,8 @@ void AI::Update(float DeltaTime)
 	double Reward = GetReward();
 
 	_IAQLearning->UpdateQTable(CurrentState, Action, Reward, NewState);
+
+	_IAQLearning->UpdateEpsilon(DeltaTime);
 }
 
 int AI::GetCurrentState()

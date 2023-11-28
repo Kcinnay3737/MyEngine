@@ -435,6 +435,16 @@ void World::ResetDrawOrder()
 	_DrawActorOrder.clear();
 }
 
+void World::AddInPersistenteData(const std::string& Key, std::any Value)
+{
+	_PersistenteData[Key] = Value;
+}
+
+void World::RemoveInPersitenteData(const std::string& Key)
+{
+	_PersistenteData.erase(Key);
+}
+
 void World::AddObject(size_t ID, Object* NewObject)
 {
 	_IDObject[ID] = NewObject;

@@ -77,6 +77,11 @@ void Projectil::Update(float DeltaTime)
 
 void Projectil::OnHit(const std::vector<CollisionData>& CollisionsData)
 {
+	for (const CollisionData& CurrCollisionData : CollisionsData)
+	{
+		CurrCollisionData.OtherActor->TakeHit(_Damage);
+	}
+
 	Engine::GetWorld()->DeleteActorByName(GetName());
 }
 

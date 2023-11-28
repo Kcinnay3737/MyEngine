@@ -6,19 +6,28 @@
 #include "Engine.h"
 
 #include "Object/Actor/TileMap.h"
-#include "Player/Issac.h"
+#include "Player/Isaac.h"
 #include "UI/ButtonLoadScene.h"
 #include "UI/Background.h"
 #include "Enemy/FirstEnemy.h"
+#include "Door.h"
+#include <ctime> 
 
 using namespace NPEngine;
 
 void InitGameplay(void)
 {
+	srand((unsigned)time(0));
+
 	Vector2D<int> ScreenSize = Engine::GetGraphics()->GetScreenSize();
 
 	//AI
 	FirstEnemy* NewFirstEnemy = new FirstEnemy(std::string("FirstEnemy"));
+	Engine::GetInstanceManager()->AddInstance(NewFirstEnemy, 
+	{
+		{"Size", Vector2D<float>(75.0f, 75.0f)},
+		{"DrawDepth", 2}
+	});
 
 	//Create and Add instance into instance manager
 	TileMap* TileMapLevel1 = new TileMap(std::string("TileMapLevel1"));
@@ -34,8 +43,7 @@ void InitGameplay(void)
 	Isaac* NewIsaac = new Isaac(std::string("Isaac"));
 	Engine::GetInstanceManager()->AddInstance(NewIsaac,
 	{
-		{"Position", Vector2D<float>(600.0f, 300.0f)},
-		{"DrawDepth", 1}
+		{"DrawDepth", 2}
 	});
 
 	Background* BackgroundMenu = new Background(std::string("BackgroundMenu"));
@@ -60,6 +68,20 @@ void InitGameplay(void)
 		{"DrawDepth", 1}
 	});
 
+	Door* DoorLevel1 = new Door(std::string("DoorLevel1"));
+	Engine::GetInstanceManager()->AddInstance(DoorLevel1,
+	{
+		{"OpenLevelName", std::string("SceneGame2")},
+		{"DrawDepth", 1}
+	});
+
+	Door* DoorLevel2 = new Door(std::string("DoorLevel2"));
+	Engine::GetInstanceManager()->AddInstance(DoorLevel2,
+	{
+		{"OpenLevelName", std::string("SceneGame3")},
+		{"DrawDepth", 1}
+	});
+
 	//Create the scene
 	Scene* SceneMenu = Engine::GetWorld()->CreateScene(std::string("SceneMenu"));
 	if (SceneMenu)
@@ -73,6 +95,24 @@ void InitGameplay(void)
 	{
 		SceneGame1->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneGame1->SetNumberSpawnPrototype("Isaac", 1);
+		SceneGame1->SetNumberSpawnPrototype("FirstEnemy", 2);
+		SceneGame1->SetNumberSpawnPrototype("DoorLevel1", 1);
+	}
+
+	Scene* SceneGame2 = Engine::GetWorld()->CreateScene(std::string("SceneGame2"));
+	if (SceneGame2)
+	{
+		SceneGame2->SetNumberSpawnPrototype("TileMapLevel1", 1);
+		SceneGame2->SetNumberSpawnPrototype("Isaac", 1);
+		SceneGame2->SetNumberSpawnPrototype("FirstEnemy", 5);
+		SceneGame2->SetNumberSpawnPrototype("DoorLevel2", 1);
+	}
+
+	Scene* SceneGame3 = Engine::GetWorld()->CreateScene(std::string("SceneGame3"));
+	if (SceneGame3)
+	{
+		SceneGame3->SetNumberSpawnPrototype("TileMapLevel1", 1);
+		SceneGame3->SetNumberSpawnPrototype("Isaac", 1);
 	}
 
 	//Load first scene

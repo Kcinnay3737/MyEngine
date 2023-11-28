@@ -36,6 +36,8 @@ void AnimationComponent::SetCurrentAnimation(const std::string AnimationName)
 
 void AnimationComponent::Update(float DeltaTime)
 {
+	if (GetTileIndex() == _CurrentAnimation.EndIndex && !_CurrentAnimation.bLoop) return;
+
 	_CurrentFrameTime += DeltaTime;
 
 	if (_CurrentFrameTime >= _CurrentAnimation.FrameInterval)

@@ -17,6 +17,8 @@ namespace NPEngine
 
 		Flip _Flip = Flip();
 
+		bool _bDraw = true;
+
 	public:
 		SpriteComponent(const std::string& Name);
 		virtual ~SpriteComponent() = default;
@@ -40,5 +42,7 @@ namespace NPEngine
 
 		void SetFlip(Flip NewFlip) { _Flip = NewFlip; }
 		Flip GetFlip() const { return _Flip; }
+
+		void SetDraw(bool bDraw) { _bDraw = bDraw; }
 	};
 }

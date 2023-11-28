@@ -112,8 +112,15 @@ void PhysicsComponent::AddVelocity(const Vector2D<float>& VelociyToAdd)
 	CorrectMagnetude();
 }
 
-std::vector<CollisionData> PhysicsComponent::ApplyVelocity(float DeltaTime)
+void PhysicsComponent::ApplyVelocity(float DeltaTime)
 {
+	if (!_bIsMovable) return;
+
+	if (DeltaTime > 0.5f)
+	{
+		DeltaTime = 0.5f;
+	}
+
 	TransformComponent* CurrTransformComponent = GetOwner()->GetComponentOfClass<TransformComponent>();
 	if (CurrTransformComponent)
 	{
@@ -121,22 +128,27 @@ std::vector<CollisionData> PhysicsComponent::ApplyVelocity(float DeltaTime)
 	}
 
 	SetVelocity(Vector2D<float>(0.0f, 0.0f));
-
-	return CorrectMovement();
 }
 
 std::vector<CollisionData> PhysicsComponent::CheckCollision()
 {
-	return Engine::GetPhysics()->CheckCollisionWith(GetCollision());
+	std::vector<CollisionData> CollisionsData = Engine::GetPhysics()->CheckCollisionWith(GetCollision());
+
+	if (!CollisionsData.empty())
+	{
+		OnCollision.Broadcast(CollisionsData);
+	}
+	
+	return CollisionsData;
 }
 
-std::vector<CollisionData> PhysicsComponent::CorrectMovement()
+void PhysicsComponent::CorrectMovement(const std::vector<CollisionData>& AllCollisionData)
 {
-	std::vector<CollisionData> AllCollisionData = CheckCollision();
+	if (!_bCorrectMovement) return;
 
 	Vector2D<float> CurrentCorrectionMovement = Vector2D<float>(0.0f, 0.0f);
 
-	for (CollisionData& CurrCollisionData : AllCollisionData)
+	for (const CollisionData& CurrCollisionData : AllCollisionData)
 	{
 		if (std::abs(CurrCollisionData.MovementCorrection.X) > std::abs(CurrentCorrectionMovement.X))
 		{
@@ -154,8 +166,6 @@ std::vector<CollisionData> PhysicsComponent::CorrectMovement()
 	{
 		CurrTransformComponent->AddPositionOffset(CurrentCorrectionMovement);
 	}
-
-	return AllCollisionData;
 }
 
 void PhysicsComponent::SetCollision(const ECollisionType& CollisionType)

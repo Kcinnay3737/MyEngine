@@ -53,6 +53,8 @@ namespace NPEngine
 		T* CreateComponentOfClass(const std::string& Name, const Param& Params = Param{});
 		//---------
 
+		virtual void TakeHit(float Damage) {};
+
 	protected:
 		virtual bool Initialise(const Param& Params) override;
 		virtual void Destroy(const Param& Params) override;

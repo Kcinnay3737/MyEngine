@@ -16,6 +16,8 @@ namespace NPEngine
 		Vector2D<float> _Direction = Vector2D<float>(0.0f, 0.0f);
 		float _MoveSpeed = 0.0f;
 
+		float _Damage = 1.0f;
+
 		PhysicsComponent* _PhysicsComponent = nullptr;
 
 	public:
