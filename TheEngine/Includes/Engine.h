@@ -14,6 +14,7 @@
 
 namespace NPEngine
 {
+	//Current engine state
 	struct EngineState
 	{
 	public:
@@ -26,10 +27,13 @@ namespace NPEngine
 	public:
 
 	private:
+		//The current engine instance
 		static Engine* _InstanceEngine;
 
+		//Current engine state
 		EngineState _EngineState = EngineState();
 
+		//All provider
 		IGraphicsProvider* _GraphicsProvider = nullptr;
 		IGraphics* _Graphics = nullptr;
 		IInputProvider* _InputProvider = nullptr;
@@ -48,25 +52,37 @@ namespace NPEngine
 		IPhysics* _Physics = nullptr;
 
 	public:
+		//Call for init engine
 		bool InitEngine(const char* Name, int Widht, int Height);
+		//Start the engine
 		void Start(void);
 
 	private:
+		//Call at start of frame
 		void StartFrame();
 
+		//Process all the current input
 		void ProcessInput();
+		//Call after process input
 		void PostInput();
 
+		//Update the physics in the world
 		void UpdatePhysics(float DeltaTime);
 
+		//Call each frame for update world
 		void Update(float DeltaTime);
+		//Call each frame after the update
 		void PostUpdate();
 
+		//Call each frame for render world
 		void Render(void);
+		//Call each frame after render
 		void PostRender();
 
+		//Call at end of frame
 		void EndFrame();
 
+		//Shut down all provider data and the engine
 		void Shutdown(void);
 
 	public:

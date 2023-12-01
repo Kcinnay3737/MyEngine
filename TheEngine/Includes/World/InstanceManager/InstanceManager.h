@@ -6,11 +6,14 @@ namespace NPEngine
 {
 	class Actor;
 
+	//Provider for instance manager
 	class InstanceManager : public IInstanceManager
 	{
 	private:
+		//Dictonary for all prototype
 		std::map<std::string, InstanceActor> _Instances;
 
+		//Just if get instance does not work
 		InstanceActor _BaseInstanceActor = InstanceActor();
 
 	public:

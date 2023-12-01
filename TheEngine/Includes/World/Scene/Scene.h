@@ -5,12 +5,15 @@
 
 namespace NPEngine
 {
+	//Scene provider
 	class Scene final : public IScene
 	{
 	public:
+		//Call when the scene is load
 		Delegate<void, const Param&> OnLoadScene;
 
 	private:
+		//All prototype to spawn on load
 		std::map<std::string, unsigned int> _PrototypeToSpawn;
 
 	public:

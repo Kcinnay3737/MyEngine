@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Scene provider interface friend with world class
 	class ISceneProvider
 	{
 		friend class World;
@@ -14,6 +15,7 @@ namespace NPEngine
 		virtual bool Initialize(const Param& Params = Param{}) = 0;
 		virtual void Destroy(const Param& Params = Param{}) = 0;
 
+		//Load all all data in the current scene
 		virtual void Load(const Param& Params = Param{}) = 0;
 		
 	};

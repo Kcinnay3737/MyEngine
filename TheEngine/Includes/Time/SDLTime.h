@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Time provider with sdl
 	class SDLTime final : public ITime
 	{
 	public:

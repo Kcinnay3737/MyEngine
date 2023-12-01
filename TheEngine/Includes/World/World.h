@@ -11,6 +11,7 @@ namespace NPEngine
 	class Object;
 	class Actor;
 
+	//Data for new actor to add this frame
 	struct DataActorToAdd
 	{
 	public:
@@ -19,6 +20,7 @@ namespace NPEngine
 		Param Params = Param{};
 	};
 
+	//Data for actor to delete this frame
 	struct DataActorToDelete
 	{
 	public:
@@ -26,6 +28,7 @@ namespace NPEngine
 		Param Params = Param{};
 	};
 
+	//Data for load a new scene
 	struct DataLoadScene
 	{
 	public:
@@ -34,29 +37,42 @@ namespace NPEngine
 		Param Params = Param{};
 	};
 
+	//Provider for world
 	class World final : public IWorld, public IObjectManager
 	{
 	private:
+		//Data never delete, just for save basic data
 		Param _PersistenteData;
 
+		//Dictonary with all object
 		std::unordered_map<size_t, Object*> _IDObject;
 
+		//All actor to call begin play at start of frame
 		std::vector<std::string> _ActorsToCallBeginPlay;
 
+		//All actor to call create component
 		std::map<std::string, bool> _ActorsToCallCreateComponent;
+		//All actor to call delete compoennt
 		std::map<std::string, bool> _ActorsToCallDeleteComponent;
 
+		//All actor with name
 		std::map<std::string, Actor*> _Actors;
+		//All actor with class
 		std::unordered_map<std::type_index, std::vector<Actor*>> _ClassActors;
 
+		//All data actor to add this frame
 		std::vector<DataActorToAdd> _ActorsToAdd;
+		//All data actor to delete this frame
 		std::vector<DataActorToDelete> _ActorsToDelete;
 
+		//All scene with name
 		std::map<std::string, Scene*> _Scenes;
 
+		//Current load scene data
 		DataLoadScene _DataLoadScene = DataLoadScene();
 
 		unsigned char _MaxDrawDepth = 0;
+		//Draw actor
 		std::vector<std::vector<Actor*>> _DrawActorOrder;
 
 	public:
@@ -71,18 +87,26 @@ namespace NPEngine
 		//Actor function
 		virtual void AddActor(Actor* Actor, const Param& Params = Param{}) override;
 		virtual void DeleteActorByName(const std::string& Name, const Param& Params = Param{}) override;
+		//Create new actor of class with Name
 		template <typename T>
 		T* CreateActorOfClass(const std::string& Name, const Param& Params = Param{});
 
+		//Add in list actor to call create component
 		void AddActorToCallCreateComponent(const std::string& Name);
+		//Add in list actor to call delete componenent
 		void AddActorToCallDeleteComponent(const std::string& Name);
 		//-------------
 		
+		//Reset the draw order 
 		void ResetDrawOrder();
 
+		//Add data in the persistente data
 		void AddInPersistenteData(const std::string& Key, std::any Value);
+		//Remove data in the persistente data
 		void RemoveInPersistenteData(const std::string& Key);
+		//Return the persistente data at Key
 		std::any GetInPersistenteData(const std::string& Key);
+		//Return if the persistente data countain
 		bool PersistenteDataContain(const std::string& Key);
 
 	private:
@@ -97,6 +121,7 @@ namespace NPEngine
 		virtual void UnloadScene() override;
 		virtual void OnLoadScene() override;
 
+		//Reset the current data load scene
 		void ResetDataLoadScene();
 		//-------------
 
@@ -116,7 +141,9 @@ namespace NPEngine
 		virtual void OnDeleteActor() override;
 		virtual void OnCreateActor() override;
 
+		//Call all create component on actor in list acotr to call create component
 		void OnCallActorCreateComponent();
+		//Call all delete component on actor in list acotr to call delete component
 		void OnCallActorDeleteComponent();
 		//-------------
 
@@ -130,8 +157,10 @@ namespace NPEngine
 		virtual Scene* GetSceneByName(const std::string& Name) override;
 
 		virtual Actor* GetActorByName(const std::string& Name) override;
+		//Return the actor with this class
 		template <typename T>
 		T* GetActorOfClass();
+		//Return all actor with this class
 		template <typename T>
 		std::vector<T*> GetAllActorOfClass();
 	};
