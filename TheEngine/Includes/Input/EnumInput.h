@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+//Emum for all input
+
 enum EButtonKeys : uint8_t
 {
 	Mouse_Left = 0,

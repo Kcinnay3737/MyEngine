@@ -5,6 +5,7 @@
 
 namespace NPEngine
 {
+	//Input provider with SDL
 	class SDLInput final : public IInput
 	{
 	public:

@@ -9,6 +9,8 @@ StateIsaacAlive::StateIsaacAlive()
 
 void StateIsaacAlive::OnEnter(Object* Owner)
 {
+	_ShootSoundId = Engine::GetAudio()->LoadSound(std::string("ShootSong.mp3"));
+
 	_OwnerIsaac = static_cast<Isaac*>(Owner);
 
 	_CurrShootDelay = _ShootDelay;
@@ -101,6 +103,8 @@ void StateIsaacAlive::UpdateShoot(float DeltaTime)
 			});
 		NewProjectil->SetMoveSpeed(1000.0f);
 		NewProjectil->SetDirection(_ShootDirection);
+
+		Engine::GetAudio()->PlaySound(_ShootSoundId);
 	}
 }
 

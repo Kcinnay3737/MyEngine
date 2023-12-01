@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Interface audio provider friend with engine class
 	class IAudioProvider : public IServiceProvider
 	{
 		friend class Engine;

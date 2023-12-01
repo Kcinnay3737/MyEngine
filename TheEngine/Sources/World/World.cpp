@@ -440,9 +440,23 @@ void World::AddInPersistenteData(const std::string& Key, std::any Value)
 	_PersistenteData[Key] = Value;
 }
 
-void World::RemoveInPersitenteData(const std::string& Key)
+void World::RemoveInPersistenteData(const std::string& Key)
 {
 	_PersistenteData.erase(Key);
+}
+
+std::any World::GetInPersistenteData(const std::string& Key)
+{
+	auto IT = _PersistenteData.find(Key);
+	if (IT == _PersistenteData.end()) return nullptr;
+	return IT->second;
+}
+
+bool World::PersistenteDataContain(const std::string& Key)
+{
+	auto IT = _PersistenteData.find(Key);
+	if (IT == _PersistenteData.end()) return false;
+	return true;
 }
 
 void World::AddObject(size_t ID, Object* NewObject)

@@ -10,6 +10,8 @@
 #include "UI/ButtonLoadScene.h"
 #include "UI/Background.h"
 #include "Enemy/FirstEnemy.h"
+#include "Enemy/BossEnemy.h"
+#include "Enemy/FlyEnemy.h"
 #include "Door.h"
 #include <ctime> 
 
@@ -27,6 +29,20 @@ void InitGameplay(void)
 	{
 		{"Size", Vector2D<float>(75.0f, 75.0f)},
 		{"DrawDepth", 2}
+	});
+
+	BossEnemy* NewBossEnemy = new BossEnemy(std::string("BossEnemy"));
+	Engine::GetInstanceManager()->AddInstance(NewBossEnemy,
+	{
+		{"Size", Vector2D<float>(300.0f, 300.0f)},
+		{"DrawDepth", 3}
+	});
+
+	FlyEnemy* NewFlyEnemy = new FlyEnemy(std::string("FlyEnemy"));
+	Engine::GetInstanceManager()->AddInstance(NewFlyEnemy,
+	{
+		{"Size", Vector2D<float>(75.0f, 75.0f)},
+		{"DrawDepth", 4}
 	});
 
 	//Create and Add instance into instance manager
@@ -95,7 +111,7 @@ void InitGameplay(void)
 	{
 		SceneGame1->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneGame1->SetNumberSpawnPrototype("Isaac", 1);
-		SceneGame1->SetNumberSpawnPrototype("FirstEnemy", 2);
+		SceneGame1->SetNumberSpawnPrototype("FirstEnemy", 4);
 		SceneGame1->SetNumberSpawnPrototype("DoorLevel1", 1);
 	}
 
@@ -104,7 +120,7 @@ void InitGameplay(void)
 	{
 		SceneGame2->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneGame2->SetNumberSpawnPrototype("Isaac", 1);
-		SceneGame2->SetNumberSpawnPrototype("FirstEnemy", 5);
+		SceneGame2->SetNumberSpawnPrototype("FirstEnemy", 10);
 		SceneGame2->SetNumberSpawnPrototype("DoorLevel2", 1);
 	}
 
@@ -113,6 +129,7 @@ void InitGameplay(void)
 	{
 		SceneGame3->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneGame3->SetNumberSpawnPrototype("Isaac", 1);
+		SceneGame3->SetNumberSpawnPrototype("BossEnemy", 1);
 	}
 
 	//Load first scene

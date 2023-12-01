@@ -2,7 +2,6 @@
 #include "Engine.h"
 #include "Player/Isaac.h"
 #include <cmath>
-#include <ctime> 
 #include "Door.h"
 
 FirstEnemy::FirstEnemy(const std::string& Name) : AI(Name)
@@ -19,6 +18,7 @@ void FirstEnemy::TakeHit(float Damage)
 {
 	if (_CurrentHealth <= 0) return;
 	_CurrentHealth -= static_cast<int>(Damage);
+	Engine::GetAudio()->PlaySound(_EnemyHitSongId);
 	if (_CurrentHealth <= 0)
 	{
 		Door* CurrDoor = Engine::GetWorld()->GetActorOfClass<Door>();
@@ -49,6 +49,8 @@ void FirstEnemy::BeginPlay()
 {
 	AI::BeginPlay();
 
+	_EnemyHitSongId = Engine::GetAudio()->LoadSound("EnemyHitSong.mp3");
+
 	Door* CurrDoor = Engine::GetWorld()->GetActorOfClass<Door>();
 	if (CurrDoor)
 	{
@@ -60,7 +62,7 @@ void FirstEnemy::BeginPlay()
 
 	Vector2D<float> Size = GetSize();
 	Vector2D<float> StartPosition = Vector2D<float>(64.0f, 64.0f);
-	Vector2D<float> EndPosition = Vector2D<float>(ScreenSize.X - 64.0f - Size.X, ScreenSize.Y - 64.0f - Size.Y);
+	Vector2D<float> EndPosition = Vector2D<float>(ScreenSize.X - 80.0f - Size.X, ScreenSize.Y - 80.0f - Size.Y);
 
 	float X = (rand() % static_cast<int>(EndPosition.X)) + StartPosition.X;
 	float Y = (rand() % static_cast<int>(EndPosition.Y)) + StartPosition.Y;
@@ -73,7 +75,6 @@ void FirstEnemy::BeginPlay()
 	if (_PhysicsComponent)
 	{
 		_PhysicsComponent->SetCollision(ECollisionType::Box);
-		_PhysicsComponent->SetDrawCollision(true);
 		_PhysicsComponent->SetMaxVelocityMagnetude(150.0f);
 
 		_PhysicsComponent->OnCollision.AddFunction(this, &FirstEnemy::OnCollision);
@@ -204,11 +205,12 @@ void FirstEnemy::Update(float DeltaTime)
 			_CurrAttackDelay = 0.0f;
 		}
 	}
-}
 
-void FirstEnemy::Draw()
-{
-	Actor::Draw();
+	Vector2D<float> MidPoint = GetPosition() + GetSize() / 2;
+	if (Engine::GetGraphics()->CheckPointIsOutOfScreen(MidPoint))
+	{
+		Engine::GetWorld()->DeleteActorByName(GetName());
+	}
 }
 
 int FirstEnemy::GetCurrentState()
@@ -261,7 +263,7 @@ int FirstEnemy::GetCurrentState()
 	return 0;
 }
 
-void FirstEnemy::PerformAction(int Action)
+void FirstEnemy::PerformAction(int Action, float DeltaTime)
 {
 	float MoveSpeed = 150.0f;
 

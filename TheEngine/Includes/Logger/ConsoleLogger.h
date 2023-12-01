@@ -5,6 +5,7 @@
 
 namespace NPEngine
 {
+	//Logger provider for consol
 	class ConsoleLogger final : public ILogger
 	{
 	private:
@@ -13,11 +14,13 @@ namespace NPEngine
 	public:
 		virtual ~ConsoleLogger() = default;
 
-		void SetTextColor(EColor ForegourndColor, EColor BackgroundColor) override;
+		virtual void SetTextColor(EColor ForegourndColor, EColor BackgroundColor) override;
 
-		void LogMessage(const char* Message, ...) override;
+		virtual void LogMessage(const char* Message, ...) override;
 
+		//Return the good color with corresponding to enum
 		uint8_t MapToForegroundColor(EColor Color);
+		//Return the good color with corresponding to enum
 		uint8_t MapToBackgroundColor(EColor Color);
 
 	private:

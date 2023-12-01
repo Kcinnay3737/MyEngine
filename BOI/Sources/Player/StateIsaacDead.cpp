@@ -7,6 +7,11 @@ StateIsaacDead::StateIsaacDead()
 
 void StateIsaacDead::OnEnter(Object* Owner)
 {
+	_PlayerLossSongId = Engine::GetAudio()->LoadSound(std::string("LossSong.mp3"));
+	Engine::GetAudio()->PlaySound(_PlayerLossSongId);
+
+	Engine::GetWorld()->RemoveInPersistenteData(std::string("PlayerHP"));
+
 	_OwnerIsaac = static_cast<Isaac*>(Owner);
 
 	_PhysicsComponent = _OwnerIsaac->GetComponentOfClass<PhysicsComponent>();

@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Enum with all color
 	enum EColor : uint8_t
 	{
 		Black = 0,
@@ -20,6 +21,7 @@ namespace NPEngine
 		Yellow = 11
 	};
 
+	//Struct with R, G, B, A
 	struct RGBA
 	{
 	public:
@@ -39,6 +41,7 @@ namespace NPEngine
 		Color(RGBA rgba);
 		Color(unsigned char R, unsigned char G, unsigned char B, unsigned char A);
 
+		//Static color
 		static const Color& Black;
 		static const Color& Blue;
 		static const Color& Brown;

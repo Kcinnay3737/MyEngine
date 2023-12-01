@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Logger provider interface friend with engine
 	class ILoggerProvider : public IServiceProvider
 	{
 		friend class Engine;

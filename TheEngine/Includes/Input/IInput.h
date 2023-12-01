@@ -6,6 +6,7 @@
 
 namespace NPEngine
 {
+	//Struct for current key state
 	struct DataKey
 	{
 	public:
@@ -14,6 +15,7 @@ namespace NPEngine
 		bool bIsPressed = false;
 	};
 
+	//Struct for current button state
 	struct DataButton
 	{
 	public:
@@ -22,6 +24,7 @@ namespace NPEngine
 		bool bIsPressed = false;
 	};
 
+	//Interface for a input provider
 	class IInput : public IInputProvider
 	{
 	public:
@@ -36,23 +39,31 @@ namespace NPEngine
 		std::map<EButtonKeys, Delegate<void, const DataButton&>> OnButtonReleased;
 
 	protected:
+		//Key state dict
 		std::map<EKeyboardKeys, DataKey> _DataKey;
+		//Button state dict
 		std::map<EButtonKeys, DataButton> _DataButton;
 
 	public:
 		virtual ~IInput() = default;
 
+		//Return true if the button is down
 		virtual bool IsKeyDown(EKeyboardKeys Key) = 0;
+		//Return true if the button is down
 		virtual bool IsButtonDown(EButtonKeys Key) = 0;
 
+		//Return the current mouse position
 		virtual void GetMousePosition(int* X, int* Y) = 0;
+		//Return the current mouse position
 		virtual Vector2D<int> GetMousePosition() = 0;
 
 	private:
 		virtual bool Initialize(const Param& Params) override = 0;
 		virtual void Shutdown(const Param& Params) override = 0;
 
+		//Process the current input
 		virtual void ProcessInput() override = 0;
+		//Update current input listener state and call it
 		virtual void UpdateInputListener(float DeltaTime) override = 0;
 	};
 }

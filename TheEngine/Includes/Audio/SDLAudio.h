@@ -8,6 +8,7 @@ struct Mix_Chunk;
 
 namespace NPEngine
 {
+	//Provider audio with SDL
 	class SDLAudio final : public IAudio
 	{
 	private:
@@ -17,8 +18,8 @@ namespace NPEngine
 	public:
 		virtual ~SDLAudio() = default;
 
-		virtual size_t LoadMusic(const char* Filename) override;
-		virtual size_t LoadSound(const char* Filename) override;
+		virtual size_t LoadMusic(const std::string& Filename) override;
+		virtual size_t LoadSound(const std::string& Filename) override;
 
 		virtual void PlayMusic(size_t MusicId, int Loop) override;
 		virtual void PlaySound(size_t SoundId, int Loop) override;

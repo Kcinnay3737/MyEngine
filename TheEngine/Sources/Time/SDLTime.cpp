@@ -19,6 +19,7 @@ void SDLTime::Shutdown(const Param& Params)
 
 float SDLTime::GetDeltaTime()
 {
+	if (_DeltaTime > 0.2f) return 0.2f;
 	return _DeltaTime;
 }
 

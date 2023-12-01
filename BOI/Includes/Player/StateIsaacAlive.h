@@ -7,6 +7,7 @@
 
 using namespace NPEngine;
 
+//State active when the player is alive
 class StateIsaacAlive : public IState
 {
 private:
@@ -23,6 +24,8 @@ private:
 	float _ShootDelay = 0.3f;
 	float _CurrShootDelay = 0.0f;
 
+	size_t _ShootSoundId = 0;
+
 public:
 	StateIsaacAlive();
 	virtual ~StateIsaacAlive() = default;
@@ -31,10 +34,14 @@ public:
 	virtual void Execute(float DeltaTime, Object* Owner) override;
 	virtual void OnExit(Object* Owner) override;
 
+	//
 	virtual void OnCollision(const std::vector<CollisionData>& CollisionsData) override;
 
 private:
+	//Update the player shoot
 	void UpdateShoot(float DeltaTime);
+	//Update the body animation with the velocity
 	void UpdateBodyAnimation();
+	//Update the head with the velo or the shoot
 	void UpdateHeadAtlas();
 };

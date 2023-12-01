@@ -4,6 +4,7 @@
 
 using namespace NPEngine;
 
+//UI component for the player
 class IsaacUI : public Component, public IDrawableComponent
 {
 private:
@@ -23,6 +24,7 @@ private:
 
 	virtual void Draw() override;
 
+	//Call when the player health change
 	void OnHealthChanged(int CurrHealth);
 
 public:

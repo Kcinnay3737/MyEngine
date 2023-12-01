@@ -5,13 +5,16 @@
 
 namespace NPEngine
 {
+	//Interface for a logger provider
 	class ILogger : public ILoggerProvider
 	{
 	public:
 		virtual ~ILogger() = default;
 
+		//Set the current text color
 		virtual void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) = 0;
 		
+		//Log the message
 		virtual void LogMessage(const char* Message, ...) = 0;
 
 	private:

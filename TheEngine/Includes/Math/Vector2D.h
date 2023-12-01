@@ -17,21 +17,27 @@ namespace NPEngine
 		Vector2D() = default;
 		Vector2D(T X, T Y);
 
+		//Return the magnitude of the vector
 		T Magnitude() const;
+		//Normalize the vector
 		void Normalize();
 
+		//Return the distance with the other vector
 		float Distance(const Vector2D<T>& Other);
 
+		//Return the dot product with these two vector
 		static T Dot(const Vector2D<T>& A, const Vector2D<T>& B)
 		{
 			return A.X * B.X + A.Y * B.Y;
 		}
 
+		//Return the cross product with thse two vector
 		static T Cross(const Vector2D<T>& A, const Vector2D<T>& B)
 		{
 			return A.X * B.Y - A.Y * B.X;
 		}
 
+		//Return the angle between these two vector
 		static float AngleBetween(const Vector2D<T>& A, const Vector2D<T>& B)
 		{
 			const double PI = 3.14159265358979323846264338327950288;

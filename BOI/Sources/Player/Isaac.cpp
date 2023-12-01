@@ -44,12 +44,19 @@ void Isaac::BeginPlay()
 {
 	Actor::BeginPlay();
 
+	if (Engine::GetWorld()->PersistenteDataContain(std::string("PlayerHP")))
+	{
+		_CurrHP = std::any_cast<int>(Engine::GetWorld()->GetInPersistenteData(std::string("PlayerHP")));
+	}
+
 	Vector2D<int> ScreenSize = Engine::GetGraphics()->GetScreenSize();
 	Vector2D<float> FScreenSize = Vector2D<float>(static_cast<float>(ScreenSize.X), static_cast<float>(ScreenSize.Y));
 
 	Vector2D<float> Size = GetSize();
 	Vector2D<float> Position = Vector2D<float>((ScreenSize.X / 2) - (Size.X / 2), ScreenSize.Y - 164.0f);
 	SetPosition(Position);
+
+	_PlayerHitSongId = Engine::GetAudio()->LoadSound(std::string("PlayerHit.mp3"));
 
 	_AllState["Alive"] = new StateIsaacAlive();
 	_AllState["Dead"] = new StateIsaacDead();
@@ -129,6 +136,13 @@ void Isaac::BeginPlay()
 		DeadAnimation.EndIndex = 2;
 		DeadAnimation.bLoop = false;
 		_AnimationComponent->AddAnimation(std::string("DeadAnimation"), DeadAnimation);
+
+		AnimationData WinAnimation = AnimationData();
+		WinAnimation.FrameInterval = 0.3f;
+		WinAnimation.StartIndex = 0;
+		WinAnimation.EndIndex = 1;
+		WinAnimation.bLoop = false;
+		_AnimationComponent->AddAnimation(std::string("WinAnimation"), WinAnimation);
 	}
 
 	OnHealthChanged.Broadcast(_CurrHP);
@@ -175,7 +189,10 @@ void Isaac::TakeHit(float Damage)
 {
 	if (_CurrHP <= 0) return;
 
+	Engine::GetAudio()->PlaySound(_PlayerHitSongId);
+
 	_CurrHP -= static_cast<int>(Damage);
+	Engine::GetWorld()->AddInPersistenteData(std::string("PlayerHP"), _CurrHP);
 	OnHealthChanged.Broadcast(_CurrHP);
 
 	if (_CurrHP <= 0)

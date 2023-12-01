@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Graphics interface for priver friend with engine class
 	class IGraphicsProvider : public IServiceProvider
 	{
 		friend class Engine;

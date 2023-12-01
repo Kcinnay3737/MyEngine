@@ -81,7 +81,9 @@ namespace NPEngine
 		void ResetDrawOrder();
 
 		void AddInPersistenteData(const std::string& Key, std::any Value);
-		void RemoveInPersitenteData(const std::string& Key);
+		void RemoveInPersistenteData(const std::string& Key);
+		std::any GetInPersistenteData(const std::string& Key);
+		bool PersistenteDataContain(const std::string& Key);
 
 	private:
 		virtual bool Initialize(const Param& Params) override;

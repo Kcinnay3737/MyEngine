@@ -11,6 +11,7 @@ namespace NPEngine
 	class Button : public Actor
 	{
 	public:
+		//Call when the button is cliched
 		Delegate<void> OnClicked;
 
 	protected:
@@ -31,10 +32,14 @@ namespace NPEngine
 		virtual void BeginPlay() override;
 
 	private:
+		//Call when the left mouse is pressed
 		void OnLeftMousePressed(const DataButton& CurrDataKey);
+		//Call when the left mouse is re;eaded
 		void OnLeftMouseReleased(const DataButton& CurrDataKey);
 
+		//Call when the button is pressed
 		virtual void OnPressedButton();
+		//Call when the button is released
 		virtual void OnReleasedButton();
 
 	public:

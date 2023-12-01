@@ -13,6 +13,7 @@
 
 namespace NPEngine
 {
+	//Provider for AI using QLearning with AI-Toolbox
 	class AITBQLearning : public IAIQLearning
 	{
 	private:

@@ -13,7 +13,7 @@
 #include "Logger/FileLogger.h"
 #endif
 
-#include <vld.h>
+//#include <vld.h>
 
 using namespace NPEngine;
 
@@ -23,7 +23,7 @@ Engine* Engine::_InstanceEngine = nullptr;
 
 bool Engine::InitEngine(const char* Name, int Width, int Height)
 {
-	VLDEnable();
+	//VLDEnable();
 
 	Param Params;
 
@@ -298,7 +298,7 @@ void Engine::Shutdown(void)
 	}
 	Params.clear();
 
-	VLDDisable();
+	//VLDDisable();
 }
 
 //-----------------------------------------------------------------------------------

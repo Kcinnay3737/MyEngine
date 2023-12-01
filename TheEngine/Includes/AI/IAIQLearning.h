@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Interface for AI using QLearning
 	class IAIQLearning
 	{
 	public:

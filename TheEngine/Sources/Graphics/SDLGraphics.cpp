@@ -284,10 +284,10 @@ void SDLGraphics::GetTextureSize(size_t TextureId, Vector2D<int>* Size)
 	SDL_QueryTexture(Texture, NULL, NULL, &Size->X, &Size->Y);
 }
 
-size_t SDLGraphics::LoadFont(const char* Filename, int FontSize)
+size_t SDLGraphics::LoadFont(const std::string& Filename, int FontSize)
 {
 	//Get ID
-	std::hash<const char*> Hasher;
+	std::hash<std::string> Hasher;
 	size_t FontId = Hasher(Filename);
 
 	//Load font
@@ -367,6 +367,18 @@ Vector2D<int> SDLGraphics::GetScreenSize() const
 	return ScreenSize;
 }
 
+bool SDLGraphics::CheckPointIsOutOfScreen(const Vector2D<float>& Point) const
+{
+	Vector2D<int> ScreenSize = GetScreenSize();
+	Vector2D<float> FScreenSize = Vector2D<float>(static_cast<float>(ScreenSize.X), static_cast<float>(ScreenSize.Y));
+
+	if (Point.X < 0 || Point.Y < 0 || Point.X > FScreenSize.X || Point.Y > FScreenSize.Y)
+	{
+		return true;
+	}
+	return false;
+}
+
 void SDLGraphics::Clear()
 {
 	SDL_SetRenderDrawColor(_Renderer, _BackgroundColor.rgba.R, _BackgroundColor.rgba.G, _BackgroundColor.rgba.B, _BackgroundColor.rgba.A);
@@ -378,10 +390,10 @@ void SDLGraphics::Present()
 	SDL_RenderPresent(_Renderer);
 }
 
-size_t SDLGraphics::LoadTexture(const char* Filename)
+size_t SDLGraphics::LoadTexture(const std::string& Filename)
 {
 	//Get the ID
-	std::hash<const char*> Hasher;
+	std::hash<std::string> Hasher;
 	size_t TextureId = Hasher(Filename);
 
 	//Load the texture

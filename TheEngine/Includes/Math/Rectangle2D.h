@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//A rectangle with two vector
 	template <class T>
 	struct Rectangle2D
 	{

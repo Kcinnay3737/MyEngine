@@ -6,12 +6,13 @@
 namespace NPEngine
 {
 	class Model;
-
+	//Class for artificial intelligence
 	class AI : public Actor
 	{
 	public:
 
 	protected:
+		//QLearning interface
 		IAIQLearning* _IAQLearning = nullptr;
 
 	public:
@@ -28,9 +29,13 @@ namespace NPEngine
 		virtual void Update(float DeltaTime) override;
 
 		//AI function
+		//Return the current state
 		virtual int GetCurrentState();
-		virtual void PerformAction(int Action);
+		//Performe the chosen action
+		virtual void PerformAction(int Action, float DeltaTime);
+		//Return the state after perform action
 		virtual int GetNewState();
+		//Return the reward
 		virtual double GetReward();
 		//----------
 

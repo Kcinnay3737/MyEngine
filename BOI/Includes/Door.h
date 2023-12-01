@@ -6,6 +6,7 @@
 
 using namespace NPEngine;
 
+//A door for change scene when all enemies is dead
 class Door : public Actor
 {
 private:
@@ -24,10 +25,14 @@ public:
 
 	virtual Actor* Clone(const std::string& Name, const Param& Params = Param{});
 
+	//Close the door
 	void Close();
+	//Open the door
 	void Open();
 
+	//Add monster alive to kill for open the door
 	void AddMonsterAlive();
+	//Pop a monster, when the number of monster is 0 the door open
 	void PopMonsterAlive();
 
 private:
@@ -35,8 +40,10 @@ private:
 
 	virtual void BeginPlay() override;
 
+	//Called when the physics component collide
 	void OnCollision(const std::vector<CollisionData>& CollisionsData);
 
+	//Open the level
 	void OpenLevel();
 
 public:

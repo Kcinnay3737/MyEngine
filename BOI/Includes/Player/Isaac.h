@@ -13,8 +13,11 @@ using namespace NPEngine;
 class Isaac : public Actor
 {
 public:
+	//Call when the current health change
 	Delegate<void, int> OnHealthChanged;
+	//Call when the game is lost
 	Delegate<void> OnLose;
+	//Call when the game is won
 	Delegate<void> OnWin;
 
 private:
@@ -23,10 +26,13 @@ private:
 	AnimationComponent* _AnimationComponent = nullptr;
 	IsaacUI* _IsaacUI = nullptr;
 
-	int _CurrHP = 5;
+	//Current health
+	int _CurrHP = 10;
 
 	IState* _CurrentState = nullptr;
 	std::map<std::string, IState*> _AllState;
+
+	size_t _PlayerHitSongId = 0;
 
 public:
 	Isaac(const std::string& Name);
@@ -44,6 +50,7 @@ private:
 
 	void Dead();
 
+	//Call when the phyiscs component collide
 	void OnCollision(const std::vector<CollisionData>& CollisionsData);
 
 public:

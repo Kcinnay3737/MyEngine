@@ -15,6 +15,7 @@ namespace NPEngine
 	class IDrawableComponent;
 	class TransformComponent;
 
+	//Data for new component to add
 	struct DataComponentToAdd
 	{
 	public:
@@ -23,6 +24,7 @@ namespace NPEngine
 		Param Params = Param{};
 	};
 
+	//Data for compoennt to delete
 	struct DataComponentToDelete
 	{
 	public:
@@ -30,6 +32,7 @@ namespace NPEngine
 		Param Params = Param{};
 	};
 
+	//Class with draw and update function, can have components
 	class Actor : public Object, public IActorWorld
 	{
 	private:
@@ -44,23 +47,31 @@ namespace NPEngine
 		Actor(const std::string& Name);
 		virtual ~Actor() = default;
 
+		//Create a new actor with the same value
 		virtual Actor* Clone(const std::string& Name, const Param& Params = Param{});
 
 		//Component
+		//Add compoennt to this actor
 		void AddComponent(Component* Component, const Param& Params = Param{});
+		//Delete compoennt at this name
 		void DeleteComponentByName(const std::string& Name, const Param& Params = Param{});
+		//Create a component with a class
 		template <typename T>
 		T* CreateComponentOfClass(const std::string& Name, const Param& Params = Param{});
 		//---------
 
+		//Take a hit
 		virtual void TakeHit(float Damage) {};
 
 	protected:
 		virtual bool Initialise(const Param& Params) override;
 		virtual void Destroy(const Param& Params) override;
 
+		//Call when the frame start
 		virtual void BeginPlay() override;
+		//Call each frame
 		virtual void Update(float DeltaTime) override;
+		//Call each frame for Draw 
 		virtual void Draw() override;
 
 	private:
@@ -73,10 +84,13 @@ namespace NPEngine
 		std::vector<DataComponentToAdd> _ComponentToAdd;
 		std::vector<DataComponentToDelete> _ComponentToDelete;
 
+		//Create all compoennt to add
 		virtual void OnCreateComponent() override final;
+		//Delete all compoennt to delete
 		virtual void OnDeleteComponent() override final;
 		
 	public:
+		//return the current name
 		std::string GetName() const { return _Name; }
 
 		virtual void SetDrawDepth(unsigned char DrawDepth) override;

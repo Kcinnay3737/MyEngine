@@ -43,7 +43,7 @@ void AI::Update(float DeltaTime)
 
 	int Action = _IAQLearning->GetAction(CurrentState);
 
-	PerformAction(Action);
+	PerformAction(Action, DeltaTime);
 
 	int NewState = GetNewState();
 	double Reward = GetReward();
@@ -58,7 +58,7 @@ int AI::GetCurrentState()
 	return 0;
 }
 
-void AI::PerformAction(int Action)
+void AI::PerformAction(int Action, float DeltaTime)
 {
 }
 

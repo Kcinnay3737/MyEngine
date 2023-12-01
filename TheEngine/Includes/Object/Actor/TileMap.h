@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Class for a tilemap
 	class TileMap : public Actor
 	{
 	public:
@@ -29,9 +30,12 @@ namespace NPEngine
 		virtual void Draw() override;
 
 	private:
+		//Load a tile set
 		void LoadTileSet(const std::string& TileSetPath);
+		//Load tile map at the path, use csv file
 		void LoadTileMap(const std::vector<std::string>& LayerPath);
 
+		//Return a grid with collide cell
 		std::vector<std::vector<bool>> GetCollisionGrid() const;
 	};
 }

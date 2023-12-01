@@ -5,6 +5,7 @@
 
 namespace NPEngine
 {
+	//Logger provider for file
 	class FileLogger final : public ILogger
 	{
 	private:
@@ -13,9 +14,9 @@ namespace NPEngine
 	public:
 		virtual ~FileLogger() = default;
 
-		void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) { };
+		virtual void SetTextColor(EColor ForegourndColor = EColor::White, EColor BackgroundColor = EColor::Black) override { };
 
-		void LogMessage(const char* Message, ...) override;
+		virtual void LogMessage(const char* Message, ...) override;
 
 	private:
 		virtual bool Initialize(const Param& Params) override;

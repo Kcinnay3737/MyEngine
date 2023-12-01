@@ -6,10 +6,11 @@
 namespace NPEngine
 {
 	class PhysicsComponent;
-
+	//A actor for simulate a profectil
 	class Projectil : public Actor
 	{
 	private:
+		//Count for clone name
 		static size_t _ProjectilCount;
 
 	protected:
@@ -31,12 +32,16 @@ namespace NPEngine
 		virtual void BeginPlay() override;
 		virtual void Update(float DeltaTime) override;
 
+		//Call when the projectil hit
 		void OnHit(const std::vector<CollisionData>& CollisionsData);
 
 	public:
+		//Set the projectil direction
 		void SetDirection(const Vector2D<float>& Direction) { _Direction = Direction; }
+		//Set the mode speed for the projectil
 		void SetMoveSpeed(const float& MoveSpeed);
 
+		//Generate a new projectil name for clone
 		static std::string GetNextProjectileName();
 
 		

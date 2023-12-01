@@ -37,10 +37,10 @@ void SDLAudio::Shutdown(const Param& Params)
 	Mix_CloseAudio();
 }
 
-size_t SDLAudio::LoadMusic(const char* Filename)
+size_t SDLAudio::LoadMusic(const std::string& Filename)
 {
 	//Get ID
-	std::hash<const char*> Hasher;
+	std::hash<std::string> Hasher;
 	size_t MusicId = Hasher(Filename);
 
 	//Load the music
@@ -62,10 +62,10 @@ size_t SDLAudio::LoadMusic(const char* Filename)
 	return MusicId;
 }
 
-size_t SDLAudio::LoadSound(const char* Filename)
+size_t SDLAudio::LoadSound(const std::string& Filename)
 {
 	//Get the ID
-	std::hash<const char*> Hasher;
+	std::hash<std::string> Hasher;
 	size_t SoundId = Hasher(Filename);
 
 	//Load the sound

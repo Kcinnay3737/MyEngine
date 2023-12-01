@@ -4,6 +4,7 @@
 
 using namespace NPEngine;
 
+//Button for load a scene
 class ButtonLoadScene : public Button
 {
 private:
@@ -20,6 +21,7 @@ private:
 	virtual void Destroy(const Param& Params) override;
 	virtual void BeginPlay() override;
 
+	//Lead the current button scene
 	void LoadScene();
 
 public:

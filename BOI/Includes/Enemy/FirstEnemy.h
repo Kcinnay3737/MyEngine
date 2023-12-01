@@ -8,6 +8,7 @@ using namespace NPEngine;
 
 class Isaac;
 
+//The first enemy in the game
 class FirstEnemy : public AI
 {
 public:
@@ -30,6 +31,8 @@ private:
 
 	int _CurrentHealth = 3;
 
+	size_t _EnemyHitSongId = 0;
+
 public:
 	FirstEnemy(const std::string& Name);
 	virtual ~FirstEnemy() = default;
@@ -44,16 +47,16 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void Update(float DeltaTime) override;
-	virtual void Draw() override;
 
 	//AI function
-	virtual int GetCurrentState();
-	virtual void PerformAction(int Action);
-	virtual int GetNewState();
-	virtual double GetReward();
+	virtual int GetCurrentState() override;
+	virtual void PerformAction(int Action, float DeltaTime) override;
+	virtual int GetNewState() override;
+	virtual double GetReward() override;
 	//----------
 
 private:
+	//Call when physics component collide
 	void OnCollision(const std::vector<CollisionData>& CollisionsData);
 
 };

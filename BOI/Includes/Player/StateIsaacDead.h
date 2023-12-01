@@ -8,6 +8,7 @@
 
 using namespace NPEngine;
 
+//State when the player is dead
 class StateIsaacDead: public IState
 {
 private:
@@ -20,6 +21,7 @@ private:
 	float _DelayRestart = 2.0f;
 	float _CurrentDelayRestart = 0.0f;
 
+	size_t _PlayerLossSongId = 0;
 public:
 	StateIsaacDead();
 	virtual ~StateIsaacDead() = default;
@@ -28,5 +30,6 @@ public:
 	virtual void Execute(float DeltaTime, Object* Owner) override;
 	virtual void OnExit(Object* Owner) override;
 
+	//Call when the physics collide
 	virtual void OnCollision(const std::vector<CollisionData>& CollisionsData) override;
 };
