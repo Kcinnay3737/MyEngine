@@ -7,6 +7,7 @@ namespace NPEngine
 	class Actor;
 	class PhysicsComponent;
 
+	//A collision class dor the box
 	class BoxCollision : public ICollision
 	{
 	private:
@@ -30,12 +31,18 @@ namespace NPEngine
 
 		virtual void DrawCollision() override;
 
+		//Set the position offset
 		void SetPositionOffset(Vector2D<float> PositionOffset) { _PositionOffset = PositionOffset; }
+		//Get the position offset
 		Vector2D<float> GetPositionOffset() const { return _PositionOffset; }
+		//Return the position
 		Vector2D<float> GetPosition() const;
 
+		//Set the size offset
 		void SetSizeOffset(Vector2D<float> SizeOffset) { _SizeOffset = SizeOffset; }
+		//Return the size offset
 		Vector2D<float> GetSizeOffset() const { return _SizeOffset; }
+		//Return the size
 		Vector2D<float> GetSize() const;
 
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }

@@ -8,6 +8,7 @@ namespace NPEngine
 	class Actor;
 	class PhysicsComponent;
 
+	//A collision class for the grid
 	class GridCollision : public ICollision
 	{
 	private:
@@ -30,18 +31,23 @@ namespace NPEngine
 		virtual CollisionData CheckCollisionWithLine(const ICollision& OtherCollision) const override;
 		virtual CollisionData CheckCollisionWithGrid(const ICollision& OtherCollision) const override;
 
-
+		//Get all index valid in a rect
 		std::vector<Vector2D<int>> GetIndexInRect(const Rectangle2D<float>& Rect) const;
 
 		virtual void DrawCollision() override;
 
+		//Set the current grid
 		void SetGrid(const std::vector<std::vector<bool>>& Grid) { _Grid = Grid; }
+		//Return the current grid
 		const std::vector<std::vector<bool>>& GetGrid() const { return _Grid; }
 
+		//Set the position offset
 		void SetPositionOffset(Vector2D<float> PositionOffset) { _PositionOffset = PositionOffset; }
 
+		//Set the cell size
 		void SetCellSize(Vector2D<float> CellSize) { _CellSize = CellSize; }
 
+		//Return a box collision at cell position
 		BoxCollision GetBoxCollisionAt(Vector2D<int> CellPosition) const;
 	
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }

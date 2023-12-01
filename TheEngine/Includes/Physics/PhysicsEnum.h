@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+//Collision type enum
 enum ECollisionType : uint8_t
 {
 	None = 0,

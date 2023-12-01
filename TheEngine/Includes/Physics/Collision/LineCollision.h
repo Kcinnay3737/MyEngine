@@ -6,6 +6,7 @@ namespace NPEngine
 {
 	class Actor;
 
+	//A class for line collision
 	class LineCollision : public ICollision
 	{
 	private:
@@ -29,12 +30,18 @@ namespace NPEngine
 
 		virtual void DrawCollision() override;
 
+		//Set the offset for the start point
 		void SetStartPointOffset(Vector2D<float> StartPointOffset) { _StartPointOffset = StartPointOffset; }
+		//Get the offset for the start point
 		Vector2D<float> GetStartPointOffset() const { return _StartPointOffset; }
+		//Return the start point
 		Vector2D<float> GetStartPoint() const;
 
+		//Set offset for the end point
 		void SetEndPointOffset(Vector2D<float> EndPointOffset) { _EndPointOffset = EndPointOffset; }
+		//Return the offset for the end point
 		Vector2D<float> GetEndPointOffset() const { return _EndPointOffset; }
+		//Return the end point
 		Vector2D<float> GetEndPoint() const;
 
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }

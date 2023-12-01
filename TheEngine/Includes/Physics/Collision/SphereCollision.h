@@ -6,6 +6,7 @@ namespace NPEngine
 {
 	class Actor;
 
+	//A class for a sphere collision
 	class SphereCollision : public ICollision
 	{
 	private:
@@ -29,11 +30,16 @@ namespace NPEngine
 
 		virtual void DrawCollision() override;
 
+		//Set the current position offset
 		void SetPositionOffset(const Vector2D<float>& PositionOffset);
+		//Return the current position offset
 		Vector2D<float> GetPositionOffset() const { return _PositionOffset; }
+		//Return the current position
 		Vector2D<float> GetPosition() const;
 
+		//Set the current ray value
 		void SetRay(float Ray) { _Ray = Ray; }
+		//return the current ray value
 		float GetRay() const { return _Ray; }
 
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }

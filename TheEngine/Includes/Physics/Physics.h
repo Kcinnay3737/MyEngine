@@ -6,6 +6,7 @@ namespace NPEngine
 {
 	class PhysicsComponent;
 
+	//Provider for physics
 	class Physics : public IPhysics
 	{
 	public:

@@ -13,6 +13,7 @@ namespace NPEngine
 		int SwitchIndex = 0;
 	};
 
+	//Structure with all animation data
 	struct AnimationData
 	{
 		friend class AnimationComponent;
@@ -28,8 +29,11 @@ namespace NPEngine
 
 		Delegate<void, int, const std::string&> AnimationObserver = Delegate<void, int, const std::string&>();
 
+		//Add a new frame to call AnimationObserver
 		void AddFrameToCallObserver(int Frame);
+		//Remove a frame to call AnimationObeserver 
 		void RemoveFrameToCallObserver(int Frame);
+		//Clear all frame in FrameToCallObserver dictonary
 		void ClearAllFrameToCallObserver();
 
 	private:
@@ -37,6 +41,7 @@ namespace NPEngine
 		std::string AnimationName = "";
 	};
 
+	//Component class for play a animation
 	class AnimationComponent : public AtlasComponent, public IUpdatableComponent
 	{
 	private:
@@ -52,11 +57,14 @@ namespace NPEngine
 		AnimationComponent(const std::string& Name);
 		virtual ~AnimationComponent() = default;
 
+		//Add a new animation to _Animations
 		void AddAnimation(const std::string& AnimationName, AnimationData& NewAnimationData);
+		//Remove a animation to _Animation
 		void RemoveAnimation(const std::string& AnimationName);
 
+		//Return the animation data at the name
 		AnimationData& GetAnimationData(const std::string& AnimationName);
-
+		//Set the current animation with the animationdata at this name
 		void SetCurrentAnimation(const std::string AnimationName);
 
 	private:

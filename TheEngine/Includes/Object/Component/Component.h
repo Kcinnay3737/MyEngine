@@ -6,9 +6,8 @@
 #include "Object/Component/IUpdatableComponent.h"
 
 namespace NPEngine
-{
-	//class Actor;
-
+{	
+	//Class put on a actor
 	class Component : public Object, public IActorComponent
 	{
 	protected:
@@ -25,10 +24,13 @@ namespace NPEngine
 		virtual void Destroy(const Param& Params = Param{}) override;
 
 	private:
+		//Set the owner for this component
 		virtual void SetOwner(Actor* Owner) override;
 
 	public:
+		//Return the component name
 		std::string GetName() { return _Name; }
+		//Return the cuurent owner fir this component
 		Actor* GetOwner() { return _OwnerActor; }
 
 	};

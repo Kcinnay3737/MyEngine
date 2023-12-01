@@ -6,6 +6,7 @@ namespace NPEngine
 {
 	class Actor;
 
+	//A class for a point collision
 	class PointCollision : public ICollision
 	{
 	private:
@@ -28,8 +29,11 @@ namespace NPEngine
 
 		virtual void DrawCollision() override;
 
+		//Set the offset for the point position
 		void SetPositionOffset(const Vector2D<float>& PositionOffset);
+		//Return the current position offset
 		Vector2D<float> GetPositionOffset() const { return _PositionOffset; }
+		//Return the current position
 		Vector2D<float> GetPosition() const;
 
 		virtual ECollisionType GetCollisionType() const override { return _CollisionType; }

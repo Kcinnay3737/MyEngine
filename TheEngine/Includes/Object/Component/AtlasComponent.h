@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Componet for draw tile in a texture
 	class AtlasComponent : public SpriteComponent
 	{
 	protected:
@@ -20,10 +21,14 @@ namespace NPEngine
 		virtual void Draw() override;
 		
 	public:
+		//Set the tile size
 		void SetTileSize(Vector2D<int> TileSize) { _TileSize = TileSize; }
+		//Return the tile size
 		Vector2D<int> GetTileSize() const { return _TileSize; }
 
+		//Set the tile index to draw
 		void SetTileIndex(int TileIndex) { _CurrTileIndex = TileIndex; }
+		//Get the current tile index
 		int GetTileIndex() const { return _CurrTileIndex; }
 	};
 }

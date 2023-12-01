@@ -5,6 +5,7 @@
 
 namespace NPEngine
 {
+	//The base class
 	class Object
 	{
 	private:
@@ -17,9 +18,11 @@ namespace NPEngine
 		Object();
 		virtual ~Object();
 
+		//Return the ID
 		size_t GetID() const { return _ID; }
 
 	private:
+		//Generate a new unique ID
 		size_t GetNextID();
 	};
 }

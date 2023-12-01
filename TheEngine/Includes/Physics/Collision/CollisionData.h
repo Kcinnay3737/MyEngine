@@ -6,6 +6,7 @@ namespace NPEngine
 {
 	class Actor;
 
+	//The data for a collision
 	struct CollisionData
 	{
 	public:

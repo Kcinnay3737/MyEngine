@@ -4,6 +4,7 @@
 
 namespace NPEngine
 {
+	//Data for apply movement
 	struct MovementData
 	{
 	public:
