@@ -3,11 +3,11 @@
 #include "AI/IAIQLearning.h"
 #include "Utility/Utility.h"
 
-#include <AIToolbox/MDP/Algorithms/QLearning.hpp>
-#include <AIToolbox/MDP/Model.hpp>
-#include <AIToolbox/MDP/Policies/EpsilonPolicy.hpp>
-#include <AIToolbox/MDP/Policies/QGreedyPolicy.hpp>
-#include <AIToolbox/Seeder.hpp>
+//#include <AIToolbox/MDP/Algorithms/QLearning.hpp>
+//#include <AIToolbox/MDP/Model.hpp>
+//#include <AIToolbox/MDP/Policies/EpsilonPolicy.hpp>
+//#include <AIToolbox/MDP/Policies/QGreedyPolicy.hpp>
+//#include <AIToolbox/Seeder.hpp>
 #include <fstream>
 #include <random>
 
@@ -17,15 +17,15 @@ namespace NPEngine
 	class AITBQLearning : public IAIQLearning
 	{
 	private:
-		AIToolbox::MDP::Model* _Model = nullptr;
-		AIToolbox::MDP::QLearning* _QLearning = nullptr;
-		AIToolbox::MDP::QGreedyPolicy* _QGreedyPolicy = nullptr;
-		AIToolbox::MDP::EpsilonPolicy* _EpsilonPolicy = nullptr;
-
-		double _EpsilonDiscountFactor = 0.0;
-		float _EpsilonUpdateDelay = 0.1f;
-
-		float _CurrentEpsilonRate = 0.0f;
+		//AIToolbox::MDP::Model* _Model = nullptr;
+		//AIToolbox::MDP::QLearning* _QLearning = nullptr;
+		//AIToolbox::MDP::QGreedyPolicy* _QGreedyPolicy = nullptr;
+		//AIToolbox::MDP::EpsilonPolicy* _EpsilonPolicy = nullptr;
+		//
+		//double _EpsilonDiscountFactor = 0.0;
+		//float _EpsilonUpdateDelay = 0.1f;
+		//
+		//float _CurrentEpsilonRate = 0.0f;
 
 	public:
 		AITBQLearning(int StateSize, int ActionSize, double LearningRate, double DiscountFactor, double Epsilon, double EpsilonDiscountFactor, float EpsilonUpdateDelay);

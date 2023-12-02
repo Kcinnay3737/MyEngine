@@ -110,17 +110,18 @@ void BossEnemy::BeginPlay()
 		_AnimationComponent->SetCurrentAnimation(std::string("IdleAnimation"));
 	}
 
-	_IAQLearning->Initialize(2, 3, 0.1, 0.4, 1.0, 0.999, 0.1f);
+	//_IAQLearning->Initialize(2, 3, 0.1, 0.4, 1.0, 0.999, 0.1f);
 }
 
 void BossEnemy::Update(float DeltaTime)
 {
     AI::Update(DeltaTime);
 
-	if (_CurrentBossState == Jumping)
+	if (_CurrentBossState == Thinking)
 	{
-		UpdateJump(DeltaTime);
+		_CurrentAction = (rand() % 2) + 0;
 	}
+	PerformAction(_CurrentAction, DeltaTime);
 
 	if (!_bCanAttack)
 	{
@@ -174,15 +175,8 @@ void BossEnemy::PerformAction(int Action, float DeltaTime)
 	switch (Action)
 	{
 	case 0:
-		if (_CurrentReward == Jumping)
-		{
-			_CurrentReward -= 10.0;
-		}
-		break;
-	case 1:
 		if (_CurrentBossState == Thinking)
 		{
-			_CurrentReward += 10.0;
 			Jump(_Player->GetPosition() + _Player->GetSize() / 2);
 		}
 		else if (_CurrentBossState == Jumping)
@@ -195,19 +189,10 @@ void BossEnemy::PerformAction(int Action, float DeltaTime)
 			_CurrentReward -= 10.0;
 		}
 		break;
-	case 2:
+	case 1:
 		if (_CurrentBossState == Thinking)
 		{
-			_CurrentReward += 10.0;
 			Vomit();
-		}
-		else if(_CurrentBossState == Vomiting)
-		{
-			_CurrentReward += 20.0;
-		}
-		else
-		{
-			_CurrentReward -= 10.0;
 		}
 		break;
 	}

@@ -120,7 +120,7 @@ void InitGameplay(void)
 	{
 		SceneGame2->SetNumberSpawnPrototype("TileMapLevel1", 1);
 		SceneGame2->SetNumberSpawnPrototype("Isaac", 1);
-		SceneGame2->SetNumberSpawnPrototype("FirstEnemy", 10);
+		SceneGame2->SetNumberSpawnPrototype("FirstEnemy", 8);
 		SceneGame2->SetNumberSpawnPrototype("DoorLevel2", 1);
 	}
 

@@ -40,7 +40,7 @@ namespace NPEngine
 		//Return the angle between these two vector
 		static float AngleBetween(const Vector2D<T>& A, const Vector2D<T>& B)
 		{
-			const double PI = 3.14159265358979323846264338327950288;
+			const float PI = 3.14159265358979323846f;
 
 			T DotValue = Dot(A, B);
 			T MagA = A.Magnitude();

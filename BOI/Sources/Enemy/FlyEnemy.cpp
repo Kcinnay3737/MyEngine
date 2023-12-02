@@ -80,7 +80,7 @@ void FlyEnemy::BeginPlay()
 		_AnimationComponent->SetCurrentAnimation(std::string("BaseAnimation"));
 	}
 
-	_IAQLearning->Initialize(8, 8, 0.1, 0.1, 1.0, 0.995, 0.1f);
+	//_IAQLearning->Initialize(8, 8, 0.1, 0.1, 1.0, 0.995, 0.1f);
 
 	_CurrentState = (rand() % 7) + 0;
 }
@@ -88,6 +88,8 @@ void FlyEnemy::BeginPlay()
 void FlyEnemy::Update(float DeltaTime)
 {
     AI::Update(DeltaTime);
+
+	PerformAction(_CurrentState, DeltaTime);
 
 	_CurrDelayChangeState += DeltaTime;
 	if (_CurrDelayChangeState >= _DelayChangeState)
@@ -116,11 +118,6 @@ int FlyEnemy::GetCurrentState()
 void FlyEnemy::PerformAction(int Action, float DeltaTime)
 {
 	float MoveSpeed = 300.0f;
-
-	if (Action == GetCurrentState())
-	{
-		_CurrentReward += 10.0;
-	}
 
 	switch (Action)
 	{

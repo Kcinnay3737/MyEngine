@@ -75,7 +75,7 @@ void FirstEnemy::BeginPlay()
 	if (_PhysicsComponent)
 	{
 		_PhysicsComponent->SetCollision(ECollisionType::Box);
-		_PhysicsComponent->SetMaxVelocityMagnetude(150.0f);
+		_PhysicsComponent->SetMaxVelocityMagnetude(120.0f);
 
 		_PhysicsComponent->OnCollision.AddFunction(this, &FirstEnemy::OnCollision);
 	}
@@ -140,7 +140,7 @@ void FirstEnemy::BeginPlay()
 		_AnimationComponent->SetOffsetPosition(Vector2D<float>(-20.0f, -20.0f));
 	}
 
-	_IAQLearning->Initialize(8, 8, 0.1, 0.1, 1.0, 0.995, 0.1f);
+	//_IAQLearning->Initialize(8, 8, 0.1, 0.1, 1.0, 0.995, 0.1f);
 
 	Vector2D<float> PlayerPosition = _Player->GetPosition() + (_Player->GetSize() / 2);
 	Vector2D<float> CurrentPosition = GetPosition() + (GetSize() / 2);
@@ -151,6 +151,8 @@ void FirstEnemy::BeginPlay()
 void FirstEnemy::Update(float DeltaTime)
 {
 	AI::Update(DeltaTime);
+
+	PerformAction(GetCurrentState(), DeltaTime);
 
 	Vector2D<float> CurrVeloDir = _PhysicsComponent->GetVelocity();
 	CurrVeloDir.Normalize();
@@ -265,12 +267,7 @@ int FirstEnemy::GetCurrentState()
 
 void FirstEnemy::PerformAction(int Action, float DeltaTime)
 {
-	float MoveSpeed = 150.0f;
-
-	if (Action == GetCurrentState())
-	{
-		_CurrentReward += 10.0;
-	}
+	float MoveSpeed = 120.0f;
 
 	switch (Action)
 	{

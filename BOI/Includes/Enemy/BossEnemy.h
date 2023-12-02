@@ -49,6 +49,8 @@ private:
 	size_t _EnemyHitSongId = 0;
 	size_t _SpawnFlySongId = 0;
 
+	int _CurrentAction = 0;
+
 public:
 	BossEnemy(const std::string& Name);
 	virtual ~BossEnemy() = default;
